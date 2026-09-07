@@ -51,14 +51,23 @@ sys.stdout.reconfigure(encoding="utf-8")
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SQL_FILE = ROOT / "sql" / "k2_termination_list_v4.sql"
-BE = 543                      # พ.ศ. − ค.ศ.
 MIN_OD_DEFAULT = 6            # ค้างครบ 6 งวดจึงเกิดสิทธิ์บอกเลิก
+
+# ทุกช่องวันที่ในหนังสือแสดงเป็น "2 สิงหาคม 2026" - เดือนไทย ปี ค.ศ.
+# (เดิมช่อง "วันที่เป็น OD6" แปลงเป็น พ.ศ. เลิกใช้แล้ว 2026-09-04)
+TH_MONTHS = ["", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+             "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
+
+
+def thai_date(v):
+    """2026-08-02 -> '2 สิงหาคม 2026'"""
+    return f"{v.day} {TH_MONTHS[v.month]} {v.year}"
 
 # ---- คอลัมน์ใน template 'ข้อมูล' → คอลัมน์จากผลลัพธ์ SQL ------------------
 MAP = [
     ("A",  "สัญญาเลขที่",                          "str"),
     ("B",  "ชื่อผู้ทำสัญญา",                        "str"),
-    ("C",  "วันที่ทำสัญญา",                         "date"),
+    ("C",  "วันที่ทำสัญญา",                         "thaidate"),
     ("D",  "ประเภทสัญญา",                          "str"),
     ("E",  "ยี่ห้อ",                                "str"),
     ("F",  "รุ่น/แบบ",                              "str"),
@@ -69,7 +78,7 @@ MAP = [
     ("K",  "งวดละ (บาท)",                          "float"),
     ("L",  "K",                                    "bahttext"),
     ("M",  "จำนวนงวดเช่าซื้อ",                      "int"),
-    ("N",  "วันเริ่มชำระงวดแรก",                    "date"),
+    ("N",  "วันเริ่มชำระงวดแรก",                    "thaidate"),
     ("O",  "วันที่ชำระงวดต่อไป",                    "int"),
     ("P",  "ค้างชำระงวดแรก",                        "int"),
     ("Q",  "งวดที่ครบ OD 6",                        "int"),
@@ -83,7 +92,7 @@ MAP = [
     ("Y",  "X",                                    "bahttext"),
     ("Z",  "รวมเป็นเงินทั้งสิ้น",                    "float"),
     ("AA", "Z",                                    "bahttext"),
-    ("AB", "วันที่เป็น OD6",                        "dateBE"),
+    ("AB", "วันที่เป็น OD6",                        "thaidate"),
     ("AC", "รวมจำนวนงวดที่ค้าง",                    "int"),
     ("AD", "__ADDRESS_FULL__",                     "str"),
     ("AE", "เลขที่",                                "str"),
@@ -238,8 +247,9 @@ def conv(kind, v):
         return float(v)
     if kind == "date":
         return dt.datetime(v.year, v.month, v.day) if hasattr(v, "year") else v
-    if kind == "dateBE":
-        return dt.datetime(v.year + BE, v.month, v.day) if hasattr(v, "year") else v
+    if kind == "thaidate":
+        # คืนเป็นข้อความ ไม่ใช่ datetime เพราะ Excel ไม่มี format เดือนไทย
+        return thai_date(v) if hasattr(v, "year") else v
     return str(v)
 
 

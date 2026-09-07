@@ -9,93 +9,69 @@ Pipeline เส้นเล็กที่สุดใน lake ตอนนี�
 ## Flow
 
 ```
-Secrets Manager ──► Google OAuth ──► Sheets API ──► CSV (/tmp) ──► S3
-   (service acct)    (access token)   (ดึงทั้งชีต)    (แปลงร่าง)    (ปลายทาง)
+EventBridge (23:30)
+      ▼
+Lambda 1 · ingest
+  Secrets Manager ──► Google OAuth (JWT) ──► Sheets API ──► CSV (/tmp) ──► S3 data
+  log CSV ──► S3 log  (S3_row_count ยังว่าง)
+  รายงาน  ──► SES
+      │ invoke async
+      ▼
+Lambda 2 · rowcount
+  อ่าน log ──► เช็ค Etag ──► นับแถวจากไฟล์จริง ──► เขียนทับ log
 ```
 
-| ส่วน              | ค่า                                                             |
-| ----------------- | --------------------------------------------------------------- |
-| Spreadsheet ID    | `1ZuZvelevthX1O0bcaWaWfMuh16zteZkbYim8OPgPwn4`                  |
-| Sheet (tab)       | `Query` · ช่วง `A:ZZ`                                           |
-| ปลายทาง           | `s3://google-sheet-extract/google-sheet-ev7/leads-ev7-2026.csv` |
-| Secret            | `com7/google-sheets/service-account`                            |
-| Lambda role       | `test-ingest-googlesheet-role-mg3ktraq`                         |
-| Runtime           | Python 3.13 · x86_64                                            |
-| ไฟล์โค้ดบนเครื่อง | `C:\Users\Sapon.S\lambda-build\` → `lambda-package-linux.zip`   |
+**4 ชีต · 14 tabs** · v2.4.0 · รันสำเร็จ 14/14 ใน 32.8 วินาที (2026-09-07)
 
-**Key ปลายทางชื่อ `leads-ev7`** — เป็นข้อมูลฝั่ง EV7 จึงเกี่ยวกับ [[GI + EV7 to 7Club]] โดยตรง
+| ชีต | brand | tabs | ปลายทาง |
+|---|---|---|---|
+| EV7 Main | ev7 | 7 | `google-sheet-ev7/ev7_*/` |
+| Grab | ev7 | `Clean` · `ชีต1` | `google-sheet-ev7/Grab_Clean/` · `Grab/` |
+| Lineman | ev7 | `Clean` · `ชีต1` | `google-sheet-ev7/Lineman_Clean/` · `Lineman/` |
+| GI | gi | `rawdataInteresting` · `rawdataTestdrive` · `rawdataBooking` | `google-sheet-gi/GI_Interest/` · `GI_Testdrive/` · `GI_Booking/` |
+
+|                              |                                                       |
+| ---------------------------- | ----------------------------------------------------- |
+| Secret                       | `com7/google-sheets/service-account`                  |
+| Lambda role                  | `test-ingest-googlesheet-role-mg3ktraq`               |
+| Runtime                      | Python 3.13 · x86_64 · 1024 MB · 5 นาที               |
+| **โค้ด**                     | `scripts/lambda/googlesheet-to-s3/lambda_function.py` |
+| **เอกสารอธิบายทีละฟังก์ชัน** | `docs/googlesheet-to-s3.md`                           |
+
+**หนึ่ง tab = หนึ่งโฟลเดอร์ = หนึ่งตาราง** เพื่อให้ Crawler แยกตารางถูก → [[Glue Crawler]]
+
+**service account ตัวเดียวใช้ได้ทุกชีต** แต่ต้อง share แต่ละไฟล์ให้ `client_email` แยกกัน — ลืมแล้วได้ **404 ไม่ใช่ 403**
+
+**ข้อมูลทั้งหมดเป็นฝั่ง EV** เกี่ยวกับ [[GI + EV7 to 7Club]] โดยตรง
 
 ---
 
 ## โครงโค้ด
 
-### boto3 client วางนอก handler
-
-```python
-secrets = boto3.client("secretsmanager")
-s3 = boto3.client("s3")
-
-def lambda_handler(event, context):
-    ...
-```
-
-โค้ดนอก handler รันเฉพาะตอน **cold start** พอถูกเรียกซ้ำ Lambda ใช้ container เดิมและข้ามส่วนนี้ไป — ในการทดสอบจริงเห็นเป็น `Init Duration: 800 ms` ที่หายไปในรอบถัดมา
-
-### credential อยู่ใน Secrets Manager ไม่ใช่ในโค้ด
-
-```python
-secret_response = secrets.get_secret_value(SecretId=SECRET_NAME)
-credentials = json.loads(secret_response["SecretString"])
-```
-
-ไฟล์ service account JSON ของ Google มี private key อยู่ข้างใน ถ้าฝังใน zip ใครอ่านโค้ดฟังก์ชันได้ก็ได้กุญแจไปด้วย — ตรงกับกติกาข้อมูลอ่อนไหวที่ห้ามเก็บ credential ในโน้ตหรือ repo
-
-### แลก private key เป็น access token
-
-```python
-scopes = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-creds = service_account.Credentials.from_service_account_info(credentials, scopes=scopes)
-creds.refresh(Request())
-access_token = creds.token
-```
-
-Google ไม่รับ private key ตรง ๆ ต้องเอาไปเซ็น JWT แล้วแลกเป็น access token อายุ 1 ชั่วโมง
-
-**ขั้นตอนเซ็น JWT นี่เองที่บังคับให้ต้องมี library `cryptography`** ซึ่งเป็นต้นตอของปัญหา packaging ทั้งหมดข้างล่าง
-
-`readonly` scope = ต่อให้ token หลุด ก็แก้ชีตต้นทางไม่ได้
-
-### เขียน CSV ผ่าน /tmp ไม่ใช่ผ่าน RAM
-
-```python
-with open("/tmp/output.csv", "w", encoding="utf-8-sig", newline="") as f:
-    writer = csv.writer(f, lineterminator=chr(10))
-    writer.writerow(headers)
-    for i in range(1, len(values)):
-        row = values[i]
-        values[i] = None          # ปล่อย memory ทีละแถว
-        if len(row) < width:
-            row = row + [""] * (width - len(row))
-        writer.writerow(row[:width])
-```
+**คำอธิบายทีละฟังก์ชันอยู่ที่ `docs/googlesheet-to-s3.md` ในรีโป** — โน้ตนี้เก็บเฉพาะข้อตัดสินใจและกับดักที่ใช้ซ้ำกับ pipeline อื่นได้
 
 | จุด | เหตุผล |
 |---|---|
-| เขียนลง `/tmp` | `/tmp` มี 512 MB **แยกจาก memory ของฟังก์ชัน** ขนาดชีตจึงแทบไม่กระทบ RAM |
-| `utf-8-sig` | ใส่ BOM ให้ Excel เปิดภาษาไทยไม่เพี้ยน |
-| `lineterminator=chr(10)` | บังคับ LF — ค่า default ของ `csv` คือ CRLF ซึ่งทำให้ Athena/Glue ติดอักขระ CR ค้างท้ายคอลัมน์สุดท้าย |
-| `csv.writer` | escape เครื่องหมายคำพูดให้เอง ค่าที่มี `"` หรือ `,` ข้างในจึงไม่ทำไฟล์พัง |
-| `values[i] = None` | ทิ้ง reference ทีละแถวระหว่างวน ไม่ถือข้อมูลทั้งชุดค้างไว้ |
+| **boto3 client วางนอก handler** | รันเฉพาะ cold start · เห็นเป็น `Init Duration ~800 ms` ที่หายไปในรอบถัดมา |
+| **credential อยู่ใน Secrets Manager** | ไฟล์ service account มี private key ถ้าฝังใน zip ใครอ่านโค้ดได้ก็ได้กุญแจ |
+| **เซ็น JWT ครั้งเดียวใช้ได้ทุกชีต** | token อายุ 1 ชม. เรียกก่อนเข้าลูป ไม่ใช่ต่อชีต |
+| **เขียน CSV ผ่าน `/tmp`** | `/tmp` 512 MB แยกจาก memory ของฟังก์ชัน — วัดจริง 50k แถว: ต่อ string ใน RAM 38.8 MB vs เขียนไฟล์ 0.3 MB |
+| **`upload_file` ไม่ใช่ `put_object`** | สตรีมจากดิสก์ แบ่ง multipart อัตโนมัติ |
+| **`try/except` อยู่ระดับ tab** | tab เดียวพังไม่ลากทั้งงานล่ม |
+| **ไม่ตั้ง env = ปิดฟีเจอร์ ไม่ใช่พัง** | SES/log ส่งไม่ได้ไม่ควรลากงานหลักล่ม เพราะข้อมูลขึ้น S3 แล้ว |
+| **retry 2 ชั้น** | ชั้นใน = ยิงซ้ำทันที (สะดุดชั่วขณะ) · ชั้นนอก = ทำใหม่ทั้งรอบหลังพัก 20 วินาที (ต้นทางหน่วงเพราะยิงติดกันหลายคำขอ) |
+| **guard ด้วยเวลาที่ Lambda เหลือ** | ก่อน retry ทุกครั้งเช็ค `get_remaining_time_in_millis()` — ไม่พอก็ยอมแพ้ tab นั้น **แทนที่จะดันจนตายทั้งงาน** |
 
-**Google ตัดช่องว่างท้ายแถวทิ้ง** — แถวที่ 3 ช่องท้ายว่างจะส่งมาสั้นกว่าแถวอื่น ต้องเติมเองให้ครบ `width` ไม่งั้นคอลัมน์เลื่อนตอน Athena อ่าน
+### กับดักที่เจอจริง
 
-### upload_file ไม่ใช่ put_object
-
-```python
-s3.upload_file(tmp_path, S3_BUCKET, S3_KEY, ExtraArgs={"ContentType": "text/csv"})
-```
-
-`upload_file` สตรีมจากดิสก์และแบ่ง multipart ให้อัตโนมัติ · `put_object` ต้องโหลดทั้งก้อนเข้า RAM ก่อน
+| กับดัก | อาการ |
+|---|---|
+| **Google ตัดช่องว่างท้ายแถวทิ้ง** | ไม่เติมให้ครบ คอลัมน์จะเลื่อนตอน Athena อ่าน |
+| **`csv` default เป็น CRLF** | ต้องบังคับ LF ไม่งั้น Athena ติดอักขระ CR ท้ายคอลัมน์สุดท้าย |
+| **`urlopen` ทิ้ง error body ของ Google** | เห็นแค่ `HTTP Error 400` ทั้งที่ Google บอกสาเหตุมาด้วย ต้องดักเอง |
+| **`/tmp` อยู่กับ container ที่ใช้ซ้ำ** | ไม่ลบจะพอกจนเจอ `No space left on device` |
+| **`ses:SendRawEmail` คนละ action กับ `ses:SendEmail`** | ใส่ผิดตัวได้ AccessDenied |
+| **Gmail บล็อก `data:` URI** | โลโก้ต้องแนบเป็น attachment อ้างด้วย `cid:` |
 
 ---
 
@@ -109,7 +85,7 @@ Lambda ให้ Python มาแค่ **standard library + boto3** ไม่�
 
 ### ทำไมต้อง Linux
 
-Library แบ่งเป็น 2 แบบ
+Library แบ่งเป็น 2 แบบ  
 
 | แบบ                            | ตัวอย่าง                                           | ย้ายข้ามเครื่อง |
 | ------------------------------ | -------------------------------------------------- | --------------- |
@@ -144,11 +120,11 @@ pip บน Windows ยังแถมโฟลเดอร์ `bin/` ที่�
 
 ### 3 ค่าที่ต้องตรงกันเสมอ
 
-| ตอน build | ตอนตั้งค่า Lambda |
-|---|---|
+| ตอน build                         | ตอนตั้งค่า Lambda                                          |
+| --------------------------------- | ---------------------------------------------------------- |
 | `--platform manylinux2014_x86_64` | Architecture = x86_64 (ถ้าใช้ Graviton ต้องเป็น `aarch64`) |
-| `--python-version 3.13` | Runtime = Python 3.13 |
-| ชื่อไฟล์ `.py` + ชื่อฟังก์ชัน | Handler = `lambda_function.lambda_handler` |
+| `--python-version 3.13`           | Runtime = Python 3.13                                      |
+| ชื่อไฟล์ `.py` + ชื่อฟังก์ชัน     | Handler = `lambda_function.lambda_handler`                 |
 
 ### zip ต้องใช้ path แบบ POSIX
 
@@ -158,13 +134,13 @@ pip บน Windows ยังแถมโฟลเดอร์ `bin/` ที่�
 
 ## ปัญหาที่เจอจริง 5 ข้อ
 
-| # | Error ที่ขึ้น | สาเหตุจริง | วิธีแก้ |
-|---|---|---|---|
-| 1 | `Runtime.ImportModuleError: cannot import name 'exceptions' from 'cryptography.hazmat.bindings._rust'` | build บน Windows + Python 3.14 | รีบิลด์ด้วย manylinux wheel |
-| 2 | `AccessDeniedException` ตอน `GetSecretValue` | Lambda role ไม่มี policy | เพิ่ม inline policy |
-| 3 | `HTTP Error 404` จาก Sheets API | Spreadsheet ID พิมพ์เกิน (46 ตัวอักษร แทนที่จะเป็น 44) | แก้ ID |
-| 4 | `Task timed out after 3.00 seconds` | timeout default 3 วินาที | ตั้ง 5 นาที |
-| 5 | `Runtime.OutOfMemory` ที่ 127/128 MB | ถือข้อมูลชุดเดียวซ้อนกัน 3 ชุด | เขียนผ่าน `/tmp` + `del` |
+| #   | Error ที่ขึ้น                                                                                          | สาเหตุจริง                                             | วิธีแก้                     |
+| --- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ | --------------------------- |
+| 1   | `Runtime.ImportModuleError: cannot import name 'exceptions' from 'cryptography.hazmat.bindings._rust'` | build บน Windows + Python 3.14                         | รีบิลด์ด้วย manylinux wheel |
+| 2   | `AccessDeniedException` ตอน `GetSecretValue`                                                           | Lambda role ไม่มี policy                               | เพิ่ม inline policy         |
+| 3   | `HTTP Error 404` จาก Sheets API                                                                        | Spreadsheet ID พิมพ์เกิน (46 ตัวอักษร แทนที่จะเป็น 44) | แก้ ID                      |
+| 4   | `Task timed out after 3.00 seconds`                                                                    | timeout default 3 วินาที                               | ตั้ง 5 นาที                 |
+| 5   | `Runtime.OutOfMemory` ที่ 127/128 MB                                                                   | ถือข้อมูลชุดเดียวซ้อนกัน 3 ชุด                         | เขียนผ่าน `/tmp` + `del`    |
 
 ### กับดักที่ควรจำ
 
@@ -226,19 +202,82 @@ except urllib.error.HTTPError as e:
 
 ---
 
-## ยังไม่ครบตามข้อกำหนด log ของทีม
+## log — ใช้ schema กลางของแผนกแล้ว
 
-ข้อกำหนดที่ตกลงกัน 2026-08-27 บอกว่าทุก job ต้องบันทึกปริมาณต้นทาง · ปริมาณปลายทาง · เวลาเริ่ม-เสร็จ · โหมดเขียน · ชื่อตาราง → [[ETL & Spark]]
+**34 คอลัมน์ · 21 ตัวแรกเรียงตาม schema กลาง** เพื่อให้รวมกับ pipeline อื่นในตารางเดียวกันได้ · 13 ตัวท้ายเป็นของเดิมที่ยังจำเป็น
 
-ตอนนี้ฟังก์ชันนี้ print ออก CloudWatch แค่
+```
+s3://com7-ingest-logs-<account>/ingest-log/source=google_sheet/job=.../
+  year=2026/month=09/day=07/<Job_No>.csv
+```
 
-- จำนวนแถวต้นทาง (`Google Sheet Rows:`)
-- ขนาดไฟล์ CSV (`CSV bytes:`)
-- ผลการอัปโหลดและ `head_object` ยืนยันว่าไฟล์ขึ้นจริง
+| ตกลงกันไว้ | ค่า |
+|---|---|
+| `Job_No` | UUID จาก `aws_request_id` |
+| `Job_Type` | `Fullload` |
+| `Job_Start_Datetime` `Job_End_Datetime` `Job_status` `Duration_min` `Error_message` | **ของ tab ในแถวนั้น** ไม่ใช่ของทั้งรอบ |
+| `Step_Function_Name` `Server_Name` `Port` `DB_Name` | ว่าง — ไม่มีความหมายกับต้นทางที่เป็น HTTPS API |
+| `Threat_scan_Malware` | ว่าง — ยังไม่มีบริการ scan |
 
-**ยังขาด** จำนวนแถวปลายทางเทียบต้นทาง · timestamp เริ่ม-เสร็จ · การระบุโหมดเขียน → งานค้างอยู่ที่ [[Pipeline Issues]]
+**คอลัมน์ที่ยืนยันว่าต้องเก็บไว้แม้ schema กลางไม่มี**
 
-**โหมดเขียนคือ rewrite เสมอ** — key ปลายทางเป็นชื่อคงที่ ทุกรอบเขียนทับของเดิมทั้งไฟล์ ไม่มีประวัติย้อนหลัง `[อนุมาน จากโค้ด]`
+| | ทำไม |
+|---|---|
+| `Write_Mode` · `Column_count` | **[[Decisions\|D-15]] บังคับ** |
+| `Run_status` · `Run_Duration_min` | **`Job_*` เป็นของ tab ในแถวนั้น** (หนึ่งแถว = หนึ่งตาราง) จึงต้องมีช่องผลรวมทั้งรอบแยกออกมา |
+| `Table_Duration_sec` | เท่ากับ `Duration_min` แต่หน่วยวินาที อ่านง่ายกว่าตอน debug |
+| `Header_Hash` | md5 หัวตาราง — **จับ schema drift ที่จำนวนคอลัมน์เท่าเดิมแต่สลับ/เปลี่ยนชื่อ** → [[Data Standardization & Quality]] |
+| `Target_Bucket` · `S3_Key` · `Etag` | Lambda 2 ใช้หาไฟล์และยืนยันว่ายังเป็นตัวเดิม |
+
+**เลือก CSV ไม่ใช่ JSON** เพราะโครงสร้างแบน Crawler อ่านเป็นตารางได้เลย และ D-15 ระบุว่า MIS เป็นผู้รับซึ่งเปิดด้วย Excel
+
+**ต้องใส่ BOM** ไม่งั้น Excel อ่านภาษาไทย (`ชีต1`) ไม่ออก — ไบต์ในไฟล์เป็น UTF-8 ถูกต้องอยู่แล้ว ปัญหาอยู่ที่ตอนเปิด
+
+**ต้องแยกถังจากถังข้อมูล** ไม่งั้น Crawler ที่สแกนถังข้อมูลจะไปเจอ log แล้วสร้างตารางมั่ว → [[Glue Crawler]]
+
+> ⚠️ `Table_row count` มีช่องว่างในชื่อตาม schema กลาง — query ใน Athena ต้องครอบ `"Table_row count"` ทุกครั้ง
+
+## Lambda ตัวที่ 2 — นับแถวจากไฟล์จริง
+
+**ที่มา:** `rows_written` เดิมคำนวณจากต้นทาง (`len(values)-1`) จึงเท่ากับ `rows_source` เสมอ — **ไม่ได้ตอบ D-15 ว่าปลายทางเท่าต้นทางไหม**
+
+**บทเรียนที่ใช้ซ้ำได้กับทุก pipeline: คอลัมน์ตรวจสอบที่คำนวณจากต้นทางเดียวกันไม่ใช่การตรวจสอบ** — ต้องวัดจากปลายทางจริง
+
+| ชั้นการตรวจ | ต้นทุน | จับอะไรได้ |
+|---|---|---|
+| นับที่ `csv.writer` | ฟรี | bug ในลูป · แถวที่หลุด |
+| **เทียบ `ContentLength` หลังอัปโหลด** | ฟรี (`head_object` เรียกอยู่แล้ว) | อัปโหลดไม่ครบ |
+| **อ่านกลับจาก S3 แล้วนับ** | +เวลาเท่าตัว → **แยกเป็น Lambda 2** | ทุกกรณี |
+
+**ต้องอ่านผ่าน `csv.reader` ห้ามนับ `
+`** — เซลล์ที่อยู่ที่คนพิมพ์ขึ้นบรรทัดใหม่ในชีตถูกครอบด้วย `"` การนับ newline จะได้เกินจริง
+
+**เช็ค `Etag` ก่อนนับ** — ไฟล์ถูกทับหลัง ingest แล้วนับ จะได้เลขที่ไม่ตรงกับ log แถวนั้น → ใส่ `STALE` แทน
+
+| `Status_row_count`                 | หมายถึง                   |
+| ---------------------------------- | ------------------------- |
+| `MATCH` / `MISMATCH`               | ต้นทางเท่า/ไม่เท่าปลายทาง |
+| `STALE`                            | ไฟล์ถูกทับแล้ว            |
+| `SKIPPED_TOO_LARGE` · `ERROR: ...` | ข้ามไป                    |
+|                                    |                           |
+
+**เรียกแบบ async (`InvocationType="Event"`)** — job หลักยิงแล้วจบทันที ไม่ช้าลง
+
+### เลือกวิธีเชื่อม 2 Lambda ยังไง
+
+| | direct invoke (ใช้อยู่) | S3 Event Notification |
+|---|---|---|
+| จุดที่ต้อง config | **3** | 5 |
+| พังแล้วรู้ไหม | เห็นใน log ของตัวที่ 1 | **เงียบ** ถ้าลืม `add-permission` |
+| แยกขาดไหม | ตัวที่ 1 ต้องรู้ชื่อตัวที่ 2 | แยกขาด |
+
+**เลือก direct invoke เพราะจุดที่พลาดได้น้อยกว่าและพังแล้วเห็น** — การแยกขาดเป็นข้อดีเชิงทฤษฎีสำหรับ pipeline แค่ 2 ขั้น ไม่คุ้มกับ config ที่เพิ่มมา 2 จุดซึ่งพลาดแล้วเงียบ
+
+**บทเรียนที่ใช้ซ้ำได้: เลือกสถาปัตยกรรมตามจำนวนจุดที่พลาดได้ ไม่ใช่ตามความสวยของ diagram**
+
+Lambda 2 เขียนให้รับได้ทั้ง 2 แบบ (`parse_event`) — เปลี่ยนวิธีเชื่อมภายหลังได้โดยไม่ต้องแก้โค้ด
+
+**ข้อแลกเปลี่ยน** — อีเมลออกไปก่อน `S3_row_count` มีค่า และต้องดู CloudWatch 2 log group
 
 ---
 
@@ -254,4 +293,4 @@ except urllib.error.HTTPError as e:
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ETL & Spark]] · [[AWS Services]] · [[Architecture]] · [[GI + EV7 to 7Club]] · [[EV Systems]] · [[Consent & PDPA]] · [[Data Standardization & Quality]] · [[Pipeline Issues]]
+[[Google Sheet to S3 - Code Walkthrough]] · [[ETL & Spark]] · [[Python Libraries]] · [[AWS Services]] · [[Architecture]] · [[GI + EV7 to 7Club]] · [[EV Systems]] · [[Consent & PDPA]] · [[Data Standardization & Quality]] · [[Pipeline Issues]]

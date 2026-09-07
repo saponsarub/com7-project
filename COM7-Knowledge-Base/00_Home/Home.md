@@ -66,6 +66,8 @@
 | เขียน Glue job ยังไง | [[ETL & Spark]] |
 | รวมข้อมูล collection K2 + ITOS | [[Collection Union (K2 + ITOS)]] |
 | **แพ็ก Lambda ยังไง ทำไมต้อง build บน Linux** | [[Google Sheet to S3 (Lambda)]] |
+| อ่านโค้ด Lambda ทีละฟังก์ชัน | `docs/googlesheet-to-s3.md` → [[Google Sheet to S3 - Code Walkthrough]] |
+| **flow เต็ม + แผนล่วงหน้าของ pipeline ชีต** | [[Google Sheet Pipeline]] |
 
 ### สถานะ · ปัญหา · อ้างอิง
 
@@ -78,6 +80,8 @@
 | ศัพท์นี้แปลว่าอะไร | [[Glossary]] |
 | ใครดูแลอะไร | [[People & Teams]] |
 | ข้อมูลใน vault มาจากไหน | [[Source Inventory]] |
+| **library ไหนใช้ทำอะไร · เลือกยังไง** | [[Python Libraries]] |
+| **ใช้ git/GitHub ยังไง · SSH 2 บัญชี · แก้ตอน push ไม่ผ่าน** | [[Git & GitHub]] |
 | บันทึกประชุม | [[Meeting Index]] |
 | ของเก่าที่เลิกใช้ | [[Archive]] |
 
@@ -98,10 +102,12 @@
 03_Data/        Customer Identity · Consent & PDPA · Data Standardization · Customer 360 · K2 Field Survey
 04_DataLake/    Architecture · AWS Services · Network & VPN · Decisions · Redshift · Glue Crawler
 05_ETL/         ETL & Spark · Collection Union (K2 + ITOS) · Google Sheet to S3 (Lambda)
+                Google Sheet to S3 - Code Walkthrough
 06_Project/     K2 + ITOS Integration · GI + EV7 → 7Club · OD6 Collection Delivery
                 Data Framework Scope · SSOT Roadmap · K2 Termination Automation
+                Google Sheet Pipeline
 07_Meeting/     บันทึกประชุม (ภาษาไทย)
-08_Reference/   Source Inventory · People & Teams · SQL & Source Schemas
+08_Reference/   Source Inventory · People & Teams · SQL & Source Schemas · Python Libraries · Git & GitHub
                 Analytics & AI · Athena Benchmark · EV China Benchmark
 09_Issues/      คำถามที่ยังไม่มีคำตอบ · งานค้าง · ความเสี่ยง
 99_Archive/     ของเก่าที่เลิกใช้แล้ว

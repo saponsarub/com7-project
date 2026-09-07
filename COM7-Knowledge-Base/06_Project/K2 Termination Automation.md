@@ -8,13 +8,13 @@
 
 **ของเดิมที่ทำงานอยู่** → [[K2 - OD6 Selection Logic]] · [[K2 - Termination Letter How-To]]
 
-| | |
-|---|---|
-| สคริปต์ | `scripts/k2/k2_termination.py` |
-| SQL | `sql/k2_termination_list_v4.sql` |
+|                |                                                                    |
+| -------------- | ------------------------------------------------------------------ |
+| สคริปต์        | `scripts/k2/k2_termination.py`                                     |
+| SQL            | `sql/k2_termination_list_v4.sql`                                   |
 | รันยังไงตอนนี้ | คนรันเองบนเครื่อง `python scripts/k2/k2_termination.py 2026-09-01` |
-| ผลรอบ 9/2026 | 343 สัญญา |
-| ผลลัพธ์ | Excel จาก template (PDF ยังไม่มี) |
+| ผลรอบ 9/2026   | 343 สัญญา                                                          |
+| ผลลัพธ์        | Excel จาก template (PDF ยังไม่มี)                                  |
 
 ---
 
