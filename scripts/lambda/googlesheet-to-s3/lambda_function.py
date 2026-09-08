@@ -16,7 +16,7 @@ from google.oauth2 import service_account
 from google.auth.transport.requests import Request
 from datetime import datetime, timezone, timedelta
 
-VERSION = "2.4.1"
+VERSION = "2.4.2"
 
 # Google Sheet -> S3  ·  เอกสาร: docs/googlesheet-to-s3.md
 
@@ -373,6 +373,7 @@ def build_html(ok, failed, runs, total_rows, total_bytes, elapsed):
     grp = ("padding:14px 16px 9px;font-size:13px;font-weight:700;"
            f"color:{AMBER_DARK};letter-spacing:.06em;text-transform:uppercase;"
            f"background:{GREEN_TINT};border-bottom:1px solid #D6E6CE;")
+    tot = f"padding:15px 16px;background:{GREEN_TINT};"
     sub_cell = (f"padding:10px 16px;font-size:13px;color:{GRAY};font-weight:700;"
                 "border-bottom:2px solid #E9ECE9;background:#F6F8F6;" + mono)
 
@@ -546,25 +547,25 @@ def build_html(ok, failed, runs, total_rows, total_bytes, elapsed):
         + stats + "</tr></table>"
         + "</td></tr></table></td></tr>"
 
-        + '<tr><td style="padding:0 28px 10px;">'
+        + '<tr><td style="padding:0 28px 24px;">'
         + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"'
         + ' style="border-collapse:separate;border-spacing:0;border:1px solid #DFE4DF;'
-        + 'border-radius:11px;overflow:hidden;">'
-        + f'<tr><th style="{head}text-align:left;">Table</th>'
+        + 'border-radius:11px;">'
+        + f'<tr><th style="{head}text-align:left;border-radius:10px 0 0 0;">Table</th>'
         + f'<th style="{head}text-align:left;">Source tab</th>'
         + f'<th style="{head}text-align:right;">Rows</th>'
         + f'<th style="{head}text-align:right;">Size</th>'
-        + f'<th style="{head}text-align:center;">Status</th></tr>'
+        + f'<th style="{head}text-align:center;border-radius:0 10px 0 0;">Status</th></tr>'
         + "".join(rows)
-        + f'<tr><td style="padding:15px 16px;background:{GREEN_TINT};font-weight:700;'
+        + f'<tr><td style="{tot}border-radius:0 0 0 10px;font-weight:700;'
         + f'font-size:15px;color:{INK};">&#931;&nbsp; Total</td>'
-        + f'<td style="background:{GREEN_TINT};"></td>'
-        + f'<td style="padding:15px 16px;background:{GREEN_TINT};text-align:right;'
+        + f'<td style="{tot}"></td>'
+        + f'<td style="{tot}text-align:right;'
         + f'{mono}font-weight:700;font-size:17px;color:{GREEN_DARK};">' + f"{total_rows:,}" + "</td>"
-        + f'<td style="padding:15px 16px;background:{GREEN_TINT};text-align:right;'
+        + f'<td style="{tot}text-align:right;'
         + f'{mono}font-weight:700;font-size:16px;color:{GREEN_DARK};">'
         + human_size(total_bytes) + "</td>"
-        + f'<td style="background:{GREEN_TINT};"></td></tr>'
+        + f'<td style="{tot}border-radius:0 0 10px 0;"></td></tr>'
         + "</table></td></tr>"
 
         + err_block

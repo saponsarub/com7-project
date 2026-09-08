@@ -104,7 +104,7 @@
 - [ ] error ถาวร (400/403/404) ยังถูกยกไป pass 2-3 ทั้งที่แก้ไม่ได้
 - [ ] `rows_delta` เทียบรอบก่อน · null rate · duplicate count
 
-- [ ] ย้าย library ไป **Lambda Layer** เพื่อให้ zip โค้ดเหลือไม่กี่ KB (ตอนนี้ 5.9 MB แก้ใน Console ไม่ได้)
+- [x] ย้าย library ไป **Lambda Layer** — zip โค้ดเหลือ 38.9 KB · แก้ใน Console ได้แล้ว
 - [ ] เปลี่ยนชื่อฟังก์ชัน/role จาก `test-*` ถ้าจะใช้จริง
 - [ ] ตรวจ bucket policy / encryption ของ `google-sheet-extract`
 

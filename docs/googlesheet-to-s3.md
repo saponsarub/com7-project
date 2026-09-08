@@ -9,10 +9,11 @@
 
 | | |
 |---|---|
-| เวอร์ชัน | 2.4.0 |
+| เวอร์ชัน | 2.4.2 |
 | Runtime | Python 3.13 · x86_64 |
 | Handler | `lambda_function.lambda_handler` |
 | Timeout / Memory | 10 นาที / 2048 MB |
+| Layer | `com7-googlesheet-deps` (5.89 MB) · function zip เหลือ 38.9 KB |
 | ปลายทาง | `s3://google-sheet-extract/google-sheet-{ev7,gi}/<table>/data.csv` |
 
 ---
@@ -380,6 +381,38 @@ if not todo:
 
 ## Build
 
+### แยกเป็น Layer แล้ว (v2.4.2)
+
+```
+zip เดียว 5.92 MB   ->  เกิน 3 MB · Console แก้โค้ดไม่ได้
+
+Layer      5.89 MB   library ทั้งหมด (อยู่ใต้ python/ ที่ root ของ zip)
+Function     38.9 KB  lambda_function.py + PNG 4 ไฟล์
+```
+
+**โค้ดเรา 67 KB · library 19 MB** — `cryptography` ตัวเดียว 14 MB
+
+| ที่อยู่ใน Lambda | มีอะไร |
+|---|---|
+| `/var/task/` | function package |
+| `/opt/python/` | layer |
+
+**PNG อยู่ใน function package ไม่ใช่ layer** เพราะโค้ดหาไฟล์จาก `os.path.dirname(__file__)` = `/var/task` · `sys.path` ใช้ตอน `import` เท่านั้น **`open()` ไม่ได้ใช้ `sys.path`**
+
+**ผลพลอยได้: แก้โค้ดใน Console ได้แล้ว** — แต่ต้อง Download กลับมาทับที่เครื่องทุกครั้ง ไม่งั้นรอบหน้า build ทับหาย
+
+### สร้าง Layer
+
+```bash
+aws s3 cp com7-googlesheet-deps-layer-*.zip s3://google-sheet-extract/_deploy/
+aws lambda publish-layer-version --layer-name com7-googlesheet-deps --content S3Bucket=google-sheet-extract,S3Key=_deploy/<ไฟล์>.zip --compatible-runtimes python3.13 --compatible-architectures x86_64
+aws lambda update-function-configuration --function-name test-ses-googlesheet --layers <LayerVersionArn>
+```
+
+**ผูก layer ก่อน แล้วค่อยอัปโหลด code-only zip** — สลับลำดับจะมีช่วงที่ฟังก์ชันหา library ไม่เจอ
+
+
+
 ```powershell
 pip install --target lambda-build --platform manylinux2014_x86_64 --implementation cp `
             --python-version 3.13 --only-binary=:all: google-auth requests
@@ -421,4 +454,6 @@ pip install --target lambda-build --platform manylinux2014_x86_64 --implementati
 | 2.1.0 | แยกเวลาเป็นราย tab |
 | 2.3.0 | ลองเปลี่ยนเป็น S3 Event Notification |
 | **2.2.0** | **`Job_Start_Datetime` `Job_End_Datetime` `Job_status` `Duration_min` เป็นของ tab ในแถวนั้น** ตามเจตนาเดิมของ schema · ย้ายผลรวมทั้งรอบไป `Run_status` / `Run_Duration_min` · Lambda 2 อ่าน `Job_status = SUCCESS` |
-| **2.4.0** | **กลับมาใช้ direct invoke** — จุด config น้อยกว่า และพังแล้วเห็นใน log · Lambda 2 ยังรับ S3 event ได้ เปลี่ยนวิธีเชื่อมโดยไม่ต้องแก้โค้ด |
+| 2.4.0 | **กลับมาใช้ direct invoke** — จุด config น้อยกว่า และพังแล้วเห็นใน log · Lambda 2 ยังรับ S3 event ได้ เปลี่ยนวิธีเชื่อมโดยไม่ต้องแก้โค้ด |
+| 2.4.1 | `jsonable()` แก้ `Runtime.MarshalError` จาก datetime ในค่าที่ return |
+| **2.4.2** | **แยก library เป็น Lambda Layer** · แก้ตารางในอีเมลที่สีพื้นล้นออกนอกกรอบ |

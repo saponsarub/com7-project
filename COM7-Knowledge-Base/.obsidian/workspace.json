@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_Business/EV Business.md",
+                "file": "08_Reference/Python Libraries.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "EV Business"
+              "title": "Python Libraries"
             }
           }
         ]
@@ -190,6 +190,9 @@
   },
   "active": "f6a21dac3801f84a",
   "lastOpenFiles": [
+    "00_Home/Current Status.md",
+    "08_Reference/Git & GitHub.md",
+    "01_Business/EV Business.md",
     "01_Business/Group Structure.md",
     "08_Reference/Analytics & AI.md",
     "05_ETL/Google Sheet to S3 - Code Walkthrough.md",
@@ -209,9 +212,7 @@
     "05_ETL/_raw/lambda_function_v1.2.2.py",
     "05_ETL/_raw",
     "05_ETL/Collection Union (K2 + ITOS).md",
-    "00_Home/Current Status.md",
     "04_DataLake/Redshift.md",
-    "08_Reference/Git & GitHub.md",
     "08_Reference/Git & GitHub.md.tmp.18816.99bd33462095",
     "99_Archive/Archive.md",
     "04_DataLake/Glue Crawler.md",
@@ -219,7 +220,6 @@
     "04_DataLake/Architecture.md",
     "00_Home/Glossary.md",
     "01_Business/UFUND.md",
-    "07_Meeting/2026-08/2026-08-26 ERP.md",
     "Untitled.base",
     "Untitled 1.canvas",
     "Untitled.canvas",
