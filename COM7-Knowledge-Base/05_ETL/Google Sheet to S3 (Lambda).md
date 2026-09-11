@@ -16,12 +16,12 @@
 ## สถาปัตยกรรม
 
 ```
-EventBridge (23:30 · ยังไม่ได้ตั้ง)
+EventBridge (23:30)
       ▼
 Lambda 1 · ingest
   Secrets Manager ──► Google OAuth (เซ็น JWT ครั้งเดียว)
   Sheets API ──► CSV (/tmp) ──► S3 data    วนทุกชีต/tab · ingest ซ้ำได้ 3 รอบ
-  log CSV ──► S3 log   (S3_row_count ยังว่าง)
+  log CSV ──► S3 log   (S3_row_count ใส่แล้ว)
   รายงาน  ──► SES (ap-southeast-1)
       │ invoke async · ไม่รอผล
       ▼
@@ -33,12 +33,12 @@ Lambda 2 · rowcount
 
 ### แหล่งข้อมูล
 
-| ชีต | brand | tabs | ปลายทาง |
-|---|---|---|---|
-| EV7 Main | ev7 | 7 tabs | `google-sheet-ev7/ev7_*/` |
-| Grab | ev7 | `Clean` · `ชีต1` | `google-sheet-ev7/Grab_Clean/` · `Grab/` |
-| Lineman | ev7 | `Clean` · `ชีต1` | `google-sheet-ev7/Lineman_Clean/` · `Lineman/` |
-| GI | gi | `rawdataInteresting` · `rawdataTestdrive` · `rawdataBooking` | `google-sheet-gi/GI_Interest/` · `GI_Testdrive/` · `GI_Booking/` |
+| ชีต      | brand | tabs                                                         | ปลายทาง                                                          |
+| -------- | ----- | ------------------------------------------------------------ | ---------------------------------------------------------------- |
+| EV7 Main | ev7   | 7 tabs                                                       | `google-sheet-ev7/ev7_*/`                                        |
+| Grab     | ev7   | `Clean` · `ชีต1`                                             | `google-sheet-ev7/Grab_Clean/` · `Grab/`                         |
+| Lineman  | ev7   | `Clean` · `ชีต1`                                             | `google-sheet-ev7/Lineman_Clean/` · `Lineman/`                   |
+| GI       | gi    | `rawdataInteresting` · `rawdataTestdrive` · `rawdataBooking` | `google-sheet-gi/GI_Interest/` · `GI_Testdrive/` · `GI_Booking/` |
 
 **service account ตัวเดียวใช้ได้ทุกชีต** แต่ต้อง share แต่ละไฟล์ให้ `client_email` แยกกัน — **ลืมแล้วได้ 404 ไม่ใช่ 403** เพราะ Google จงใจไม่บอกว่าไฟล์มีอยู่จริงไหม
 
@@ -48,25 +48,25 @@ Lambda 2 · rowcount
 
 ## ฟังก์ชันทั้งหมด — Lambda 1 (1,012 บรรทัด)
 
-| ฟังก์ชัน | ทำอะไร | ตรรกะที่ต้องรู้ |
-|---|---|---|
-| `total_tabs(runs)` | นับ tab ที่ตั้งใจดึงในรอบนี้ | ใช้เป็นตัวหารใน `12 of 14 tabs` |
-| `time_left()` | วินาทีที่ Lambda เหลือ | อ่าน `CONTEXT.get_remaining_time_in_millis()` · รันบนเครื่องคืน 900 · **เป็น guard ก่อน retry ทุกจุด** |
-| `get_access_token()` | Secrets Manager → access token | เซ็น JWT RS256 ครั้งเดียวใช้ได้ทุกชีต · token อายุ 1 ชม. |
-| `fetch_tab(...)` | ดึง 1 tab จาก Sheets API | retry ในตัว + ดัก error body ของ Google |
-| `write_csv(values, path)` | เขียน CSV ทีละแถวลง `/tmp` | คืน `(bytes, จำนวนแถว)` |
-| `human_size(n)` | bytes → KB/MB/GB ฐาน 1024 | ให้ตรงกับที่ S3 console แสดง |
-| `group_by_source(items, runs)` | จัดรายการตามชีต | **คงลำดับตาม `SOURCES`** ไม่เรียงตามตัวอักษร คนอ่านเห็นลำดับเดิมทุกวัน |
-| `build_report(...)` | รายงาน plain text | จัดตารางด้วยช่องว่าง ใช้ได้เพราะทุกค่าเป็น ASCII |
-| `esc(text)` | escape `& < > "` | ค่าจากชีตไม่ควรกลายเป็น HTML tag |
-| `build_html(...)` | รายงาน HTML สำหรับ SES | table layout + inline style |
-| `build_log_rows(...)` | ประกอบ log 34 คอลัมน์ | หนึ่งแถวต่อหนึ่งตาราง |
-| `write_log(rows)` | เขียน log CSV ลง S3 + เรียก Lambda 2 | partition `year=/month=/day=` |
-| `send_report(report, html)` | ส่งผ่าน SES | ส่งไม่ได้ไม่ทำให้ job พัง |
-| `build_mime(...)` | ประกอบอีเมล multipart | โลโก้ inline ด้วย `cid:` |
-| `ingest_tab(...)` | ดึง 1 tab → เขียน S3 → คืน dict | แยกออกมาเพราะ handler เรียกซ้ำหลายรอบ |
-| `jsonable(items)` | แปลง datetime → string | Lambda marshal ค่าที่ `return` เป็น JSON |
-| `lambda_handler(...)` | ตัวควบคุม | กรอง event → auth → วน pass → log → เมล |
+| ฟังก์ชัน                       | ทำอะไร                               | ตรรกะที่ต้องรู้                                                                                        |
+| ------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `total_tabs(runs)`             | นับ tab ที่ตั้งใจดึงในรอบนี้         | ใช้เป็นตัวหารใน `12 of 14 tabs`                                                                        |
+| `time_left()`                  | วินาทีที่ Lambda เหลือ               | อ่าน `CONTEXT.get_remaining_time_in_millis()` · รันบนเครื่องคืน 900 · **เป็น guard ก่อน retry ทุกจุด** |
+| `get_access_token()`           | Secrets Manager → access token       | เซ็น JWT RS256 ครั้งเดียวใช้ได้ทุกชีต · token อายุ 1 ชม.                                               |
+| `fetch_tab(...)`               | ดึง 1 tab จาก Sheets API             | retry ในตัว + ดัก error body ของ Google                                                                |
+| `write_csv(values, path)`      | เขียน CSV ทีละแถวลง `/tmp`           | คืน `(bytes, จำนวนแถว)`                                                                                |
+| `human_size(n)`                | bytes → KB/MB/GB ฐาน 1024            | ให้ตรงกับที่ S3 console แสดง                                                                           |
+| `group_by_source(items, runs)` | จัดรายการตามชีต                      | **คงลำดับตาม `SOURCES`** ไม่เรียงตามตัวอักษร คนอ่านเห็นลำดับเดิมทุกวัน                                 |
+| `build_report(...)`            | รายงาน plain text                    | จัดตารางด้วยช่องว่าง ใช้ได้เพราะทุกค่าเป็น ASCII                                                       |
+| `esc(text)`                    | escape `& < > "`                     | ค่าจากชีตไม่ควรกลายเป็น HTML tag                                                                       |
+| `build_html(...)`              | รายงาน HTML สำหรับ SES               | table layout + inline style                                                                            |
+| `build_log_rows(...)`          | ประกอบ log 34 คอลัมน์                | หนึ่งแถวต่อหนึ่งตาราง                                                                                  |
+| `write_log(rows)`              | เขียน log CSV ลง S3 + เรียก Lambda 2 | partition `year=/month=/day=`                                                                          |
+| `send_report(report, html)`    | ส่งผ่าน SES                          | ส่งไม่ได้ไม่ทำให้ job พัง                                                                              |
+| `build_mime(...)`              | ประกอบอีเมล multipart                | โลโก้ inline ด้วย `cid:`                                                                               |
+| `ingest_tab(...)`              | ดึง 1 tab → เขียน S3 → คืน dict      | แยกออกมาเพราะ handler เรียกซ้ำหลายรอบ                                                                  |
+| `jsonable(items)`              | แปลง datetime → string               | Lambda marshal ค่าที่ `return` เป็น JSON                                                               |
+| `lambda_handler(...)`          | ตัวควบคุม                            | กรอง event → auth → วน pass → log → เมล                                                                |
 
 ### Lambda 2 · rowcount (171 บรรทัด)
 
@@ -489,4 +489,4 @@ Lambda Console (แก้ได้แล้วหลังมี layer)         
 
 ## เชื่อมกับโน้ตอื่น
 
-[[Google Sheet Pipeline]] · [[Google Sheet to S3 - Code Walkthrough]] · [[Glue Crawler]] · [[Python Libraries]] · [[ETL & Spark]] · [[Decisions]] · [[AWS Services]] · [[Consent & PDPA]] · [[Data Standardization & Quality]] · [[GI + EV7 to 7Club]] · [[Pipeline Issues]]
+[[Google Sheet Pipeline]] · [[Google Sheet to S3 - Code Walkthrough]] · [[Glue Crawler]] · [[DMS Full Load Validation (Lambda)]] · [[Python Libraries]] · [[ETL & Spark]] · [[Decisions]] · [[AWS Services]] · [[Consent & PDPA]] · [[Data Standardization & Quality]] · [[GI + EV7 to 7Club]] · [[Pipeline Issues]]

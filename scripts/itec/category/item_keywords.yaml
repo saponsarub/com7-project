@@ -1,0 +1,277 @@
+IS_Promotion:
+  words:
+  - promo
+  whole_word: false
+IS_Demo_Product:
+  words:
+  - demo
+  whole_word: true
+IS_Gaming:
+  words:
+  - gaming
+  whole_word: false
+IS_Smartphone:
+  words:
+  - smartphone
+  whole_word: false
+IS_Mobile:
+  words:
+  - mobile
+  whole_word: false
+IS_iPhone:
+  words:
+  - iphone
+  whole_word: false
+IS_Galaxy:
+  words:
+  - galaxy
+  whole_word: false
+IS_iPad:
+  words:
+  - ipad
+  whole_word: false
+IS_Tablet:
+  words:
+  - tablet
+  whole_word: false
+IS_Watch:
+  words:
+  - watch
+  whole_word: false
+IS_Applewatch:
+  words:
+  - apple watch
+  - applewatch
+  whole_word: false
+IS_AirPod:
+  words:
+  - airpod
+  whole_word: false
+IS_HeadSet:
+  words:
+  - headset
+  whole_word: false
+IS_HeadPhone:
+  words:
+  - head phone
+  - headphone
+  whole_word: false
+IS_EarPhone:
+  words:
+  - earphon
+  whole_word: false
+IS_Earcap:
+  words:
+  - earcap
+  whole_word: false
+IS_Mouse:
+  words:
+  - mouse
+  whole_word: false
+IS_Keyboard:
+  words:
+  - keyboard
+  whole_word: false
+IS_Software:
+  words:
+  - software
+  whole_word: false
+IS_AppleCare:
+  words:
+  - apple care
+  whole_word: false
+IS_Insurance:
+  words:
+  - insurance
+  whole_word: false
+IS_Care:
+  words:
+  - care
+  whole_word: true
+IS_Playstation:
+  words:
+  - playstation
+  whole_word: false
+IS_NintendoSwitch:
+  words:
+  - nintendo switch
+  whole_word: false
+IS_Nintendo_SwitchG:
+  words:
+  - switch-g
+  whole_word: false
+IS_PC:
+  words:
+  - pc
+  whole_word: true
+IS_iMac:
+  words:
+  - imac
+  whole_word: false
+IS_Desktop:
+  words:
+  - desktop
+  whole_word: false
+IS_Computer:
+  words:
+  - computer
+  whole_word: false
+IS_Notebook:
+  words:
+  - notebook
+  whole_word: false
+IS_Macbook:
+  words:
+  - macbook
+  whole_word: false
+IS_GraphicCard:
+  words:
+  - graphic card
+  whole_word: false
+IS_PowerSupply:
+  words:
+  - power supply
+  whole_word: false
+IS_Mainboard:
+  words:
+  - mainboard
+  whole_word: false
+IS_RAM:
+  words:
+  - ram
+  whole_word: true
+IS_CPU:
+  words:
+  - cpu
+  whole_word: true
+IS_Cooling:
+  words:
+  - cooling
+  whole_word: false
+IS_Harddisk:
+  words:
+  - external
+  - h/d
+  - hdd
+  - internal harddrive
+  - portable
+  - solid state drive
+  - ssd
+  whole_word: true
+IS_Camera:
+  words:
+  - camera
+  whole_word: false
+IS_Adapter:
+  words:
+  - adapter
+  whole_word: false
+IS_Charger:
+  words:
+  - charger
+  whole_word: false
+IS_PowerBank:
+  words:
+  - power bank
+  - powerbank
+  whole_word: false
+IS_Case:
+  words:
+  - case
+  whole_word: true
+IS_Casing:
+  words:
+  - casing
+  whole_word: false
+IS_Protect:
+  words:
+  - protec
+  whole_word: false
+IS_Bumper:
+  words:
+  - bumper
+  whole_word: false
+IS_film:
+  words:
+  - film
+  whole_word: true
+IS_Monitor:
+  words:
+  - monitor
+  whole_word: false
+IS_Printer:
+  words:
+  - printer
+  whole_word: false
+IS_Toner:
+  words:
+  - toner
+  whole_word: false
+IS_Cartridge:
+  words:
+  - cartridge
+  whole_word: false
+IS_Cable:
+  words:
+  - cable
+  whole_word: false
+IS_USB:
+  words:
+  - usb
+  whole_word: true
+IS_Speaker:
+  words:
+  - speaker
+  whole_word: false
+IS_Gadget:
+  words:
+  - gadget
+  whole_word: false
+IS_Accessory:
+  words:
+  - accesso
+  whole_word: false
+IS_Sim:
+  words:
+  - sim
+  whole_word: true
+IS_Flashdrive:
+  words:
+  - flash drive
+  whole_word: false
+IS_SD:
+  words:
+  - sd
+  whole_word: true
+IS_Card:
+  words:
+  - card
+  whole_word: true
+IS_Microphone:
+  words:
+  - microphone
+  whole_word: false
+IS_Buletooth:
+  words:
+  - bluetooth
+  whole_word: false
+IS_Battery:
+  words:
+  - battery
+  whole_word: false
+IS_Pin:
+  words:
+  - pin
+  whole_word: true
+IS_Strap:
+  words:
+  - strap
+  whole_word: false
+IS_Stand:
+  words:
+  - stand
+  whole_word: false
+IS_Dock:
+  words:
+  - dock
+  whole_word: true

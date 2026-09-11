@@ -14,14 +14,14 @@
 |---|---|---|---|
 | 1.1.1 | [[ITEC Overview]] | **Done** | Data Team |
 | 1.1.2.1 | [[K2 Overview\|K2]] (UFund) | **Done** (survey ฐานจริง 2026-08-26) | MIS-Fintech |
-| 1.1.2.2 | [[ITOS Overview\|ITOS]] (UFund) | In-Progress | K.Ton |
+| 1.1.2.2 | [[ITOS Overview\|ITOS]] (UFund) | **ตอบแบบสำรวจฟิลด์ลูกค้าแล้ว 2026-09-04** (53 มี · 31 ทดแทน · 14 ไม่มี) | K.Ton |
 | 1.1.3 | [[EV Business\|GI Core]] | Todo | Punt, Nut |
 | 1.1.4 | [[Other Systems\|D365]] | Todo | MIS-ERP |
 | 1.1.5 | [[EV Business\|EV7]] | Todo | **ไม่มีชื่อในตาราง** |
-| 1.1.6.1 | [[Other Systems\|iCare]] — Insurance | Todo | P.Pui |
-| 1.1.6.2 | [[Other Systems\|iCare]] — Mobile Service | Todo | P.Pui |
+| 1.1.6.1 | [[iCare Insurance (ICI)\|iCare]] — Insurance | Todo | P.Pui |
+| 1.1.6.2 | [[Smart Care Service\|iCare / Smart Care]] — Mobile Service | Todo | P.Pui |
 | 1.1.7 | [[Other Systems\|SAP B1]] | Todo | K.Benz |
-| 1.2.1 | [[CRM Overview\|7Club+/CRM]] | Todo | P.Por |
+| 1.2.1 | [[CRM Overview\|7Club+/CRM]] | **มี data dictionary แล้ว 2026-08-28** (3 ตาราง 61 ฟิลด์) · เหลือ coverage | P.Por |
 | 1.2.2 | [[Other Systems\|Tech Trade]] | Todo | K.Koj, K.Poj |
 
 **เสร็จ 2 จาก 11** — งานนี้เป็นคอขวดของทุกอย่าง
@@ -42,7 +42,8 @@
 | AION DMS | GI | ระบบ vendor — บันทึกประชุมเขียนว่า "ของจีน" | To Verify | ClickUp |
 | EV7CORE | EV7 | ระบุเป็นระบบแยกในปัญหาข้อมูลซ้ำ | To Verify | ClickUp |
 | EVTRACKING | EV7 / GI | ยังมีบางรายการของ GI ค้างอยู่หลังโอนไป EV7 | To Verify | ClickUp |
-| [[Other Systems\|iCare]] | ประกัน + mobile service | survey แยก 2 track | To Verify | Timeline |
+| [[iCare Insurance (ICI)]] | ประกันวินาศภัย | บริษัทประกัน · 8 ผลิตภัณฑ์ · คนละธุรกิจกับศูนย์ซ่อม | Confirmed | เว็บทางการ 2026-09-09 |
+| [[Smart Care Service]] | บริการหลังการขาย | **iCare = Apple · Smart Care = ยี่ห้ออื่น** | To Verify | แจ้งวาจา 2026-09-11 |
 | [[Other Systems\|SAP B1]] | ERP | ไม่รู้ว่า BU ไหนใช้ | To Verify | Timeline |
 | [[CRM Overview\|7Club]] | membership | โปรแกรมสมาชิก · survey รวมกับ CRM | To Verify | Timeline · Data Framework |
 | [[CRM Overview\|CRM]] | ลูกค้า / แคมเปญ | ครอบคลุมแค่ ITEC · ส่งต่อให้ทีม CRM ใช้ Braze | Partially Confirmed | Data Framework |

@@ -86,7 +86,7 @@ Proposal บอก Bronze = raw ที่ scan แล้ว · ทีมร่�
 | AION DMS / EV7CORE / EVTRACKING คืออะไร · RPA ย้ายอะไร | Punt, Nut |
 | **Double7 / Co-Ture Shop / Dtac Shop ใช้ระบบอะไร** — ไม่พบชื่อเหล่านี้ในเอกสารต้นฉบับไฟล์ไหนเลย | — |
 | ITEC schema documentation อยู่ไหน — survey Done แล้วแต่ไม่พบเอกสาร | Data Team |
-| CRM data dictionary (`crm_fied_description.html`) อยู่ไหน | P.Por |
+| ~~CRM data dictionary (`crm_fied_description.html`) อยู่ไหน~~ **ปิดแล้ว 2026-09-11** — ได้ไฟล์และแตกเป็น [[CRM - Data Dictionary]] | P.Por |
 | CRM เป็น platform อะไร | P.Por |
 
 ---

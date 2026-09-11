@@ -19,7 +19,9 @@
 | **EVSEVEN**               | ชื่อ BU ใน brief เดิม                                  | brief                    |
 | **D365**                  | Dynamics 365 · ข้อมูลผ่าน `D365FO_DATALAKE`            | Timeline, SQL            |
 | **SAP B1**                | SAP Business One                                       | Timeline                 |
-| **iCare**                 | ประกันอุปกรณ์ + mobile service                         | Timeline                 |
+| **iCare**                 | ศูนย์ซ่อม **Apple** 61 สาขา · **ไม่ใช่บริษัทประกัน** | Timeline, [[Smart Care Service]] |
+| **Smart Care**            | ศูนย์ซ่อม **ยี่ห้ออื่น (non-Apple)** — แยกจาก iCare ตามยี่ห้อสินค้า | [[Smart Care Service]] |
+| **iCare Insurance (ICI)** | บริษัทประกันวินาศภัย 8 ผลิตภัณฑ์ · รถ · ทรัพย์สิน · อุบัติเหตุ | [[iCare Insurance (ICI)]] |
 | **7Club / 7Club+**        | โปรแกรมสมาชิก                                          | Data Framework, Timeline |
 | **Tech Trade / Tectrade** | ธุรกิจเทิร์นเครื่อง                                    | Timeline, Gap Review     |
 | **Braze**                 | platform ส่งข้อความและแคมเปญที่ทีม CRM ใช้             | Data Framework           |

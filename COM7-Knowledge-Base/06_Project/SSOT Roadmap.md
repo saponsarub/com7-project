@@ -20,6 +20,7 @@ Data Framework → Data Migration → Centralized Platform → SSOT
 | # | เป้าหมาย | ขึ้นกับข้อ | อยู่ที่ไหนใน vault |
 |---|---|---|---|
 | 1 | รวมข้อมูลจากทุก BU | — | [[System Inventory]] |
+| 1b | **แบบสำรวจฟิลด์รายแผนก** — input ของข้อ 3 และ 6 | 1 | [[ITEC Data Requirement Survey]] · [[iCare Insurance (ICI)]] · [[K2 Customer Field Survey]] |
 | 2 | สร้างสถาปัตยกรรมกลาง | 1 | [[Architecture]] |
 | 3 | สร้าง **SSOT** | 2 | [[Customer Identity]] |
 | 4 | **Standardize** ข้ามทุก BU | 1 | [[Data Standardization & Quality\|Data Standardization]] |

@@ -28,6 +28,8 @@
 | ระบบสินเชื่อ ITOS | [[ITOS Overview]] |
 | ระบบฝั่ง EV | [[EV Systems]] |
 | ระบบที่ยังรู้น้อย (D365 · SAP B1 · iCare · Tech Trade · Synapse) | [[Other Systems]] |
+| **iCare Insurance ขายอะไร · เก็บข้อมูลอะไร** | [[iCare Insurance (ICI)]] |
+| **iCare vs Smart Care vs iCare Insurance ต่างกันยังไง** | [[Smart Care Service]] |
 
 ### ธุรกิจ — `01_Business`
 
@@ -64,10 +66,14 @@
 | **ตั้ง Glue Crawler ยังไงไม่ให้ตารางแตก · วางโครงสร้าง S3** | [[Glue Crawler]] |
 | เชื่อมเครือข่าย on-prem ↔ AWS | [[Network & VPN]] |
 | เขียน Glue job ยังไง | [[ETL & Spark]] |
+| **Glue ต่อ MSSQL / on-prem · Client VPN vs Site-to-Site** | [[Glue Connectivity]] |
 | รวมข้อมูล collection K2 + ITOS | [[Collection Union (K2 + ITOS)]] |
 | **แพ็ก Lambda ยังไง ทำไมต้อง build บน Linux** | [[Google Sheet to S3 (Lambda)]] |
 | อ่านโค้ด Lambda ทีละฟังก์ชัน | `docs/googlesheet-to-s3.md` → [[Google Sheet to S3 - Code Walkthrough]] |
 | **flow เต็ม + แผนล่วงหน้าของ pipeline ชีต** | [[Google Sheet Pipeline]] |
+| **ตรวจว่า DMS full-load จบจริง · นับแถว Parquet โดยไม่อ่านข้อมูล** | [[DMS Full Load Validation (Lambda)]] |
+| **DMS เป็น full load จะหา change ยังไง · ผังจากทีม Data Engineering** | [[Snapshot Change Detection (ITEC DMS)]] |
+| **ย้าย logic จำแนกสินค้า ITEC จาก SQL ไป pandas / Spark** | [[ITEC Item Category Mapping (SQL to Python)]] |
 
 ### สถานะ · ปัญหา · อ้างอิง
 
@@ -97,12 +103,15 @@
                 ├── Retail (ITEC + CRM)/  ITEC Overview · ITEC - Data Dictionary · ITEC - Query Cookbook
                 │                         CRM Overview · CRM - Data Dictionary
                 ├── EV/                   EV Systems
-                ├── TBD/                  Other Systems
+                ├── TBD/                  Other Systems · iCare Insurance (ICI) · Smart Care Service
                 └── _raw/                 ไฟล์ดิบ · sample ที่ mask แล้ว
 03_Data/        Customer Identity · Consent & PDPA · Data Standardization · Customer 360 · K2 Field Survey
 04_DataLake/    Architecture · AWS Services · Network & VPN · Decisions · Redshift · Glue Crawler
+                Snapshot Change Detection (ITEC DMS)
 05_ETL/         ETL & Spark · Collection Union (K2 + ITOS) · Google Sheet to S3 (Lambda)
+                ITEC Item Category Mapping (SQL to Python)
                 Google Sheet to S3 - Code Walkthrough
+                DMS Full Load Validation (Lambda)
 06_Project/     K2 + ITOS Integration · GI + EV7 → 7Club · OD6 Collection Delivery
                 Data Framework Scope · SSOT Roadmap · K2 Termination Automation
                 Google Sheet Pipeline
@@ -118,7 +127,7 @@
 | [[UFUND]] — เช่าซื้อ IT | K2 · ITOS | `02_System/UFUND (K2 + ITOS)/` |
 | [[Retail]] — ค้าปลีก IT | ITEC · CRM | `02_System/Retail (ITEC + CRM)/` |
 | [[EV Business]] — รถไฟฟ้า | Ev7core · Ev7 tracking · GI Core · 365 · **K2** | `02_System/EV/` |
-| ยังไม่ระบุ | D365 · SAP B1 · iCare · Tech Trade · Synapse | `02_System/TBD/` |
+| ยังไม่ระบุ | D365 · SAP B1 · Tech Trade · Synapse · iCare Insurance · Smart Care | `02_System/TBD/` |
 
 > **K2 อยู่ 2 ธุรกิจ** — ไฟล์เก็บไว้ใต้ UFUND เพราะเป็นเจ้าของหลัก แต่ทำใบแจ้งหนี้/บิลค้าง/ค่าปรับจราจรให้ EV ด้วย → [[EV Systems]]
 

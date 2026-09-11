@@ -753,4 +753,4 @@ EduProject 7 · Service 7 · Wholesale 5 · HeadOffice 5 · Honor 5 · GA 5
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC Overview]] · [[ITEC - Query Cookbook]] · [[CRM - Data Dictionary]] · [[Customer Identity]] · [[Data Standardization & Quality]] · [[Consent & PDPA]] · [[K2 - Data Dictionary]]
+[[ITEC Overview]] · [[ITEC - Query Cookbook]] · [[CRM - Data Dictionary]] · [[Customer Identity]] · [[Data Standardization & Quality]] · [[Consent & PDPA]] · [[K2 - Data Dictionary]] · [[ITEC Item Category Mapping (SQL to Python)]]

@@ -18,6 +18,60 @@
 
 ---
 
+## 🔴 Glue ต่อ on-prem MSSQL ไม่ได้ — Client VPN ใช้กับ Glue ไม่ได้ 🆕
+
+> **บันทึก 2026-09-08** — ไล่ debug Glue job (`testjob`) ต่อ MSSQL หลายชั่วโมง สรุปได้ต้นตอจริง
+> Region **ap-southeast-7** · VPC `vpc-0724ede854478d5a3` · Subnet `subnet-01fb5215a38d90391` · RouteTable `rtb-08ed1761f17749e9e` · SG `sg-0027ef551e6e063d2` · บัญชี `603238661233`
+> เกี่ยวข้อง → [[Network & VPN]] · [[Glue Crawler]] · [[ETL & Spark]]
+
+### 🎯 ต้นตอจริง: Client VPN เชื่อม "คน" ไม่ได้เชื่อม "subnet"
+
+**ทำไม DMS ต่อ on-prem ได้ แต่ Glue ไม่ได้:**
+
+| | Client VPN (ที่ใช้อยู่) | ผลต่อ Glue |
+|---|---|---|
+| เชื่อมอะไร | เครื่องของคน (โน้ตบุ๊ก) ↔ AWS VPC | — |
+| DMS ต่อได้ | เพราะสั่งจากเครื่องคนที่ล็อกอิน Client VPN | ✅ เครื่องเห็น on-prem |
+| Glue รันที่ไหน | Spark cluster ใน **subnet ของ AWS** (ผูก ENI) | ❌ subnet ไม่ได้ต่อ Client VPN → ไปไม่ถึง on-prem |
+
+> **หัวใจ:** Client VPN = client-to-site (คนต่อเข้า) · Glue เป็น service ที่รันเองใน subnet ไม่มีใครล็อกอิน Client VPN ให้ → route ไป on-prem จึง**ไม่มี** (ยืนยันแล้ว: `describe-route-tables` ไม่เจอ route on-prem CIDR → vgw/tgw)
+
+### ✅ ทางแก้ (เลือก 1)
+
+- [ ] **Site-to-Site VPN** (VPC↔on-prem, network-to-network) → Glue วิ่งผ่านได้ · ตรงกับที่ [[Network & VPN]] เตรียม template ไว้แล้ว · ต้องคุยทีม network COM7 / True IDC
+- [ ] **หรือ** ให้ **DMS ดึง on-prem → S3** (ใช้ของที่มีอยู่) แล้วให้ **Glue อ่านจาก S3** แทน → เลี่ยงปัญหา network ทั้งหมด ⭐ *แนะนำ: เร็วสุด ใช้ Client VPN + DMS ที่มีอยู่ได้เลย*
+- Direct Connect = ทางเลือกถ้าต้องการ bandwidth สูง/เสถียร (แพงกว่า)
+
+**Client VPN ใช้กับ Glue ต่อ on-prem ไม่ได้** — จำไว้เลย
+
+### เส้นทาง network ที่ verify แล้วว่าผ่าน (S3 ฝั่ง AWS ครบ)
+
+ระหว่าง debug ได้ไล่เช็ก/แก้ทั้งหมดนี้จนผ่าน — **network ไป S3 สมบูรณ์** (log ยืนยัน `GlueLibsDownloader` + `Get job script` โหลดผ่าน):
+
+- [x] S3 Gateway Endpoint `vpce-00e4b9e719776257a` ผูก `rtb-08ed...` · route `pl-14bc597d` = active
+- [x] Endpoint policy เปิดหมด (`Allow * * *`)
+- [x] SG `sg-0027ef...`: inbound self-reference (all) + outbound `0.0.0.0/0`
+- [x] VPC DNS: enableDnsSupport + enableDnsHostnames = true · NACL allow all
+
+### Error อื่นที่เจอระหว่างทาง + วิธีแก้
+
+1. **AZ ไม่ตรง subnet** → `AvailabilityZone` ใน Glue Connection ต้อง = AZ ของ subnet
+2. **`Could not find S3 endpoint or NAT`** → สร้าง S3 Gateway Endpoint (ทำแล้ว ✅)
+3. **`Invalid connection name: Sqlserver connectiontest`** → ชื่อ Glue connection **ห้ามมีเว้นวรรค** (มี connection รก 15 ตัวจากลองผิดลองถูก → ควรลบทิ้ง)
+4. **`Invalid connection name: Sqlserver-connection2`** (ทั้งที่มีจริง) → หลอก! สาเหตุจริงคือ `Status: FAILED · Failed to assume the customers role. Verify that your VPC has access to STS`
+   - → ต้องสร้าง **STS Interface Endpoint** (ไม่ใช่ Gateway): `com.amazonaws.ap-southeast-7.sts` type Interface + `--private-dns-enabled`
+   - บทเรียน: error "Invalid connection name" ไม่ได้แปลว่าชื่อผิดเสมอ — เช็ก `Status`/`StatusReason` ของ connection ด้วย
+5. **PORT ผิด**: connection type SQLSERVER แต่ `PORT: 3306` (MySQL) — SQL Server ต้อง **1433** · Console SchemaVersion 2 อาจไม่มีช่อง Port เมื่อ host เป็น RDS → แก้ผ่าน CLI `update-connection` (ส่ง ConnectionInput ครบทุก field)
+6. **สร้าง RDS `mssql-datalake-1`** (`sqlserver-ex`) — RDS ตั้ง port 1433 ให้เองตาม engine · แต่ **RDS ไม่จำเป็นถ้าเป้าหมายคือดึง on-prem** (มีค่าใช้จ่าย) · รหัส RDS ห้ามใช้ `/ @ " ` และเว้นวรรค
+
+### สิ่งที่ต้องทำต่อ
+
+- [ ] ตัดสินใจ: Site-to-Site VPN **หรือ** DMS→S3→Glue (แนะนำ DMS→S3)
+- [ ] ถ้าเก็บ RDS SQL Server ไว้ใช้ → ตั้ง Glue connection ใหม่ port **1433** + สร้าง STS endpoint · ถ้าไม่ใช้ → ลบ RDS + connection รก 15 ตัว
+- [ ] on-prem firewall ต้องเปิด 1433 ให้ VPC CIDR (กรณี Site-to-Site)
+
+---
+
 ## K2 Termination Automation — เรื่องที่ต้องตัดสินใจก่อนลงมือ
 
 เนื้อหา → [[K2 Termination Automation]] · ยังเป็นข้อเสนอ ยังไม่ได้ลงมือ

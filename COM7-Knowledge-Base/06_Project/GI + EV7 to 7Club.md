@@ -93,7 +93,7 @@
 | Dataset | ที่บันทึกไว้ | สถานะจริง |
 |---|---|---|
 | GI & EV7 | `ev,gi / schema.prisma` | **มี** ที่ `D:\EV_GI_database\` |
-| CRM | `crm_fied_description.html` | **ไม่พบไฟล์** |
+| CRM | `crm_fied_description.html` | **ได้แล้ว** → [[CRM - Data Dictionary]] |
 
 หมายเหตุจากที่ประชุม: การสร้าง ER จาก Prisma *"ซับซ้อนอยู๋"* · มี `ERD.svg` อยู่ข้าง schema แล้ว
 

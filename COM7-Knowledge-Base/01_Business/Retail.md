@@ -21,9 +21,12 @@
 | **Studio7** | ค้าปลีก **Apple** เป็นหลัก (Apple Authorized Reseller) |
 | **U.Store** | ร้าน Apple ในสถาบันการศึกษา |
 | **TRUE by COM7** | ร้านโทรคมนาคม ดำเนินการโดย Double7 |
-| **iCare** | ศูนย์ **ซ่อม/บริการหลังการขาย** — ไม่ใช่ iCare Insurance |
+| **iCare** | ศูนย์ซ่อม/บริการหลังการขาย **เฉพาะ Apple** — ไม่ใช่ iCare Insurance |
+| **Smart Care** | ศูนย์ซ่อม/บริการหลังการขาย **ยี่ห้ออื่น** → [[Smart Care Service]] |
 
-> **ระวังสับสน:** `iCare` (บริการซ่อม) ≠ `iCare Insurance` (บริษัทประกันภัย) — คนละธุรกิจ
+> **ระวังสับสน — สามชื่อคนละอย่าง**
+> `iCare` ซ่อม **Apple** · `Smart Care` ซ่อม **ยี่ห้ออื่น** · `iCare Insurance` **บริษัทประกันภัย**
+> สองตัวแรกเป็นธุรกิจเดียวกันแบ่งตามยี่ห้อ · ตัวที่สามคนละธุรกิจ → [[Smart Care Service]] · [[iCare Insurance (ICI)]]
 
 ---
 

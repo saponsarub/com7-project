@@ -33,26 +33,27 @@
 
 ## library ที่ pipeline ปัจจุบันใช้
 
-| ชั้น | library |
-|---|---|
-| stdlib | `json` `csv` `io` `os` `time` `datetime` `urllib` `email` |
-| AWS | `boto3` (ไม่ต้องแพ็ก) |
-| Google | `google-auth` |
+| ชั้น      | library                                                                                                                |
+| --------- | ---------------------------------------------------------------------------------------------------------------------- |
+| stdlib    | `json` `csv` `io` `os` `time` `datetime` `urllib` `email`                                                              |
+| AWS       | `boto3` (ไม่ต้องแพ็ก)                                                                                                  |
+| Google    | `google-auth`                                                                                                          |
 | ติดมาด้วย | `cryptography` `cffi` `pycparser` `pyasn1` `pyasn1_modules` `requests` `urllib3` `certifi` `idna` `charset_normalizer` |
 
 **`cryptography` เป็นตัวที่บังคับให้ต้อง build บน Linux** — มีโค้ด Rust/C คอมไพล์แล้ว ผูกกับ OS และเวอร์ชัน Python · `google-auth` เรียกใช้ตอนเซ็น JWT จึงตัดออกไม่ได้
 
 ## ตัวเลือกสำหรับงานถัดไป
 
-| ต้องการ | library | ข้อควรรู้ |
-|---|---|---|
-| ต่อ SQL Server จาก Lambda | **`pymssql`** | มี manylinux wheel พร้อม FreeTDS ในตัว · `pyodbc` ต้องมี ODBC Driver 18 ระดับ OS ด้วย zip ธรรมดาไม่พอ ต้องใช้ container → [[K2 Termination Automation]] |
-| เขียน Parquet | `pyarrow` | ไม่ต้องลาก pandas มาด้วย |
-| อ่าน/เขียน xlsx | `openpyxl` | `k2_termination.py` ใช้อยู่ |
-| คุยกับ Google Sheets แบบสั้น | `gspread` | **ไม่ได้ทำให้ zip เล็กลง** ลาก `google-auth` → `cryptography` มาเหมือนกัน |
+| ต้องการ                      | library       | ข้อควรรู้                                                                                                                                               |
+| ---------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ต่อ SQL Server จาก Lambda    | **`pymssql`** | มี manylinux wheel พร้อม FreeTDS ในตัว · `pyodbc` ต้องมี ODBC Driver 18 ระดับ OS ด้วย zip ธรรมดาไม่พอ ต้องใช้ container → [[K2 Termination Automation]] |
+| เขียน Parquet                | `pyarrow`     | ไม่ต้องลาก pandas มาด้วย                                                                                                                                |
+| อ่าน/เขียน xlsx              | `openpyxl`    | `k2_termination.py` ใช้อยู่                                                                                                                             |
+| คุยกับ Google Sheets แบบสั้น | `gspread`     | **ไม่ได้ทำให้ zip เล็กลง** ลาก `google-auth` → `cryptography` มาเหมือนกัน                                                                               |
+| **fuzzy match ข้อความ** | **`rapidfuzz`** | เร็วกว่า `fuzzywuzzy` · ใบอนุญาต MIT · มี manylinux wheel · ใช้ `process.extractOne` + `fuzz.token_set_ratio` ไม่ใช่ `fuzz.ratio` → [[ITEC Item Category Mapping (SQL to Python)]] |
 
 ---
 
 ## เชื่อมกับโน้ตอื่น
 
-[[Google Sheet to S3 (Lambda)]] · [[Google Sheet Pipeline]] · [[ETL & Spark]] · [[K2 Termination Automation]] · [[Glue Crawler]]
+[[Google Sheet to S3 (Lambda)]] · [[Google Sheet Pipeline]] · [[ETL & Spark]] · [[K2 Termination Automation]] · [[Glue Crawler]] · [[ITEC Item Category Mapping (SQL to Python)]]

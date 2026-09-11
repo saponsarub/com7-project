@@ -21,7 +21,7 @@
 | **Prime Solution & Services (PRIME)** | เทคโนโลยี / System Integration | SI · พัฒนาซอฟต์แวร์ · IT solution · ดูแลระบบ                           |
 | **Thunder FinFin (TFF)**              | บริการทางการเงิน               | **เช่าซื้อ/ผ่อนชำระ** สินค้า IT · เน้นกลุ่มนักศึกษา — แบรนด์ **UFUND** |
 | **COM7 Holding**                      | Holding / ลงทุน                | ถือหุ้นบริษัทย่อย · เกี่ยวข้องกับ iCare Insurance, Gold Integrated     |
-| **iCare Insurance PCL (ICI)**         | ประกันภัย                      | ประกันวินาศภัย · ประกันอุปกรณ์/สินค้า                                  |
+| **iCare Insurance PCL (ICI)**         | ประกันภัย                      | ประกันวินาศภัย — รถ · ทรัพย์สิน · อุบัติเหตุ · ขนส่ง → [[iCare Insurance (ICI)]] |
 
 ---
 
@@ -34,7 +34,7 @@ COM7 GROUP
 │                             BKK · KingKong Phone · Brand Shops
 ├── B2B / ENTERPRISE / EDU    องค์กร · SME · โรงเรียน · มหาวิทยาลัย · ราชการ
 ├── DISTRIBUTION              Adept
-├── SERVICE / TELECOM         iCare (ซ่อม/บริการ) · TRUE by COM7 (Double7)
+├── SERVICE / TELECOM         iCare (ซ่อม Apple) · Smart Care (ซ่อมยี่ห้ออื่น) · TRUE by COM7 (Double7)
 ├── FINANCE                   Thunder FinFin → UFUND
 ├── INSURANCE                 iCare Insurance
 ├── EV                        EV7
@@ -51,7 +51,7 @@ COM7 GROUP
 | กลุ่ม | แบรนด์ |
 |---|---|
 | ค้าปลีก IT | BaNANA · Studio7 · U.Store · BaNANA Mobile · BKK · KingKong Phone · BaNANA Equip · BaNANA Outlet · Bb · B-Play · Bb-Move |
-| บริการ / โทรคมนาคม | iCare · TRUE by COM7 |
+| บริการ / โทรคมนาคม | iCare · Smart Care · TRUE by COM7 |
 | การเงิน | **UFUND** |
 | EV | **EV7** |
 | Solar | Solar9 |
@@ -66,7 +66,8 @@ COM7 GROUP
 
 | คำ | หมายถึง |
 |---|---|
-| **iCare** | บริการ **ซ่อม/หลังการขาย** (Apple service) |
+| **iCare** | ศูนย์ซ่อม/หลังการขาย **เฉพาะ Apple** |
+| **Smart Care** | ศูนย์ซ่อม/หลังการขาย **ยี่ห้ออื่น** — ธุรกิจเดียวกับ iCare แบ่งตามยี่ห้อ |
 | **iCare Insurance** | **บริษัทประกันภัย** — คนละธุรกิจกัน |
 | **UFUND** | **แบรนด์** ธุรกิจเช่าซื้อ |
 | **TFF / Thunder FinFin** | **นิติบุคคล**ที่ดำเนินธุรกิจ UFUND |
@@ -123,4 +124,4 @@ Membership · Customer Interaction
 
 ## เชื่อมกับโน้ตอื่น
 
-[[Home]] · [[System Inventory]] · [[UFUND]] · [[Retail]] · [[EV Business]] · [[Customer Identity]]
+[[Home]] · [[System Inventory]] · [[UFUND]] · [[Retail]] · [[EV Business]] · [[Customer Identity]] · [[iCare Insurance (ICI)]]

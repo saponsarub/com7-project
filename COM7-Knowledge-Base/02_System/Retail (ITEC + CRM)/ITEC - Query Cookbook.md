@@ -59,18 +59,18 @@ ORDER BY qty DESC;
 
 **⏱ 0.38 วินาที**
 
-| Brand | สินค้า | ชิ้น | ยอด (บาท) |
-|---|---|---:|---:|
-| SCREEN CARE | Super7CarePlus (ในปีที่ 2+5) | 5,007,817 | 28,774,811 |
-| 7 SCREEN CARE | 7 Screen Care 180 Days | 1,478,092 | 9,103,034 |
-| 7 SCREEN CARE | 7 Screen Care 1 Year | 1,287,695 | 15,244,615 |
-| 7 SCREEN CARE | 7 Screen Care 90 Days | 1,005,568 | 4,439,917 |
-| CYBER | Cyber Care + | 710,220 | 10,675,458 |
-| CYBER | ProMax Cyber Care+ ประกันภัยไซเบอร์ 1 ปี | 496,758 | 13,735,544 |
-| 7DEGREE | PS 7Degrees Bluetooth Speaker SP-02 | 486,379 | 31,384,668 |
-| 7 SCREEN CARE | 7 Screen Care 2 Year | 471,007 | 19,140,499 |
-| 7DEGREE | PS Mini Fan | 436,021 | 37,283,852 |
-| SCREEN CARE | ProMax Care | 404,291 | 12,308,214 |
+| Brand         | สินค้า                                   |      ชิ้น |  ยอด (บาท) |
+| ------------- | ---------------------------------------- | --------: | ---------: |
+| SCREEN CARE   | Super7CarePlus (ในปีที่ 2+5)             | 5,007,817 | 28,774,811 |
+| 7 SCREEN CARE | 7 Screen Care 180 Days                   | 1,478,092 |  9,103,034 |
+| 7 SCREEN CARE | 7 Screen Care 1 Year                     | 1,287,695 | 15,244,615 |
+| 7 SCREEN CARE | 7 Screen Care 90 Days                    | 1,005,568 |  4,439,917 |
+| CYBER         | Cyber Care +                             |   710,220 | 10,675,458 |
+| CYBER         | ProMax Cyber Care+ ประกันภัยไซเบอร์ 1 ปี |   496,758 | 13,735,544 |
+| 7DEGREE       | PS 7Degrees Bluetooth Speaker SP-02      |   486,379 | 31,384,668 |
+| 7 SCREEN CARE | 7 Screen Care 2 Year                     |   471,007 | 19,140,499 |
+| 7DEGREE       | PS Mini Fan                              |   436,021 | 37,283,852 |
+| SCREEN CARE   | ProMax Care                              |   404,291 | 12,308,214 |
 
 > **สินค้าขายดีตามจำนวนชิ้นคือ "ประกันและบริการ" ไม่ใช่เครื่อง** — Screen Care · Cyber Care · ProMax Care
 > เป็นสินค้าพ่วงที่ขายไปกับเครื่อง · แบรนด์ `7DEGREE` และ `SCREEN CARE` เป็น **house brand ของ COM7 เอง**

@@ -100,4 +100,4 @@ ADLS Gen1 หรือ Gen2 · BU ไหนที่ข้อมูลผ่า�
 
 ## เชื่อมกับโน้ตอื่น
 
-[[Issue Index]] · [[Open Questions & Risks]] · [[Current Status]] · [[Home]]
+[[Issue Index]] · [[Open Questions & Risks]] · [[Current Status]] · [[Home]] · [[iCare Insurance (ICI)]]

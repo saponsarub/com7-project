@@ -70,15 +70,15 @@
 
 ## ตัวเลขที่วัดได้จริง
 
-| | ค่า | หมายเหตุ |
-|---|---:|---|
-| บรรทัดขายทั้งหมด | **79,828,304** | `fact_sales_itec` |
-| บิลขายไม่ซ้ำ | **2,269,383** | `COUNT(DISTINCT SalesId)` |
-| สินค้าใน master | **216,009** | `dim_item_itec` |
-| สาขา | **3,205** | Active เพียง **50** · InActive 3,155 |
-| พนักงานขาย | 35,763 | Normal 6,995 · Cancel 28,768 |
-| หัวบิล/ใบกำกับ | 8,987,607 | `dim_sales_header_itec` |
-| ธุรกรรมสต็อกจาก D365 | **269,264,980** | view ใหญ่ที่สุด |
+|                      |             ค่า | หมายเหตุ                             |
+| -------------------- | --------------: | ------------------------------------ |
+| บรรทัดขายทั้งหมด     |  **79,828,304** | `fact_sales_itec`                    |
+| บิลขายไม่ซ้ำ         |   **2,269,383** | `COUNT(DISTINCT SalesId)`            |
+| สินค้าใน master      |     **216,009** | `dim_item_itec`                      |
+| สาขา                 |       **3,205** | Active เพียง **50** · InActive 3,155 |
+| พนักงานขาย           |          35,763 | Normal 6,995 · Cancel 28,768         |
+| หัวบิล/ใบกำกับ       |       8,987,607 | `dim_sales_header_itec`              |
+| ธุรกรรมสต็อกจาก D365 | **269,264,980** | view ใหญ่ที่สุด                      |
 
 ### ยอดขายรายปี (`Status = 0`)
 
@@ -117,14 +117,14 @@ Status 1 มีแค่ 1.9% ของบรรทัด แต่มูลค�
 
 ### 4. `memcode` มีรูปแบบปนกันจนใช้เป็นคีย์ไม่ได้
 
-| ความยาว | จำนวนแถว | ขึ้นต้นด้วย 0 | เป็นตัวเลขล้วน |
-|---:|---:|---:|---:|
-| 13 | 13,869,950 | 150,934 | 180,077 |
-| 11 | 2,098,021 | 897,641 | 67,409 |
-| 12 | 1,580,170 | 544,854 | 66,975 |
-| **10** | 1,490,232 | 1,406,340 | **1,351,390** |
-| 15 | 1,396,377 | 13,388 | 237 |
-| อื่นๆ (16 ความยาว) | 1,607,654 | — | — |
+|            ความยาว |   จำนวนแถว | ขึ้นต้นด้วย 0 | เป็นตัวเลขล้วน |
+| -----------------: | ---------: | ------------: | -------------: |
+|                 13 | 13,869,950 |       150,934 |        180,077 |
+|                 11 |  2,098,021 |       897,641 |         67,409 |
+|                 12 |  1,580,170 |       544,854 |         66,975 |
+|             **10** |  1,490,232 |     1,406,340 |  **1,351,390** |
+|                 15 |  1,396,377 |        13,388 |            237 |
+| อื่นๆ (16 ความยาว) |  1,607,654 |             — |              — |
 
 ความยาว 10 ที่เป็นตัวเลขล้วนขึ้นต้นด้วย 0 = **เบอร์โทรศัพท์** (1.35 ล้านแถว)
 ที่เหลือปนกันหลายรูปแบบ → **`memcode` เป็นช่องกรอกอิสระ ไม่ใช่รหัสที่มีรูปแบบเดียว**
@@ -165,13 +165,13 @@ rpt.dim_mem_itec.memcode ◄───────────── members.itec
 
 ## คุณภาพการ join (ทดสอบจริง)
 
-| จาก → ถึง | คีย์ | ตัวอย่างที่ทดสอบ | ไม่จับคู่ |
-|---|---|---:|---:|
-| `fact_sales_itec` → `dim_item_itec` | `ItemId` | 500,000 | **0 (100%)** |
-| `fact_sales_itec` → `dim_branch_itec` | `SalesBranch` = `Branch` | 500,000 | **0 (100%)** |
-| `fact_sales_itec` → `dim_officer_itec` | `SalesOfficerId` = `OfficerID` | 200,000 | 4 |
-| `fact_sales_itec` → `dim_mem_itec` | `SalesId` + `SalesBranch` | 200,000 | 21,546 (10.8%) |
-| `fact_sales_itec` → `dim_sales_header_itec` | `SalesId` + `SalesBranch` | 200,000 | **45,364 (22.7%)** |
+| จาก → ถึง                                   | คีย์                           | ตัวอย่างที่ทดสอบ |          ไม่จับคู่ |
+| ------------------------------------------- | ------------------------------ | ---------------: | -----------------: |
+| `fact_sales_itec` → `dim_item_itec`         | `ItemId`                       |          500,000 |       **0 (100%)** |
+| `fact_sales_itec` → `dim_branch_itec`       | `SalesBranch` = `Branch`       |          500,000 |       **0 (100%)** |
+| `fact_sales_itec` → `dim_officer_itec`      | `SalesOfficerId` = `OfficerID` |          200,000 |                  4 |
+| `fact_sales_itec` → `dim_mem_itec`          | `SalesId` + `SalesBranch`      |          200,000 |     21,546 (10.8%) |
+| `fact_sales_itec` → `dim_sales_header_itec` | `SalesId` + `SalesBranch`      |          200,000 | **45,364 (22.7%)** |
 
 > **หัวบิลหายไป 22.7%** — บรรทัดขายที่ไม่มีเลขที่ใบกำกับภาษี ต้องถามว่าเป็นการขายประเภทไหน
 
@@ -183,16 +183,16 @@ rpt.dim_mem_itec.memcode ◄───────────── members.itec
 
 ### แบรนด์ร้าน — `ci.clean_branch.SHOP_BRAND`
 
-| แบรนด์ | สาขา | | แบรนด์ | สาขา |
-|---|---:|---|---|---:|
-| **BaNANA** | 1,033 | | True | 70 |
-| Franchise | 715 | | Event | 67 |
-| **Studio7** | 236 | | iCare | 61 |
-| NA | 170 | | Xiaomi | 52 |
-| BeBe Phone | 148 | | Samsung | 44 |
-| Consign | 133 | | Oppo | 35 |
-| KingKong | 125 | | Bb+Bplay | 28 |
-| BKK | 85 | | Huawei | 27 |
+| แบรนด์      |  สาขา |     | แบรนด์   | สาขา |
+| ----------- | ----: | --- | -------- | ---: |
+| **BaNANA**  | 1,033 |     | True     |   70 |
+| Franchise   |   715 |     | Event    |   67 |
+| **Studio7** |   236 |     | iCare    |   61 |
+| NA          |   170 |     | Xiaomi   |   52 |
+| BeBe Phone  |   148 |     | Samsung  |   44 |
+| Consign     |   133 |     | Oppo     |   35 |
+| KingKong    |   125 |     | Bb+Bplay |   28 |
+| BKK         |    85 |     | Huawei   |   27 |
 
 อีก 14 แบรนด์: Online 22 · E-Quip 20 · VIVO 19 · Warehouse 15 · CaseClub 11 · Realme 10 · FCC 9 · Solar Cell 7 · EduProject 7 · Service 7 · Wholesale 5 · HeadOffice 5 · Honor 5 · GA 5
 
@@ -212,16 +212,16 @@ KING KONG 2,055 · HUAWEI 1,944 · DELL 1,911 · LG 1,736 · CASE CLUB 1,689 · 
 
 ### มิติสินค้า — `ci.clean_item_category_itec`
 
-| Main_Product_Dimension | รายการ | | Main_Product_Dimension | รายการ |
-|---|---:|---|---|---:|
-| Accessory and Others | 67,406 | | Smart Watch | 6,572 |
-| **Smart Phone** | 52,112 | | Camera | 5,434 |
-| PC | 19,581 | | Adapter/Charger/Powerbank | 4,440 |
-| Notebook | 17,305 | | Software | 1,055 |
-| PC&Notebook Component | 13,126 | | Console Gaming | 893 |
-| Tablet | 9,942 | | Insurance | 649 |
-| Mouse&Keyboard | 8,773 | | | |
-| HeadSet&Earpiece | 8,721 | | | |
+| Main_Product_Dimension | รายการ |     | Main_Product_Dimension    | รายการ |
+| ---------------------- | -----: | --- | ------------------------- | -----: |
+| Accessory and Others   | 67,406 |     | Smart Watch               |  6,572 |
+| **Smart Phone**        | 52,112 |     | Camera                    |  5,434 |
+| PC                     | 19,581 |     | Adapter/Charger/Powerbank |  4,440 |
+| Notebook               | 17,305 |     | Software                  |  1,055 |
+| PC&Notebook Component  | 13,126 |     | Console Gaming            |    893 |
+| Tablet                 |  9,942 |     | Insurance                 |    649 |
+| Mouse&Keyboard         |  8,773 |     |                           |        |
+| HeadSet&Earpiece       |  8,721 |     |                           |        |
 
 **มิติอื่น:** `Sale_Type` = Normal Sale 201,437 · Promotion Sale 14,572
 `Product_Dimension` = Normal Product 196,756 · **Demo Product 19,253**

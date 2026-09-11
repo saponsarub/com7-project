@@ -63,6 +63,8 @@ flowchart LR
 
 **Path C — Database CDC** · AWS DMS replicate แบบ near-real-time
 
+> **ใช้จริงไม่ได้ — IT ไม่อนุมัติให้เปิด CDC ที่ต้นทาง** · DMS จึงรันเป็น **Full Load** แล้วหา change จากการเทียบ snapshot แทน → [[Snapshot Change Detection (ITEC DMS)]] · [[Decisions]] D-20
+
 ตัวเลือกสำรองที่ proposal ระบุ: Glue Crawler, MWAA, AppFlow, DataSync, Amazon MSK, Airbyte
 
 ### S3 zones
@@ -221,4 +223,4 @@ Athena คิดเงินตาม TB ที่ scan จึงลด cost ใ
 
 ## เชื่อมกับโน้ตอื่น
 
-[[SSOT Roadmap]] · [[Current Status]] · [[Decisions]] · [[AWS Services]] · [[ETL & Spark]]
+[[SSOT Roadmap]] · [[Current Status]] · [[Decisions]] · [[AWS Services]] · [[ETL & Spark]] · [[Snapshot Change Detection (ITEC DMS)]]

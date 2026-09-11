@@ -37,7 +37,7 @@ Owner ที่ระบุคือ **Innovation**
 
 Gap Review มีหมายเหตุปรากฏ 2 ครั้ง: *"สอบถาม Innovation และดูใน DataDic CRM แล้วไม่มี ต้องสร้างใหม่"*
 
-→ **มี CRM data dictionary อยู่จริงและถูกใช้อ้างอิงแล้ว** แต่ไฟล์ `crm_fied_description.html` ที่บันทึกประชุมระบุไว้ **หาไม่เจอ**
+→ **ได้ไฟล์แล้ว** `crm_fied_description.html` ถูกส่งให้ทีมข้อมูลและแตกเป็น [[CRM - Data Dictionary]] เรียบร้อย (3 ตาราง 61 ฟิลด์) — **ปิดคำถามนี้ 2026-09-11**
 
 ### Opinions recorded in the report
 

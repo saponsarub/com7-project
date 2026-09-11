@@ -4,6 +4,20 @@
 
 ---
 
+## 🆕 อัปเดต 2026-09-08 — Glue ต่อ MSSQL: เจอต้นตอ Client VPN
+
+**ข้อค้นพบสำคัญ:** ไล่ debug Glue job ต่อ MSSQL ทั้งวัน สรุปว่า **Client VPN ใช้กับ Glue ต่อ on-prem ไม่ได้** — Client VPN เชื่อม "เครื่องคน" ไม่ได้เชื่อม "subnet" ที่ Glue รัน (ต่างจาก DMS ที่ต่อได้เพราะสั่งจากเครื่องคน) → รายละเอียด [[Glue Connectivity]]
+
+| เรื่อง | สถานะ |
+|---|---|
+| เส้นทาง network ฝั่ง S3 (endpoint/route/SG/DNS/NACL) | ✅ verify ครบแล้ว |
+| STS Interface Endpoint (assume role) | ⬜ ยังต้องสร้าง |
+| ต่อ on-prem ผ่าน Glue | ❌ Client VPN ไม่รองรับ → ต้อง **Site-to-Site VPN** หรือ **DMS→S3→Glue** ⭐ |
+
+**แนวทางแนะนำ:** `on-prem ──DMS+Client VPN──► S3 ──Glue──► Bronze/Silver/Gold` (ใช้ของที่มีอยู่ เลี่ยงปัญหา network)
+
+---
+
 ## The bottleneck
 
 **Survey เสร็จ 2 จาก 11 ระบบ** (ITEC · K2) — ทุกอย่างปลายน้ำรอตรงนี้
@@ -85,7 +99,7 @@ Survey กับ PoC เดินคู่กัน
 | D365                 | MIS-ERP              |
 | **EV7**              | **ไม่มีชื่อในตาราง** |
 | iCare Insurance      | P.Pui                |
-| iCare Mobile Service | P.Pui                |
+| iCare / Smart Care   | P.Pui                |
 | SAP B1               | K.Benz               |
 | 7Club+/CRM           | P.Por                |
 | Tech Trade           | K.Koj, K.Poj         |
@@ -275,4 +289,4 @@ QuickSight ไม่มี region ในไทย ผลทดสอบพบว
 
 ## เชื่อมกับโน้ตอื่น
 
-[[SSOT Roadmap]] · [[Architecture]] · [[Decisions]] · [[Open Questions & Risks]] · [[System Inventory]]
+[[SSOT Roadmap]] · [[Architecture]] · [[Decisions]] · [[Open Questions & Risks]] · [[System Inventory]] · [[Glue Connectivity]]
