@@ -88,6 +88,9 @@ Proposal บอก Bronze = raw ที่ scan แล้ว · ทีมร่�
 | ITEC schema documentation อยู่ไหน — survey Done แล้วแต่ไม่พบเอกสาร | Data Team |
 | ~~CRM data dictionary (`crm_fied_description.html`) อยู่ไหน~~ **ปิดแล้ว 2026-09-11** — ได้ไฟล์และแตกเป็น [[CRM - Data Dictionary]] | P.Por |
 | CRM เป็น platform อะไร | P.Por |
+| **ขอ connection เข้า S3 ของ ICS** — ข้อมูล iCare Service อยู่บน S3 ของแผนก Innovation · **ต้องขอสิทธิ์ระดับส่วนกลาง ไม่ใช่ระดับสาขา** → [[ICS (iCare Service)]] | Innovation |
+| `PHYID` คือฟิลด์ไหนใน ITEC — ใช้เปิดเคสต่อจาก iCare แต่ไม่มีใน [[ITEC - Data Dictionary]] | ITEC |
+| serial ฝั่ง ITEC ที่มี `S` นำหน้า (เลขหน้ากล่อง) เป็นเลขเดียวกับ serial ในเครื่องของ iCare หรือไม่ | iCare + ITEC |
 
 ---
 

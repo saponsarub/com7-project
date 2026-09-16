@@ -50,6 +50,19 @@ def main_rules(fix_pc_notebook=False):
                                             | _f(d, "IS_CPU") | _f(d, "IS_Cooling")
                                             | _f(d, "IS_Harddisk")),
         ("Camera", lambda d: _f(d, "IS_Camera")),
+        # --- หมวดที่เพิ่มเอง 2026-09-14 · ดึงของออกจากกอง Accessory and Others ---
+        ("Telecom / Package", lambda d: _f(d, "IS_Telecom")),
+        ("Spare Part", lambda d: _f(d, "IS_SparePart") | _f(d, "IS_Part")),
+        ("Monitor", lambda d: _f(d, "IS_Monitor") | _f(d, "IS_Projector")),
+        ("Printer / Ink", lambda d: (_f(d, "IS_Printer") | _f(d, "IS_Toner")
+                                     | _f(d, "IS_Cartridge"))),
+        ("Audio", lambda d: (_f(d, "IS_Speaker") | _f(d, "IS_Microphone")
+                             | _f(d, "IS_EarPhone") | _f(d, "IS_Earcap"))),
+        ("Network", lambda d: _f(d, "IS_Network")),
+        ("Storage", lambda d: (_f(d, "IS_Flashdrive") | _f(d, "IS_SD")
+                               | _f(d, "IS_USB"))),
+        ("Furniture", lambda d: _f(d, "IS_Chair")),
+        ("Merchandise", lambda d: _f(d, "IS_Apparel")),
         ("Adapter/Charger/Powerbank", lambda d: _f(d, "IS_Adapter") | _f(d, "IS_Charger")
                                                 | _f(d, "IS_PowerBank")),
     ]
@@ -59,7 +72,8 @@ MAIN_DEFAULT = "Accessory and Others"
 
 
 # ----------------------------------------------------------------- Sub --
-def _adapter(d):   return _f(d, "IS_Adapter") | _f(d, "IS_Charger")
+def _adapter(d):   return (_f(d, "IS_Adapter") | _f(d, "IS_Charger")
+                           | _f(d, "IS_PowerBank"))
 def _case(d):      return (_f(d, "IS_Case") | _f(d, "IS_Casing")
                            | _f(d, "IS_Protect") | _f(d, "IS_Bumper"))
 def _film(d):      return _f(d, "IS_film")

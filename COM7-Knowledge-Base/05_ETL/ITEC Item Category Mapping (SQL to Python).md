@@ -395,4 +395,4 @@ IS_Bluetooth:
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC - Data Dictionary]] · [[ITEC Overview]] · [[Data Standardization & Quality]] · [[Python Libraries]] · [[ETL & Spark]] · [[SQL & Source Schemas]] · [[Snapshot Change Detection (ITEC DMS)]]
+[[ITEC - Data Dictionary]] · [[ITEC Overview]] · [[Data Standardization & Quality]] · [[Python Libraries]] · [[ETL & Spark]] · [[SQL & Source Schemas]] · [[Snapshot Change Detection (ITEC DMS)]] · [[ITEC Flag & Category Review Guide]] · [[ITEC Category Toolkit]]

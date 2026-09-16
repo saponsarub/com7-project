@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """จัดหมวดสินค้า ITEC ด้วย pandas แทน CASE WHEN ใน SQL
 
-    from mapper import run
+    from itec_mapper import run
     out = run(df)                       # strict = ได้ผลเท่าของเดิมทุกแถว
     out = run(df, strict=False)          # เปิด whole_word + แก้บั๊ก PC/Notebook
 
 รันตรง ๆ เพื่อดูตัวอย่าง:
-    python scripts/itec/category/mapper.py
+    python scripts/itec/category/itec_mapper.py
 เอกสาร: COM7-Knowledge-Base/05_ETL/ITEC Item Category Mapping (SQL to Python).md
 """
 import re
@@ -19,7 +19,10 @@ import yaml
 
 import rules as R
 
-sys.stdout.reconfigure(encoding="utf-8")
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except AttributeError:
+    pass          # Jupyter/Colab ไม่มีเมธอดนี้ และไม่ต้องใช้
 
 KEYWORDS = Path(__file__).parent / "item_keywords.yaml"
 TEXT_COLS = ["ItemName", "CategoryName", "SubCategoryName"]
@@ -30,6 +33,31 @@ FROM   rpt.dim_item_itec
 """
 
 
+# ชื่อคอลัมน์ต่างกันตามที่ export มา · map ให้เป็นชื่อกลางก่อนใช้
+ALIASES = {
+    "itemid": "ItemId", "item_id": "ItemId",
+    "itemname": "ItemName", "item_name": "ItemName", "name": "ItemName",
+    "categoryname": "CategoryName", "category": "CategoryName",
+    "subcategoryname": "SubCategoryName", "sub_category": "SubCategoryName",
+    "subcategory": "SubCategoryName",
+    "model/series": "Model/Series", "model_series": "Model/Series",
+    "brand": "Brand",
+}
+
+
+def normalize_columns(df):
+    """รับ CSV ที่ตั้งชื่อคอลัมน์ต่างกัน แล้วคืนชื่อกลางที่โค้ดนี้ใช้"""
+    ren = {c: ALIASES[c.strip().lower().replace(" ", "")]
+           for c in df.columns
+           if c.strip().lower().replace(" ", "") in ALIASES
+           and ALIASES[c.strip().lower().replace(" ", "")] not in df.columns}
+    df = df.rename(columns=ren)
+    for col in TEXT_COLS:          # ขาดคอลัมน์ไหนให้เป็นค่าว่าง อย่าพัง
+        if col not in df.columns:
+            df[col] = ""
+    return df
+
+
 def load_rules(path=KEYWORDS):
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 
@@ -37,7 +65,7 @@ def load_rules(path=KEYWORDS):
 def normalize(s):
     """พิมพ์เล็ก · ตัดอักขระพิเศษ · ยุบช่องว่าง · เก็บ / & + . - ไว้เพราะ h/d ใช้"""
     return (s.fillna("").astype(str).str.lower()
-             .str.replace(r"[^\w\s/&+.-]", " ", regex=True)
+             .str.replace(r"[^\w\s/&+.\-ก-๛]", " ", regex=True)   # ก-๛ ไว้กันไทยหาย
              .str.replace(r"\s+", " ", regex=True)
              .str.strip())
 
@@ -118,7 +146,7 @@ def add_fuzzy(df, vocab, cutoff=88):
 
 
 def run(df, strict=True, rules=None):
-    df = df.copy()
+    df = normalize_columns(df.copy())
     df["search_text"] = build_search_text(df)
     df = build_flags(df, rules or load_rules(), strict=strict)
     return add_dimensions(df, fix_pc_notebook=not strict)

@@ -19,7 +19,7 @@
 | 1.1.4 | [[Other Systems\|D365]] | Todo | MIS-ERP |
 | 1.1.5 | [[EV Business\|EV7]] | Todo | **ไม่มีชื่อในตาราง** |
 | 1.1.6.1 | [[iCare Insurance (ICI)\|iCare]] — Insurance | Todo | P.Pui |
-| 1.1.6.2 | [[Smart Care Service\|iCare / Smart Care]] — Mobile Service | Todo | P.Pui |
+| 1.1.6.2 | [[ICS (iCare Service)]] — Mobile Service | **ประชุมภาพรวมแล้ว 2026-09-11** · data field survey กำลังตามมา | P.Pui |
 | 1.1.7 | [[Other Systems\|SAP B1]] | Todo | K.Benz |
 | 1.2.1 | [[CRM Overview\|7Club+/CRM]] | **มี data dictionary แล้ว 2026-08-28** (3 ตาราง 61 ฟิลด์) · เหลือ coverage | P.Por |
 | 1.2.2 | [[Other Systems\|Tech Trade]] | Todo | K.Koj, K.Poj |
@@ -44,6 +44,7 @@
 | EVTRACKING | EV7 / GI | ยังมีบางรายการของ GI ค้างอยู่หลังโอนไป EV7 | To Verify | ClickUp |
 | [[iCare Insurance (ICI)]] | ประกันวินาศภัย | บริษัทประกัน · 8 ผลิตภัณฑ์ · คนละธุรกิจกับศูนย์ซ่อม | Confirmed | เว็บทางการ 2026-09-09 |
 | [[Smart Care Service]] | บริการหลังการขาย | **iCare = Apple · Smart Care = ยี่ห้ออื่น** | To Verify | แจ้งวาจา 2026-09-11 |
+| [[ICS (iCare Service)]] | บริการหลังการขาย | ระบบงานซ่อม/เคลมของ iCare · **ข้อมูลอยู่บน S3 ของแผนก Innovation** · คีย์เคสคือ Document Number | To Verify | ประชุม 2026-09-11 |
 | [[Other Systems\|SAP B1]] | ERP | ไม่รู้ว่า BU ไหนใช้ | To Verify | Timeline |
 | [[CRM Overview\|7Club]] | membership | โปรแกรมสมาชิก · survey รวมกับ CRM | To Verify | Timeline · Data Framework |
 | [[CRM Overview\|CRM]] | ลูกค้า / แคมเปญ | ครอบคลุมแค่ ITEC · ส่งต่อให้ทีม CRM ใช้ Braze | Partially Confirmed | Data Framework |
@@ -164,6 +165,8 @@ Brief เดิมระบุ **Double7**, **Co-Ture Shop**, **Dtac Shop** เ�
 **ถือข้อมูลลูกค้าและต้อง reconcile:** ITEC · K2 · ITOS · GI Core · iCare · 7Club · CRM · Tech Trade
 
 **ข้อมูลวงจรชีวิตอุปกรณ์** (Gap Review จัดเป็นช่องว่างอันดับ 1): ITEC (การซื้อ, อุปกรณ์เสริม) · iCare (ประกัน, ซ่อม) · Tech Trade (เทิร์น) · ทะเบียนอุปกรณ์ (ยังไม่มี)
+
+> **อุปสรรคที่ชัดแล้ว** — ตัวระบุเครื่องไม่ตรงกัน · ITEC/ICI ใช้ **IMEI** · ICS ใช้ **Serial** ของ Apple · serial ฝั่ง ITEC ยังมี `S` นำหน้าเพราะอิงเลขหน้ากล่อง **ต้องมีตารางกลางผูก IMEI ↔ Serial ก่อน** → [[ICS (iCare Service)]]
 
 ---
 

@@ -30,6 +30,7 @@
 | ระบบที่ยังรู้น้อย (D365 · SAP B1 · iCare · Tech Trade · Synapse) | [[Other Systems]] |
 | **iCare Insurance ขายอะไร · เก็บข้อมูลอะไร** | [[iCare Insurance (ICI)]] |
 | **iCare vs Smart Care vs iCare Insurance ต่างกันยังไง** | [[Smart Care Service]] |
+| **ระบบซ่อม/เคลมของ iCare เก็บข้อมูลที่ไหน ใช้คีย์อะไร** | [[ICS (iCare Service)]] |
 
 ### ธุรกิจ — `01_Business`
 
@@ -74,6 +75,10 @@
 | **ตรวจว่า DMS full-load จบจริง · นับแถว Parquet โดยไม่อ่านข้อมูล** | [[DMS Full Load Validation (Lambda)]] |
 | **DMS เป็น full load จะหา change ยังไง · ผังจากทีม Data Engineering** | [[Snapshot Change Detection (ITEC DMS)]] |
 | **ย้าย logic จำแนกสินค้า ITEC จาก SQL ไป pandas / Spark** | [[ITEC Item Category Mapping (SQL to Python)]] |
+| **งานจัดหมวดสินค้า ITEC — เริ่มที่นี่** | [[ITEC Category Toolkit]] |
+| **อธิบาย notebook ทีละ cell · YAML คืออะไร · ใช้โมเดลอะไร ทำไม** | [[ITEC Model - Notebook Explained]] |
+| **fine-tune backbone · พิสูจน์ว่าคุ้มไหม** | [[ITEC Model - Fine-tune Design]] |
+| **ควรเพิ่ม/ลด flag ตัวไหน · กอง Accessory 31.6% แก้ยังไง** | [[ITEC Flag & Category Review Guide]] |
 
 ### สถานะ · ปัญหา · อ้างอิง
 
@@ -104,12 +109,16 @@
                 │                         CRM Overview · CRM - Data Dictionary
                 ├── EV/                   EV Systems
                 ├── TBD/                  Other Systems · iCare Insurance (ICI) · Smart Care Service
+│                         ICS (iCare Service)
                 └── _raw/                 ไฟล์ดิบ · sample ที่ mask แล้ว
 03_Data/        Customer Identity · Consent & PDPA · Data Standardization · Customer 360 · K2 Field Survey
 04_DataLake/    Architecture · AWS Services · Network & VPN · Decisions · Redshift · Glue Crawler
                 Snapshot Change Detection (ITEC DMS)
 05_ETL/         ETL & Spark · Collection Union (K2 + ITOS) · Google Sheet to S3 (Lambda)
                 ITEC Item Category Mapping (SQL to Python)
+                ITEC Flag & Category Review Guide · ITEC Category Toolkit
+                ITEC Model - Notebook Explained
+                ITEC Model - Fine-tune Design
                 Google Sheet to S3 - Code Walkthrough
                 DMS Full Load Validation (Lambda)
 06_Project/     K2 + ITOS Integration · GI + EV7 → 7Club · OD6 Collection Delivery

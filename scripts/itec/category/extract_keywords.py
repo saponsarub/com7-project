@@ -10,7 +10,10 @@ from pathlib import Path
 
 import yaml
 
-sys.stdout.reconfigure(encoding="utf-8")
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except AttributeError:
+    pass          # Jupyter/Colab ไม่มีเมธอดนี้ และไม่ต้องใช้
 
 OUT = Path(__file__).parent / "item_keywords.yaml"
 

@@ -67,10 +67,12 @@ IS_Earcap:
 IS_Mouse:
   words:
   - mouse
+  - เมาส์
   whole_word: false
 IS_Keyboard:
   words:
   - keyboard
+  - คีย์บอร์ด
   whole_word: false
 IS_Software:
   words:
@@ -169,6 +171,9 @@ IS_Adapter:
 IS_Charger:
   words:
   - charger
+  - ที่ชาร์จ
+  - หัวชาร์จ
+  - อะแดปเตอร์
   whole_word: false
 IS_PowerBank:
   words:
@@ -178,6 +183,11 @@ IS_PowerBank:
 IS_Case:
   words:
   - case
+  - เคส
+  - cover
+  - ฝาหลัง
+  - ฝาครอบ
+  - ซองใส่
   whole_word: true
 IS_Casing:
   words:
@@ -194,14 +204,21 @@ IS_Bumper:
 IS_film:
   words:
   - film
+  - ฟิล์ม
+  - tempered
+  - กระจกนิรภัย
   whole_word: true
 IS_Monitor:
   words:
   - monitor
+  - จอคอม
+  - จอมอนิเตอร์
   whole_word: false
 IS_Printer:
   words:
   - printer
+  - เครื่องพิมพ์
+  - ปริ้นเตอร์
   whole_word: false
 IS_Toner:
   words:
@@ -214,6 +231,8 @@ IS_Cartridge:
 IS_Cable:
   words:
   - cable
+  - สายชาร์จ
+  - สายusb
   whole_word: false
 IS_USB:
   words:
@@ -222,6 +241,7 @@ IS_USB:
 IS_Speaker:
   words:
   - speaker
+  - ลำโพง
   whole_word: false
 IS_Gadget:
   words:
@@ -252,12 +272,14 @@ IS_Microphone:
   - microphone
   whole_word: false
 IS_Buletooth:
-  words:
+  words: &id001
   - bluetooth
   whole_word: false
 IS_Battery:
   words:
   - battery
+  - แบตเตอรี่
+  - แบตเตอรี
   whole_word: false
 IS_Pin:
   words:
@@ -266,12 +288,75 @@ IS_Pin:
 IS_Strap:
   words:
   - strap
+  - สายนาฬิกา
+  - สายรัด
   whole_word: false
 IS_Stand:
   words:
   - stand
+  - ขาตั้ง
+  - แท่นวาง
   whole_word: false
 IS_Dock:
   words:
   - dock
   whole_word: true
+IS_Telecom:
+  words:
+  - จ่ายล่วงหน้า
+  - ราคาเครื่อง
+  - ลดค่าเครื่อง
+  - แพ็กเกจ
+  - แพคเกจ
+  - package
+  - prepaid
+  - postpaid
+  - เติมเงิน
+  - รายเดือน
+  - ค่าบริการรายเดือน
+  whole_word: false
+IS_SparePart:
+  words:
+  - อะไหล่
+  - spare part
+  - lcd
+  - flex cable
+  - back housing
+  - หน้าจอชุด
+  whole_word: false
+IS_Part:
+  words:
+  - part
+  whole_word: true
+IS_Network:
+  words:
+  - router
+  - เราเตอร์
+  - access point
+  - modem
+  - โมเด็ม
+  - wi-fi
+  - wifi
+  whole_word: false
+IS_Chair:
+  words:
+  - chair
+  - เก้าอี้
+  - gaming desk
+  - โต๊ะเกม
+  whole_word: false
+IS_Apparel:
+  words:
+  - t-shirt
+  - tshirt
+  - เสื้อยืด
+  - hoodie
+  whole_word: false
+IS_Projector:
+  words:
+  - projector
+  - โปรเจกเตอร์
+  whole_word: false
+IS_Bluetooth:
+  words: *id001
+  whole_word: false

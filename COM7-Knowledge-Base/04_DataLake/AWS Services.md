@@ -196,11 +196,7 @@ AWS Proposal:
 
 ## New approach (current)
 
-**VPN Client โดย Vanguard** — ยังไม่มีเอกสารรายละเอียดในโฟลเดอร์ที่ตรวจ
-
-ค้นเว็บแล้ว **ไม่พบผลิตภัณฑ์ที่ตรงกับกรณีนี้** (ผลที่เจอเป็น The Vanguard Group บริษัทกองทุนรวมสหรัฐฯ, บล็อกรีวิว VPN สำหรับผู้บริโภค, ซอฟต์แวร์ดูกล้อง X10, router CalAmp Vanguard 3000 — ไม่มีอันไหนเกี่ยวข้อง)
-
-**น่าจะเป็นระบบภายในหรือ vendor ในไทย — ต้องถามทีม ไม่ใช่ค้นเอา** `[อนุมาน]`
+**VPN Client โดย Wireguard**`
 
 ## Original approach per the AWS proposal
 

@@ -1,0 +1,651 @@
+types:
+- label: Warranty
+  words:
+  - applecare
+  - care+
+  - ประกัน
+  - insurance
+  - warranty
+  - คุ้มครอง
+  whole_word: false
+- label: Telecom
+  words:
+  - promotion
+  - โปรโมชั่น
+  - เปิดเบอร์
+  - รายเดือน
+  - เติมเงิน
+  - trade up
+  - walkin
+  - prebook
+  - แพ็กเกจ
+  - ย้ายค่าย
+  - รายการส่งเสริมการขาย
+  - แลกซื้อ
+  whole_word: false
+- label: Service
+  words:
+  - ค่าบริการ
+  - ค่าส่ง
+  - ค่าแรง
+  - ค่าขนส่ง
+  - ค่าติดตั้ง
+  - shipping
+  - ซ่อม
+  - repair
+  - fee
+  - service charge
+  - ค่าธรรมเนียม
+  whole_word: true
+- label: SparePart
+  words:
+  - อะไหล่
+  - spare
+  - part
+  - after sales
+  - แพรจอ
+  - ชุดจอ
+  whole_word: true
+- label: PowerSupply
+  words:
+  - power supply
+  - 'psu '
+  - เพาเวอร์ซัพพลาย
+  whole_word: false
+- label: Cooling
+  words:
+  - cooling
+  - cooler
+  - heatsink
+  - พัดลม
+  - ระบายความร้อน
+  - liquid freezer
+  whole_word: false
+- label: Mainboard
+  words:
+  - mainboard
+  - motherboard
+  - เมนบอร์ด
+  - 'm/b '
+  whole_word: false
+- label: GraphicCard
+  words:
+  - graphic card
+  - 'vga '
+  - geforce
+  - radeon
+  - 'rtx '
+  - 'gtx '
+  whole_word: false
+- label: RAM
+  words:
+  - ddr4
+  - ddr5
+  - so-dimm
+  - udimm
+  whole_word: false
+- label: RAM
+  words:
+  - ram
+  whole_word: true
+- label: CPU
+  words:
+  - ryzen
+  - core i3
+  - core i5
+  - core i7
+  - core i9
+  - ultra 5
+  - ultra 7
+  - ultra 9
+  whole_word: false
+- label: Bag
+  words:
+  - bag
+  - กระเป๋า
+  - sleeve
+  - pouch
+  - backpack
+  - เป้
+  whole_word: true
+- label: Case
+  words:
+  - case
+  - casing
+  - เคส
+  - cover
+  - ฝาหลัง
+  - ฝาครอบ
+  - ซองใส่
+  - bumper
+  - กันกระแทก
+  - skin
+  whole_word: true
+- label: Case
+  words:
+  - protec
+  whole_word: false
+- label: Film
+  words:
+  - film
+  - ฟิล์ม
+  - tempered
+  - กระจกนิรภัย
+  whole_word: true
+- label: Memory
+  words:
+  - micro sd
+  - microsd
+  - sdhc
+  - sdxc
+  - memory card
+  - flash drive
+  - flashdrive
+  - thumb drive
+  - memory stick
+  whole_word: false
+- label: Adapter
+  words:
+  - card reader
+  - usb hub
+  - docking station
+  - แปลงสัญญาณ
+  whole_word: false
+- label: Charger
+  words:
+  - charger
+  - adapter
+  - อะแดปเตอร์
+  - ที่ชาร์จ
+  - หัวชาร์จ
+  - power bank
+  - powerbank
+  - พาวเวอร์แบงค์
+  - ปลั๊ก
+  whole_word: false
+- label: Cable
+  words:
+  - cable
+  - สายชาร์จ
+  - สาย usb
+  - lightning
+  - type-c
+  - type c
+  whole_word: false
+- label: Strap
+  words:
+  - strap
+  - สายนาฬิกา
+  - สายรัด
+  - band
+  whole_word: true
+- label: Stand
+  words:
+  - stand
+  - ขาตั้ง
+  - holder
+  - ที่วาง
+  - dock
+  - แท่นวาง
+  whole_word: true
+- label: Keyboard
+  words:
+  - keyboard
+  - คีย์บอร์ด
+  whole_word: false
+- label: Mouse
+  words:
+  - mouse
+  - เมาส์
+  - mousepad
+  whole_word: true
+- label: Smartwatch
+  words:
+  - smartwatch
+  - watch series
+  - watch ultra
+  - watch se
+  - galaxy watch
+  - watch fit
+  - นาฬิกาอัจฉริยะ
+  whole_word: false
+- label: Notebook
+  words:
+  - notebook
+  - laptop
+  - macbook
+  - vaio
+  - thinkpad
+  - ideapad
+  - ultrabook
+  - chromebook
+  - surface laptop
+  - surface pro
+  - โน๊ตบุ๊ค
+  - โน้ตบุ๊ก
+  whole_word: false
+- label: Desktop
+  words:
+  - desktop
+  - all-in-one
+  - computer set
+  - pc set
+  - imac
+  - mac mini
+  - mac studio
+  - mac pro
+  - คอมประกอบ
+  whole_word: false
+- label: Notebook
+  words:
+  - mac
+  - nb
+  whole_word: true
+- label: Desktop
+  words:
+  - aio
+  - pc
+  whole_word: true
+- label: Tablet
+  words:
+  - tablet
+  - ipad
+  - แท็บเล็ต
+  - galaxy tab
+  whole_word: false
+- label: Smartphone
+  words:
+  - smartphone
+  - สมาร์ทโฟน
+  - มือถือ
+  - โทรศัพท์
+  whole_word: false
+- label: Monitor
+  words:
+  - monitor
+  - จอมอนิเตอร์
+  - จอคอม
+  whole_word: false
+- label: TV
+  words:
+  - ทีวี
+  - โทรทัศน์
+  - bravia
+  - smart tv
+  whole_word: false
+- label: TV
+  words:
+  - tv
+  whole_word: true
+- label: Printer
+  words:
+  - printer
+  - เครื่องพิมพ์
+  - ปริ้นเตอร์
+  - toner
+  - หมึกพิมพ์
+  - ตลับหมึก
+  - inkjet
+  - laserjet
+  whole_word: false
+- label: Camera
+  words:
+  - camera
+  - กล้อง
+  - webcam
+  - dslr
+  - mirrorless
+  - handycam
+  - gopro
+  whole_word: false
+- label: Storage
+  words:
+  - ssd
+  - hdd
+  - hard drive
+  - harddisk
+  - hard disk
+  - usb drive
+  - external drive
+  - 'nas '
+  - optical drive
+  - handy drive
+  - storage
+  whole_word: false
+- label: Audio
+  words:
+  - headphone
+  - หูฟัง
+  - earphone
+  - earbud
+  - speaker
+  - ลำโพง
+  - soundbar
+  - headset
+  - airpod
+  whole_word: false
+- label: Audio
+  words:
+  - buds
+  whole_word: true
+- label: Console
+  words:
+  - playstation
+  - nintendo
+  - xbox
+  - console
+  whole_word: false
+- label: Console
+  words:
+  - ps4
+  - ps5
+  whole_word: true
+- label: Network
+  words:
+  - router
+  - access point
+  - wi-fi
+  - wifi
+  - mesh
+  - modem
+  - rj-11
+  - rj-45
+  - rj11
+  - rj45
+  - network
+  - เราเตอร์
+  whole_word: false
+- label: HomeAppliance
+  words:
+  - ตู้เย็น
+  - เครื่องซักผ้า
+  - เครื่องปรับอากาศ
+  - ไมโครเวฟ
+  - หม้อทอด
+  - เตาอบ
+  - เครื่องดูดฝุ่น
+  - หม้อหุงข้าว
+  - กาต้มน้ำ
+  - appliance
+  whole_word: false
+- label: Battery
+  words:
+  - battery
+  - แบตเตอรี่
+  - แบตเตอรี
+  whole_word: false
+- label: Software
+  words:
+  - software
+  - license
+  - microsoft 365
+  - office 365
+  - antivirus
+  whole_word: false
+- label: UPS
+  words:
+  - ups
+  whole_word: true
+platforms:
+- label: AirPods
+  words:
+  - airpod
+  whole_word: false
+- label: AppleWatch
+  words:
+  - apple watch
+  - applewatch
+  - watch ultra
+  whole_word: false
+- label: iPhone
+  words:
+  - iphone
+  - ไอโฟน
+  whole_word: false
+- label: iPad
+  words:
+  - ipad
+  - ไอแพด
+  whole_word: false
+- label: MacBook
+  words:
+  - macbook
+  - imac
+  - mac mini
+  - mac studio
+  whole_word: false
+- label: Galaxy
+  words:
+  - galaxy
+  whole_word: false
+- label: Samsung
+  words:
+  - samsung
+  whole_word: false
+- label: Xiaomi
+  words:
+  - xiaomi
+  - redmi
+  - poco
+  whole_word: false
+- label: Huawei
+  words:
+  - huawei
+  whole_word: false
+- label: Realme
+  words:
+  - realme
+  whole_word: false
+- label: OPPO
+  words:
+  - oppo
+  whole_word: false
+- label: Vivo
+  words:
+  - vivo
+  whole_word: true
+- label: Nintendo
+  words:
+  - nintendo
+  whole_word: false
+- label: PlayStation
+  words:
+  - playstation
+  - ps5
+  - ps4
+  whole_word: true
+- label: Asus
+  words:
+  - asus
+  - 'rog '
+  - zenbook
+  - vivobook
+  - 'tuf '
+  whole_word: false
+- label: Acer
+  words:
+  - acer
+  - predator
+  - nitro
+  whole_word: false
+- label: Lenovo
+  words:
+  - lenovo
+  - thinkpad
+  - ideapad
+  - legion
+  whole_word: false
+- label: HP
+  words:
+  - 'hp '
+  - pavilion
+  - omen
+  - envy
+  - compaq
+  whole_word: false
+- label: Dell
+  words:
+  - dell
+  - alienware
+  - inspiron
+  - latitude
+  whole_word: false
+- label: MSI
+  words:
+  - msi
+  whole_word: true
+- label: Microsoft
+  words:
+  - microsoft
+  - surface
+  whole_word: false
+- label: Logitech
+  words:
+  - logitech
+  - 'logi '
+  whole_word: false
+- label: Razer
+  words:
+  - razer
+  whole_word: false
+- label: JBL
+  words:
+  - jbl
+  whole_word: true
+- label: Anker
+  words:
+  - anker
+  - soundcore
+  whole_word: false
+- label: Sony
+  words:
+  - sony
+  - bravia
+  - cyber-shot
+  - vaio
+  whole_word: false
+- label: LG
+  words:
+  - 'lg '
+  whole_word: false
+- label: Canon
+  words:
+  - canon
+  whole_word: false
+- label: Garmin
+  words:
+  - garmin
+  whole_word: false
+- label: Brother
+  words:
+  - brother
+  whole_word: false
+- label: Epson
+  words:
+  - epson
+  whole_word: false
+- label: WD-Kingston
+  words:
+  - kingston
+  - sandisk
+  - adata
+  - toshiba
+  - seagate
+  - western digital
+  - 'wd '
+  whole_word: false
+- label: Electrolux
+  words:
+  - electrolux
+  whole_word: false
+disambiguate:
+- from: Case
+  to: PC Case
+  words:
+  - atx
+  - tower
+  - chassis
+  - computer case
+  - pc case
+  - เคสคอม
+  - เคส pc
+  - case & cooling
+  whole_word: false
+- from: Case
+  to: Bag
+  words:
+  - bag
+  - กระเป๋า
+  - sleeve
+  - pouch
+  - ซองใส่
+  whole_word: false
+- from: Case
+  to: Smartwatch
+  words:
+  - watch series
+  - watch ultra
+  - watch se
+  - watch nike+
+  - smartwatch
+  whole_word: false
+- from: Strap
+  to: Smartwatch
+  words:
+  - watch series
+  - watch ultra
+  - smartwatch
+  - galaxy watch
+  whole_word: false
+- from: CPU
+  to: Notebook
+  words:
+  - notebook
+  - laptop
+  - macbook
+  - surface
+  - thinkpad
+  - ideapad
+  - vaio
+  whole_word: false
+- from: CPU
+  to: Desktop
+  words:
+  - desktop
+  - all-in-one
+  - computer set
+  - pc set
+  - imac
+  whole_word: false
+- from: GraphicCard
+  to: Notebook
+  words:
+  - notebook
+  - laptop
+  - macbook
+  whole_word: false
+- from: GraphicCard
+  to: Desktop
+  words:
+  - desktop
+  - all-in-one
+  - computer set
+  - pc set
+  whole_word: false
+- from: Keyboard
+  to: Notebook
+  words:
+  - macbook
+  - notebook
+  - laptop
+  whole_word: false
+- from: Charger
+  to: Adapter
+  words:
+  - displayport
+  - hdmi
+  - dvi
+  - vga
+  - ethernet
+  - converter
+  whole_word: false

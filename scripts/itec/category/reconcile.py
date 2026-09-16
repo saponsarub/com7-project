@@ -12,9 +12,13 @@ from pathlib import Path
 
 import pandas as pd
 
-import mapper as M
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import itec_mapper as M
 
-sys.stdout.reconfigure(encoding="utf-8")
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except AttributeError:
+    pass          # Jupyter/Colab ไม่มีเมธอดนี้ และไม่ต้องใช้
 
 KEYS = ["Main_Product_Dimension", "Sub_Product_Dimension"]
 OUT = Path(__file__).parent / "category_diff.csv"

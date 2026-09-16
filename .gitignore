@@ -43,3 +43,18 @@ desktop.ini
 COM7-Knowledge-Base/.obsidian/workspace.json
 COM7-Knowledge-Base/.obsidian/workspace-mobile.json
 COM7-Knowledge-Base/.trash/
+
+# ─────────────────────────────────────────────────────────────
+#  ข้อมูล/ผลลัพธ์ที่ generate ใหม่ได้ — ไม่ต้องเก็บใน git
+# ─────────────────────────────────────────────────────────────
+# *.csv ถูกบล็อกอยู่แล้ว แต่ .gz กับ .parquet หลุดมาได้
+*.csv.gz
+*.parquet
+
+# โฟลเดอร์ข้อมูลเข้า/ผลลัพธ์ของสคริปต์ ITEC
+# _data/  มาจาก export SQL · _out/ สร้างใหม่ได้จากโน้ตบุ๊กเสมอ
+scripts/itec/*/_data/
+scripts/itec/*/_out/
+
+# zip ที่ build ไว้อัป Colab/Kaggle — สร้างใหม่ด้วย make_zip.py
+scripts/itec/*/*.zip
