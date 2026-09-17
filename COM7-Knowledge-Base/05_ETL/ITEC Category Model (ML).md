@@ -1,9 +1,25 @@
 # ITEC Category Model (ML)
 
-> โมเดลจัดหมวดสินค้า ITEC ใหม่ทั้งหมด ด้วย LLM embedding + classifier — แก้ปัญหา category เดิม **key ผิด / ซ้ำซ้อน**
-> อัปเดต 2026-09-14 · รวมทุกเรื่อง ML ไว้ที่เดียว (approach + re-grouping + override + build guide + fine-tune)
-> คู่กับ notebook `itec_recategorization_full.ipynb` · deploy → [[ITEC Model - Run on EC2 Guide]]
-> ต้นทาง rule-based → [[ITEC Item Category Mapping (SQL to Python)]] · เกี่ยวข้อง → [[ITEC - Data Dictionary]] · [[Data Standardization & Quality]]
+> [!warning] โน้ตนี้เป็น**รุ่นเก่า** — เก็บไว้เป็นบันทึกสิ่งที่เคยลอง อย่าใช้เป็นคู่มือ
+> เขียนไว้ 2026-09-14 · ตรวจสอบใหม่ 2026-09-17 แล้วพบว่าไม่ตรงกับงานจริงอีกต่อไป
+>
+> **งานปัจจุบันอยู่ที่** `scripts/itec/dimension/` -> [[ITEC Product Dimension]]
+>
+> | | โน้ตนี้ (เก่า) | งานจริงตอนนี้ |
+> |---|---|---|
+> | โฟลเดอร์ | `scripts/itec/category/` | `scripts/itec/dimension/` |
+> | notebook | `itec_recategorization_full.ipynb` | `itec_dimension.ipynb` (33 cell) |
+> | กฎอยู่ไหน | ฝังใน notebook | `rules.yaml` + `dimension.py` |
+> | จำนวนหมวด | 14 | **20** |
+> | ชื่อหมวดที่เลิกใช้แล้ว | `Accessory and Others` · `Service and Others` · `Adapter/Charger/Powerbank` | `Others` · `IT Accessories` · `Powerbank` · `Smart Home` · `Personal Care & Health` · `Lifestyle & Hobby` |
+> | คอลัมน์กลาง | ไม่มี | `Item_Type` · `Item_Host` · `Item_Platform` |
+> | สถานะ ML | เขียนไว้ว่าเทรนแล้ว | **ยังไม่เคยรัน** — `RUN_ML = False` ทุกเซลล์ |
+>
+> **⚠️ ขั้น 3 + ขั้น 4 ในโน้ตนี้มี target leakage อย่าลอกไปใช้**
+> label (`Category_std`) สร้างจาก `CategoryName` แล้วเอา `CategoryName` ใส่กลับเป็น feature
+> -> accuracy จะเข้าใกล้ 1.0 แต่โมเดลไม่ได้เรียนอะไร มันแค่อ่านค่าเดิมคืนมา
+>
+> ตัวโน้ตยังขัดแย้งกันเองด้วย — หัวโน้ตเขียน `Feature: ItemName (ตอน predict มีแค่นี้)` แต่ขั้น 4 ใช้ 2 factor
 
 ---
 

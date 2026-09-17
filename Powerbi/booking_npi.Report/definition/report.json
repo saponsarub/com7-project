@@ -12,6 +12,11 @@
     },
     "customTheme": {
       "name": "com7_launch_theme",
+      "reportVersionAtImport": {
+        "visual": "2.11.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
       "type": "RegisteredResources"
     }
   },
@@ -23,6 +28,19 @@
             "expr": {
               "Literal": {
                 "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
               }
             }
           }
@@ -48,8 +66,13 @@
       "items": [
         {
           "name": "com7_launch_theme",
-          "path": "com7_launch_theme.json",
+          "path": "com7_launch_theme",
           "type": "CustomTheme"
+        },
+        {
+          "name": "logocom7.png",
+          "path": "logocom7.png",
+          "type": "Image"
         }
       ]
     }

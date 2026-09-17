@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "k2",
+  "position": {
+    "x": 646,
+    "y": 54,
+    "z": 2,
+    "width": 307,
+    "height": 96,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "Branches"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).Branches",
+              "nativeQueryRef": "Branches"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'สาขาที่รับจอง'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

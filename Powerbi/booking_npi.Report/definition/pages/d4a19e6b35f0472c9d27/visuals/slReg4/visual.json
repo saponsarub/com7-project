@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "slReg4",
+  "position": {
+    "x": 1028,
+    "y": 588,
+    "z": 14,
+    "width": 236,
+    "height": 122,
+    "tabOrder": 14
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "book_region_en"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).book_region_en",
+              "nativeQueryRef": "book_region_en"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'ภาค'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

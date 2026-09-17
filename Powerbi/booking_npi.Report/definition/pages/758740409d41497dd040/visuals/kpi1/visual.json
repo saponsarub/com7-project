@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "kpi1",
+  "position": {
+    "x": 267,
+    "y": 54,
+    "z": 1,
+    "width": 243,
+    "height": 96,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "Value M"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).Value M",
+              "nativeQueryRef": "Value M"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'มูลค่า (ล้านบาท)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

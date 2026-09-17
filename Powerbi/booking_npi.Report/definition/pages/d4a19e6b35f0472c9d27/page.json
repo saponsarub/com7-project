@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
-  "name": "758740409d41497dd040",
-  "displayName": "ภาพรวม",
+  "name": "d4a19e6b35f0472c9d27",
+  "displayName": "วันรับเครื่อง",
   "displayOption": "FitToPage",
   "height": 720,
   "width": 1280

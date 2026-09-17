@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "kpi4",
+  "position": {
+    "x": 1020,
+    "y": 54,
+    "z": 4,
+    "width": 243,
+    "height": 96,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "Pending Pickup"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).Pending Pickup",
+              "nativeQueryRef": "Pending Pickup"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'รอมารับเครื่อง'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

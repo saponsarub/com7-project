@@ -1,11 +1,11 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "tbl",
+  "name": "pkBranch",
   "position": {
     "x": 16,
     "y": 458,
     "z": 12,
-    "width": 940,
+    "width": 1000,
     "height": 252,
     "tabOrder": 12
   },
@@ -23,11 +23,39 @@
                       "Entity": "ci npi_iphone (2)"
                     }
                   },
-                  "Property": "Launch Cohort"
+                  "Property": "book_cleanbranchname"
                 }
               },
-              "queryRef": "ci npi_iphone (2).Launch Cohort",
-              "nativeQueryRef": "Launch Cohort"
+              "queryRef": "ci npi_iphone (2).book_cleanbranchname",
+              "nativeQueryRef": "book_cleanbranchname"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "book_region_en"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).book_region_en",
+              "nativeQueryRef": "book_region_en"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "book_shop_brand"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).book_shop_brand",
+              "nativeQueryRef": "book_shop_brand"
             },
             {
               "field": {
@@ -37,11 +65,11 @@
                       "Entity": "ci npi_iphone (2)"
                     }
                   },
-                  "Property": "Bookings Pro Only"
+                  "Property": "Bookings"
                 }
               },
-              "queryRef": "ci npi_iphone (2).Bookings Pro Only",
-              "nativeQueryRef": "Bookings Pro Only"
+              "queryRef": "ci npi_iphone (2).Bookings",
+              "nativeQueryRef": "Bookings"
             },
             {
               "field": {
@@ -51,67 +79,11 @@
                       "Entity": "ci npi_iphone (2)"
                     }
                   },
-                  "Property": "Bookings YoY %"
+                  "Property": "Pending Pickup"
                 }
               },
-              "queryRef": "ci npi_iphone (2).Bookings YoY %",
-              "nativeQueryRef": "Bookings YoY %"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "ci npi_iphone (2)"
-                    }
-                  },
-                  "Property": "Value M Pro Only"
-                }
-              },
-              "queryRef": "ci npi_iphone (2).Value M Pro Only",
-              "nativeQueryRef": "Value M Pro Only"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "ci npi_iphone (2)"
-                    }
-                  },
-                  "Property": "Value YoY %"
-                }
-              },
-              "queryRef": "ci npi_iphone (2).Value YoY %",
-              "nativeQueryRef": "Value YoY %"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "ci npi_iphone (2)"
-                    }
-                  },
-                  "Property": "Avg Price"
-                }
-              },
-              "queryRef": "ci npi_iphone (2).Avg Price",
-              "nativeQueryRef": "Avg Price"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "ci npi_iphone (2)"
-                    }
-                  },
-                  "Property": "Pro Max Share %"
-                }
-              },
-              "queryRef": "ci npi_iphone (2).Pro Max Share %",
-              "nativeQueryRef": "Pro Max Share %"
+              "queryRef": "ci npi_iphone (2).Pending Pickup",
+              "nativeQueryRef": "Pending Pickup"
             },
             {
               "field": {
@@ -139,7 +111,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'เทียบฐานเดียวกัน · เฉพาะ Pro / Pro Max'"
+                  "Value": "'รายสาขา · เรียงตามคิวรอรับ เพื่อจัดกำลัง back office'"
                 }
               }
             }

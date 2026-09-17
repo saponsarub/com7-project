@@ -409,3 +409,63 @@ def health(df):
          "%": round((df.Item_Platform == "Generic").mean() * 100, 1), "เป้า": "—"},
         {"ตัวชี้วัด": "รวมทั้งหมด", "แถว": n, "%": 100.0, "เป้า": "—"},
     ])
+
+
+# ══════════════════════════════════════════════════ feature สำหรับ ML ══
+# คอลัมน์เสริม : ป้ายกำกับในข้อความ : โอกาสถูกสุ่มตัดทิ้งตอนเทรน
+ML_FIELDS = (("CategoryName",    "หมวด",   0.50),
+             ("SubCategoryName", "ย่อย",   0.50),
+             ("Brand",           "แบรนด์", 0.30))
+
+
+def build_text(df, drop=True, seed=42, mask_by_category=True):
+    """ประกอบข้อความ 1 บรรทัดต่อสินค้า สำหรับป้อนเข้า embedding
+
+        "usb-c cable 1m | หมวด: accessories | ย่อย: cable | แบรนด์: anker"
+
+    ทำไมต้องสุ่มตัด field ทิ้ง
+        ของใหม่ที่เพิ่งเข้าระบบ ยังไม่มีใคร key หมวดให้ เหลือแค่ ItemName
+        ถ้าเทรนด้วยข้อมูลครบทุกแถว โมเดลจะพึ่ง CategoryName จนตอนใช้จริงพัง
+        สุ่มปิดบาง field ระหว่างเทรน = โมเดลตัวเดียวใช้ได้ทั้งสองสภาพ
+        ItemName ไม่เคยถูกตัด เพราะเป็นสิ่งเดียวที่มีเสมอ
+
+    mask_by_category  กัน target leakage
+        แถวที่ by_category=True คือแถวที่ *กฎ* ตัดสินจาก CategoryName
+        label ของมันจึงเป็นฟังก์ชันตรง ๆ ของคอลัมน์นั้น
+        ถ้าปล่อยให้เห็น CategoryName ด้วย โมเดลจะแค่อ่านค่าคืนมา
+        accuracy สวยแต่ไม่ได้เรียนอะไร -> บังคับตัดทิ้ง 100%
+
+    drop=False   ใส่ทุก field ที่มี (ใช้ตอนวัดผลสภาพ "ข้อมูลครบ")
+    """
+    rng = np.random.default_rng(seed)
+    n = len(df)
+    out = normalize(df["ItemName"])
+
+    bycat = (df["by_category"].to_numpy(dtype=bool)
+             if mask_by_category and "by_category" in df.columns
+             else np.zeros(n, dtype=bool))
+
+    for colname, label, p in ML_FIELDS:
+        if colname not in df.columns:
+            continue
+        val = normalize(df[colname])
+        keep = np.ones(n, dtype=bool) if not drop else (rng.random(n) >= p)
+        if colname == "CategoryName":
+            keep &= ~bycat                       # แถวที่กฎเชื่อ category อยู่แล้ว ห้ามเห็น
+        keep &= (val.to_numpy() != "")           # ค่าว่างไม่ต้องใส่ป้าย
+        out = out + pd.Series(f" | {label}: ", index=df.index).where(
+            pd.Series(keep, index=df.index), "") + val.where(
+            pd.Series(keep, index=df.index), "")
+    return out.tolist()
+
+
+def text_variants(df, seed=42):
+    """3 ชุดข้อความสำหรับเทรนและวัดผล 2 สภาพ
+
+        train  สุ่มปิด field  -> ใช้เทรน
+        full   ข้อมูลครบ      -> วัดตอน recategorize ของเก่าที่มี category ครบ
+        name   ชื่อล้วน        -> วัดตอนของใหม่ที่ยังไม่มีใคร key หมวด
+    """
+    return {"train": build_text(df, drop=True, seed=seed),
+            "full":  build_text(df, drop=False),
+            "name":  normalize(df["ItemName"]).tolist()}

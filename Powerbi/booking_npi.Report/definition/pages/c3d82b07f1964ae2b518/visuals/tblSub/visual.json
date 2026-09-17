@@ -1,19 +1,19 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "lineDay",
+  "name": "tblSub",
   "position": {
-    "x": 790,
-    "y": 162,
-    "z": 11,
-    "width": 474,
-    "height": 284,
-    "tabOrder": 11
+    "x": 16,
+    "y": 598,
+    "z": 4,
+    "width": 1000,
+    "height": 112,
+    "tabOrder": 4
   },
   "visual": {
-    "visualType": "lineChart",
+    "visualType": "tableEx",
     "query": {
       "queryState": {
-        "Category": {
+        "Values": {
           "projections": [
             {
               "field": {
@@ -23,34 +23,12 @@
                       "Entity": "ci npi_iphone (2)"
                     }
                   },
-                  "Property": "Launch Day"
+                  "Property": "clean_iPhone_submodel"
                 }
               },
-              "queryRef": "ci npi_iphone (2).Launch Day",
-              "nativeQueryRef": "Launch Day"
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "ci npi_iphone (2)"
-                    }
-                  },
-                  "Property": "Launch Cohort"
-                }
-              },
-              "queryRef": "ci npi_iphone (2).Launch Cohort",
-              "nativeQueryRef": "Launch Cohort"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
+              "queryRef": "ci npi_iphone (2).clean_iPhone_submodel",
+              "nativeQueryRef": "clean_iPhone_submodel"
+            },
             {
               "field": {
                 "Measure": {
@@ -64,6 +42,34 @@
               },
               "queryRef": "ci npi_iphone (2).Bookings",
               "nativeQueryRef": "Bookings"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "Value M"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).Value M",
+              "nativeQueryRef": "Value M"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "Avg Price"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).Avg Price",
+              "nativeQueryRef": "Avg Price"
             }
           ]
         }
@@ -77,7 +83,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'จังหวะการจองรายวัน (วันที่ 0 = วันเปิดจอง)'"
+                  "Value": "'สรุปรายรุ่นย่อย'"
                 }
               }
             }

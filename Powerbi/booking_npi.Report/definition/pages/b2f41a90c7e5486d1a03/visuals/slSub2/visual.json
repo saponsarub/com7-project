@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "slSub2",
+  "position": {
+    "x": 1140,
+    "y": 458,
+    "z": 14,
+    "width": 124,
+    "height": 252,
+    "tabOrder": 14
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "clean_iPhone_submodel"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).clean_iPhone_submodel",
+              "nativeQueryRef": "clean_iPhone_submodel"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'รุ่นย่อย'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

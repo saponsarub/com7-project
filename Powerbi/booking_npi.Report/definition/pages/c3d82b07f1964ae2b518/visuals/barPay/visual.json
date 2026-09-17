@@ -1,16 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "lineDay",
+  "name": "barPay",
   "position": {
-    "x": 790,
-    "y": 162,
-    "z": 11,
-    "width": 474,
-    "height": 284,
-    "tabOrder": 11
+    "x": 648,
+    "y": 346,
+    "z": 3,
+    "width": 616,
+    "height": 240,
+    "tabOrder": 3
   },
   "visual": {
-    "visualType": "lineChart",
+    "visualType": "barChart",
     "query": {
       "queryState": {
         "Category": {
@@ -23,11 +23,11 @@
                       "Entity": "ci npi_iphone (2)"
                     }
                   },
-                  "Property": "Launch Day"
+                  "Property": "installment_type"
                 }
               },
-              "queryRef": "ci npi_iphone (2).Launch Day",
-              "nativeQueryRef": "Launch Day"
+              "queryRef": "ci npi_iphone (2).installment_type",
+              "nativeQueryRef": "installment_type"
             }
           ]
         },
@@ -49,7 +49,7 @@
             }
           ]
         },
-        "Y": {
+        "X": {
           "projections": [
             {
               "field": {
@@ -77,7 +77,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'จังหวะการจองรายวัน (วันที่ 0 = วันเปิดจอง)'"
+                  "Value": "'วิธีชำระเงิน'"
                 }
               }
             }

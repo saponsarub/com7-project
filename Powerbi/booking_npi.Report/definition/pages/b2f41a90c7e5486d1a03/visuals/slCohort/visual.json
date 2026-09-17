@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "slCohort",
+  "position": {
+    "x": 1008,
+    "y": 458,
+    "z": 13,
+    "width": 124,
+    "height": 252,
+    "tabOrder": 13
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "Launch Cohort"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).Launch Cohort",
+              "nativeQueryRef": "Launch Cohort"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'รุ่น'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

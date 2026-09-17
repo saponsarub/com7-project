@@ -1,6 +1,90 @@
 table 'ci npi_iphone (2)'
 	lineageTag: 9371e051-8d3e-4b4e-9cce-4b4aa1380513
 
+	measure Bookings = CALCULATE(COUNTROWS('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
+		formatString: #,0
+		lineageTag: a4220428-0594-4e51-8b61-a93163389a87
+
+	measure Units = CALCULATE(SUM('ci npi_iphone (2)'[booking_qty]), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
+		formatString: #,0
+		lineageTag: 3369db8d-24b5-45ac-a565-c715c66358fc
+
+	measure 'Value THB' = CALCULATE(SUM('ci npi_iphone (2)'[srp]), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
+		formatString: #,0
+		lineageTag: 3d01054d-8e50-4597-a0e3-f14bb3aa44e3
+
+	measure 'Value M' = DIVIDE([Value THB], 1000000)
+		formatString: #,0.0
+		lineageTag: 19328476-e8c2-418d-b03d-66f7742a1f2c
+
+	measure 'Avg Price' = DIVIDE([Value THB], [Bookings])
+		formatString: #,0
+		lineageTag: cd1e82ee-f088-43dd-a087-dc89426f91da
+
+	measure Branches = CALCULATE(DISTINCTCOUNT('ci npi_iphone (2)'[booking_branch]), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
+		formatString: #,0
+		lineageTag: 032c344b-9063-4d59-8b44-468c94f41d0f
+
+	measure Completed = CALCULATE([Bookings], 'ci npi_iphone (2)'[finish] = 1)
+		formatString: #,0
+		lineageTag: 2748fd86-38d1-4896-8431-f2161304f0ab
+
+	measure 'Completion %' = DIVIDE([Completed], [Bookings])
+		formatString: 0.0%
+		lineageTag: 13349f0d-c529-4ee2-865d-ed29a109be12
+
+	measure 'Pro Max Share %' = DIVIDE(CALCULATE([Bookings], 'ci npi_iphone (2)'[clean_iPhone_submodel] = "Pro Max"), [Bookings])
+		formatString: 0.0%
+		lineageTag: ded2150c-d26e-458c-b5a0-008fc42fc1ae
+
+	measure 'Bookings All Time' = CALCULATE(COUNTROWS('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Is Test Row] = 0)
+		formatString: #,0
+		lineageTag: fdaf5a13-ecb7-4b26-8b07-484d83c4e806
+
+	measure 'Outside Window' = [Bookings All Time] - [Bookings]
+		formatString: #,0
+		lineageTag: a6427ebc-989e-49e2-9f74-f572e20b6082
+
+	measure 'Bookings Pro Only' = CALCULATE([Bookings], 'ci npi_iphone (2)'[clean_iPhone_submodel] IN {"Pro", "Pro Max"})
+		formatString: #,0
+		lineageTag: 6b243b65-1342-4de2-a27a-9cb86988e60c
+
+	measure 'Value M Pro Only' = CALCULATE([Value M], 'ci npi_iphone (2)'[clean_iPhone_submodel] IN {"Pro", "Pro Max"})
+		formatString: #,0.0
+		lineageTag: c02d3900-a9f9-4ff5-8873-e9b9eeb4f79e
+
+	measure 'Pending Pickup' = CALCULATE([Bookings], 'ci npi_iphone (2)'[finish] = 0)
+		formatString: #,0
+		lineageTag: 181b43c0-2bc2-4462-87e4-9d1569e71ef1
+
+	measure 'Unmapped Rows' = CALCULATE(COUNTROWS('ci npi_iphone (2)'), ISBLANK('ci npi_iphone (2)'[Launch Cohort]), 'ci npi_iphone (2)'[Is Test Row] = 0)
+		formatString: #,0
+		lineageTag: 51961aa8-1722-4025-8610-76b543146930
+
+	measure 'Bookings D0-2' = CALCULATE([Bookings], 'ci npi_iphone (2)'[Launch Day] >= 0, 'ci npi_iphone (2)'[Launch Day] <= 2)
+		formatString: #,0
+		lineageTag: a9027052-6284-4680-bb5b-42a0e597451e
+
+	measure 'Value M D0-2' = CALCULATE([Value M], 'ci npi_iphone (2)'[Launch Day] >= 0, 'ci npi_iphone (2)'[Launch Day] <= 2)
+		formatString: #,0.0
+		lineageTag: a9a92b81-4b31-4997-b083-f169239bc1c4
+
+	measure 'Bookings Prev Model' = VAR n = SELECTEDVALUE('ci npi_iphone (2)'[Model No]) RETURN CALCULATE([Bookings D0-2], REMOVEFILTERS('ci npi_iphone (2)'[Launch Cohort], 'ci npi_iphone (2)'[clean_iPhone_model], 'ci npi_iphone (2)'[Launch Open], 'ci npi_iphone (2)'[Launch Sale], 'ci npi_iphone (2)'[Launch Window Days], 'ci npi_iphone (2)'[clean_bookdate], 'ci npi_iphone (2)'[booking_datetime]), 'ci npi_iphone (2)'[Model No] = n - 1)
+		formatString: #,0
+		lineageTag: 7db2899c-7a8a-49ff-aa7d-84b92a18b1bf
+
+	measure 'Bookings YoY %' = VAR p = [Bookings Prev Model] RETURN IF(p > 0, DIVIDE([Bookings D0-2] - p, p), BLANK())
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 3d1fc19f-5857-4a91-9cce-5ad4e736e096
+
+	measure 'Value Prev Model' = VAR n = SELECTEDVALUE('ci npi_iphone (2)'[Model No]) RETURN CALCULATE([Value M D0-2], REMOVEFILTERS('ci npi_iphone (2)'[Launch Cohort], 'ci npi_iphone (2)'[clean_iPhone_model], 'ci npi_iphone (2)'[Launch Open], 'ci npi_iphone (2)'[Launch Sale], 'ci npi_iphone (2)'[Launch Window Days], 'ci npi_iphone (2)'[clean_bookdate], 'ci npi_iphone (2)'[booking_datetime]), 'ci npi_iphone (2)'[Model No] = n - 1)
+		formatString: #,0.0
+		lineageTag: 005bb570-9dd0-4067-8e5c-70bcabdf82fb
+
+	measure 'Value YoY %' = VAR p = [Value Prev Model] RETURN IF(p > 0, DIVIDE([Value M D0-2] - p, p), BLANK())
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: c3db5d2f-adc3-4ed9-b974-d5a38b019890
+
 	column unique_key
 		dataType: string
 		lineageTag: c71c0bbe-d3e5-42e1-807d-9d66361867ca
@@ -421,90 +505,6 @@ table 'ci npi_iphone (2)'
 		summarizeBy: none
 
 		annotation SummarizationSetBy = Automatic
-
-	measure 'Bookings' = CALCULATE(COUNTROWS('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
-		formatString: #,0
-		lineageTag: a4220428-0594-4e51-8b61-a93163389a87
-
-	measure 'Units' = CALCULATE(SUM('ci npi_iphone (2)'[booking_qty]), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
-		formatString: #,0
-		lineageTag: 3369db8d-24b5-45ac-a565-c715c66358fc
-
-	measure 'Value THB' = CALCULATE(SUM('ci npi_iphone (2)'[srp]), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
-		formatString: #,0
-		lineageTag: 3d01054d-8e50-4597-a0e3-f14bb3aa44e3
-
-	measure 'Value M' = DIVIDE([Value THB], 1000000)
-		formatString: #,0.0
-		lineageTag: 19328476-e8c2-418d-b03d-66f7742a1f2c
-
-	measure 'Avg Price' = DIVIDE([Value THB], [Bookings])
-		formatString: #,0
-		lineageTag: cd1e82ee-f088-43dd-a087-dc89426f91da
-
-	measure 'Branches' = CALCULATE(DISTINCTCOUNT('ci npi_iphone (2)'[booking_branch]), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
-		formatString: #,0
-		lineageTag: 032c344b-9063-4d59-8b44-468c94f41d0f
-
-	measure 'Completed' = CALCULATE([Bookings], 'ci npi_iphone (2)'[finish] = 1)
-		formatString: #,0
-		lineageTag: 2748fd86-38d1-4896-8431-f2161304f0ab
-
-	measure 'Completion %' = DIVIDE([Completed], [Bookings])
-		formatString: 0.0%
-		lineageTag: 13349f0d-c529-4ee2-865d-ed29a109be12
-
-	measure 'Pro Max Share %' = DIVIDE(CALCULATE([Bookings], 'ci npi_iphone (2)'[clean_iPhone_submodel] = "Pro Max"), [Bookings])
-		formatString: 0.0%
-		lineageTag: ded2150c-d26e-458c-b5a0-008fc42fc1ae
-
-	measure 'Bookings All Time' = CALCULATE(COUNTROWS('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Is Test Row] = 0)
-		formatString: #,0
-		lineageTag: fdaf5a13-ecb7-4b26-8b07-484d83c4e806
-
-	measure 'Outside Window' = [Bookings All Time] - [Bookings]
-		formatString: #,0
-		lineageTag: a6427ebc-989e-49e2-9f74-f572e20b6082
-
-	measure 'Bookings Pro Only' = CALCULATE([Bookings], 'ci npi_iphone (2)'[clean_iPhone_submodel] IN {"Pro", "Pro Max"})
-		formatString: #,0
-		lineageTag: 6b243b65-1342-4de2-a27a-9cb86988e60c
-
-	measure 'Value M Pro Only' = CALCULATE([Value M], 'ci npi_iphone (2)'[clean_iPhone_submodel] IN {"Pro", "Pro Max"})
-		formatString: #,0.0
-		lineageTag: c02d3900-a9f9-4ff5-8873-e9b9eeb4f79e
-
-	measure 'Pending Pickup' = CALCULATE([Bookings], 'ci npi_iphone (2)'[finish] = 0)
-		formatString: #,0
-		lineageTag: 181b43c0-2bc2-4462-87e4-9d1569e71ef1
-
-	measure 'Unmapped Rows' = CALCULATE(COUNTROWS('ci npi_iphone (2)'), ISBLANK('ci npi_iphone (2)'[Launch Cohort]), 'ci npi_iphone (2)'[Is Test Row] = 0)
-		formatString: #,0
-		lineageTag: 51961aa8-1722-4025-8610-76b543146930
-
-	measure 'Bookings D0-2' = CALCULATE([Bookings], 'ci npi_iphone (2)'[Launch Day] >= 0, 'ci npi_iphone (2)'[Launch Day] <= 2)
-		formatString: #,0
-		lineageTag: a9027052-6284-4680-bb5b-42a0e597451e
-
-	measure 'Value M D0-2' = CALCULATE([Value M], 'ci npi_iphone (2)'[Launch Day] >= 0, 'ci npi_iphone (2)'[Launch Day] <= 2)
-		formatString: #,0.0
-		lineageTag: a9a92b81-4b31-4997-b083-f169239bc1c4
-
-	measure 'Bookings Prev Model' = VAR n = SELECTEDVALUE('ci npi_iphone (2)'[Model No]) RETURN CALCULATE([Bookings D0-2], ALL('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Model No] = n - 1)
-		formatString: #,0
-		lineageTag: 7db2899c-7a8a-49ff-aa7d-84b92a18b1bf
-
-	measure 'Bookings YoY %' = VAR p = [Bookings Prev Model] RETURN IF(p > 0, DIVIDE([Bookings D0-2] - p, p), BLANK())
-		formatString: +0.0%;-0.0%;0.0%
-		lineageTag: 3d1fc19f-5857-4a91-9cce-5ad4e736e096
-
-	measure 'Value Prev Model' = VAR n = SELECTEDVALUE('ci npi_iphone (2)'[Model No]) RETURN CALCULATE([Value M D0-2], ALL('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Model No] = n - 1)
-		formatString: #,0.0
-		lineageTag: 005bb570-9dd0-4067-8e5c-70bcabdf82fb
-
-	measure 'Value YoY %' = VAR p = [Value Prev Model] RETURN IF(p > 0, DIVIDE([Value M D0-2] - p, p), BLANK())
-		formatString: +0.0%;-0.0%;0.0%
-		lineageTag: c3db5d2f-adc3-4ed9-b974-d5a38b019890
 
 	partition 'ci npi_iphone (2)' = m
 		mode: import

@@ -1,11 +1,11 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "tbl",
+  "name": "tblProv",
   "position": {
     "x": 16,
     "y": 458,
     "z": 12,
-    "width": 940,
+    "width": 980,
     "height": 252,
     "tabOrder": 12
   },
@@ -23,11 +23,11 @@
                       "Entity": "ci npi_iphone (2)"
                     }
                   },
-                  "Property": "Launch Cohort"
+                  "Property": "book_province"
                 }
               },
-              "queryRef": "ci npi_iphone (2).Launch Cohort",
-              "nativeQueryRef": "Launch Cohort"
+              "queryRef": "ci npi_iphone (2).book_province",
+              "nativeQueryRef": "book_province"
             },
             {
               "field": {
@@ -37,11 +37,11 @@
                       "Entity": "ci npi_iphone (2)"
                     }
                   },
-                  "Property": "Bookings Pro Only"
+                  "Property": "Bookings"
                 }
               },
-              "queryRef": "ci npi_iphone (2).Bookings Pro Only",
-              "nativeQueryRef": "Bookings Pro Only"
+              "queryRef": "ci npi_iphone (2).Bookings",
+              "nativeQueryRef": "Bookings"
             },
             {
               "field": {
@@ -51,39 +51,11 @@
                       "Entity": "ci npi_iphone (2)"
                     }
                   },
-                  "Property": "Bookings YoY %"
+                  "Property": "Value M"
                 }
               },
-              "queryRef": "ci npi_iphone (2).Bookings YoY %",
-              "nativeQueryRef": "Bookings YoY %"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "ci npi_iphone (2)"
-                    }
-                  },
-                  "Property": "Value M Pro Only"
-                }
-              },
-              "queryRef": "ci npi_iphone (2).Value M Pro Only",
-              "nativeQueryRef": "Value M Pro Only"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "ci npi_iphone (2)"
-                    }
-                  },
-                  "Property": "Value YoY %"
-                }
-              },
-              "queryRef": "ci npi_iphone (2).Value YoY %",
-              "nativeQueryRef": "Value YoY %"
+              "queryRef": "ci npi_iphone (2).Value M",
+              "nativeQueryRef": "Value M"
             },
             {
               "field": {
@@ -107,11 +79,25 @@
                       "Entity": "ci npi_iphone (2)"
                     }
                   },
-                  "Property": "Pro Max Share %"
+                  "Property": "Branches"
                 }
               },
-              "queryRef": "ci npi_iphone (2).Pro Max Share %",
-              "nativeQueryRef": "Pro Max Share %"
+              "queryRef": "ci npi_iphone (2).Branches",
+              "nativeQueryRef": "Branches"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "Pending Pickup"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).Pending Pickup",
+              "nativeQueryRef": "Pending Pickup"
             },
             {
               "field": {
@@ -139,7 +125,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'เทียบฐานเดียวกัน · เฉพาะ Pro / Pro Max'"
+                  "Value": "'รายจังหวัด · คลิกหัวคอลัมน์เพื่อเรียงลำดับ'"
                 }
               }
             }
