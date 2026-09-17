@@ -220,11 +220,19 @@ Bookings Pro Only = CALCULATE([Bookings], T[submodel] IN {"Pro", "Pro Max"})
 |---|---|
 | `card` | `Values` |
 | `columnChart` | `Category` · `Series` · `Y` |
-| `barChart` | `Category` · `Series` · `X` |
+| `barChart` | `Category` · `Series` · `Y` — **ชื่อเดียวกับ columnChart** |
 | `lineChart` | `Category` · `Series` · `Y` |
 | `tableEx` | `Values` (ใส่ได้หลายฟิลด์เรียงกัน) |
 | `slicer` | `Values` |
 | `image` | ไม่มี query |
+
+> [!bug] กับดัก — `barChart` ขึ้นกรอบเปล่า ไม่มี error
+> ทิศทางแท่งกำหนดด้วย `visualType` **ไม่ใช่ชื่อ role**
+> `barChart` (แท่งนอน) กับ `columnChart` (แท่งตั้ง) ใช้ role ชุดเดียวกัน คือ `Category` · `Series` · `Y`
+> ถ้าใส่ `X` (ซึ่งเป็นของ `scatterChart`) Power BI จะ **มองไม่เห็น field เลย วาดกรอบเปล่าออกมา โดยไม่ฟ้องอะไร**
+> เจอจริง 2026-09-17 — พังพร้อมกัน 5 visual กว่าจะรู้ว่าสาเหตุคือ role ชื่อผิด
+>
+> **วิธีกัน:** รันสคริปต์ตรวจ role ก่อนเปิด Desktop ทุกครั้ง (อยู่ในหัวข้อ "ขั้นตอนทำงาน")
 
 ### เวอร์ชัน schema
 
