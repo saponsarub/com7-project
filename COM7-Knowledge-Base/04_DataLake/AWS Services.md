@@ -113,6 +113,8 @@ Athena → Power BI ทดสอบแล้วเชื่อมได้ผ่
 
 AWS Proposal ระบุว่า Athena รันใน VPC
 
+> **หมายเหตุ (2026-09-16):** Athena เป็น serverless — compute อยู่นอก VPC เสมอ · ที่ทำได้คือใช้ VPC Interface Endpoint ให้ traffic ไป Athena API ไม่ออกเน็ต ไม่ใช่ engine รันใน VPC
+
 ---
 
 # Redshift

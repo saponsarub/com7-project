@@ -1,0 +1,196 @@
+table 'rpt booking_list (2)'
+	lineageTag: c9d632ea-a995-47e5-a63e-ab9d83efd361
+
+	column booking_id
+		dataType: int64
+		formatString: 0
+		lineageTag: b07bf0ea-2481-4989-8b9c-53dfbcace62a
+		summarizeBy: sum
+		sourceColumn: booking_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_branch
+		dataType: int64
+		formatString: 0
+		lineageTag: 7e473b05-4c55-4f69-821e-b30d116b656c
+		summarizeBy: sum
+		sourceColumn: booking_branch
+
+		annotation SummarizationSetBy = Automatic
+
+	column CusCode
+		dataType: string
+		lineageTag: 15e90b0f-28dc-40cf-a435-54964363b87d
+		summarizeBy: none
+		sourceColumn: CusCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_datetime
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c94b6684-aead-4754-bce2-0f42b793b0ec
+		summarizeBy: none
+		sourceColumn: booking_datetime
+
+		variation Variation
+			isDefault
+			relationship: 5ec2c25b-390c-49ab-bc5a-43f3019425a9
+			defaultHierarchy: LocalDateTable_6430378c-f53a-4fc5-b284-2a74b670e2e5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_name
+		dataType: string
+		lineageTag: 96224f0e-0021-44c8-8b0f-7efe465f64ff
+		summarizeBy: none
+		sourceColumn: category_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Model
+		dataType: string
+		lineageTag: e92fc441-de04-48d9-a60e-06969f5abd61
+		summarizeBy: none
+		sourceColumn: Model
+
+		annotation SummarizationSetBy = Automatic
+
+	column product
+		dataType: string
+		lineageTag: 7d97582a-7a7d-4018-b7c0-074320111757
+		summarizeBy: none
+		sourceColumn: product
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		lineageTag: f8c08489-6bf5-4d3e-ac58-f2de2d984725
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_qty
+		dataType: int64
+		formatString: 0
+		lineageTag: 8c23ef05-72d3-4ea0-8c82-1933be61c42f
+		summarizeBy: sum
+		sourceColumn: booking_qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_amount
+		dataType: decimal
+		formatString: "฿"#,0.###############;-"฿"#,0.###############;"฿"#,0.###############
+		lineageTag: 1248fff6-2eee-4320-8db6-d78d013185ee
+		summarizeBy: sum
+		sourceColumn: booking_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"th-TH"}
+
+	column PayInfo
+		dataType: string
+		lineageTag: 040774db-282d-408d-bfd0-c0cca9d58d44
+		summarizeBy: none
+		sourceColumn: PayInfo
+
+		annotation SummarizationSetBy = Automatic
+
+	column srp
+		dataType: decimal
+		formatString: "฿"#,0.###############;-"฿"#,0.###############;"฿"#,0.###############
+		lineageTag: a004477c-e1ea-4052-b6b0-980b1e9f3c5a
+		summarizeBy: sum
+		sourceColumn: srp
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"th-TH"}
+
+	column finish
+		dataType: int64
+		formatString: 0
+		lineageTag: 4798fa48-5a7b-4286-a926-f91d951a1ade
+		summarizeBy: sum
+		sourceColumn: finish
+
+		annotation SummarizationSetBy = Automatic
+
+	column finish_datetime
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5d53812c-224a-4e02-ada9-4519f8f6d84d
+		summarizeBy: none
+		sourceColumn: finish_datetime
+
+		variation Variation
+			isDefault
+			relationship: c3eb613e-61cd-4dfb-8cbd-a0eee2b68830
+			defaultHierarchy: LocalDateTable_868697e0-ca05-4d23-8e26-b158589cc488.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column FinishSalesId
+		dataType: int64
+		formatString: 0
+		lineageTag: 4a4f2e56-702d-4f8f-a2c2-7b7f7bb9b17a
+		summarizeBy: count
+		sourceColumn: FinishSalesId
+
+		annotation SummarizationSetBy = Automatic
+
+	column FinishSalesBranch
+		dataType: int64
+		formatString: 0
+		lineageTag: 499ddff9-b3cd-4773-b3e8-5159ee9a49e5
+		summarizeBy: sum
+		sourceColumn: FinishSalesBranch
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_no
+		dataType: string
+		lineageTag: dfb83710-ca3f-4309-84a2-4df5622feb17
+		summarizeBy: none
+		sourceColumn: order_no
+
+		annotation SummarizationSetBy = Automatic
+
+	column lot_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 183e045a-ba2c-4aeb-8ff9-53ba4e368367
+		summarizeBy: none
+		sourceColumn: lot_date
+
+		variation Variation
+			isDefault
+			relationship: 883f0f6a-7ef6-4dc7-a585-27bb35a91a28
+			defaultHierarchy: LocalDateTable_8bbf90c5-31df-477e-9940-32b53f9a2bdb.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column MemberCode
+		dataType: string
+		lineageTag: 35a806d9-bd73-4330-818b-cfc3090f0185
+		summarizeBy: none
+		sourceColumn: MemberCode
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'rpt booking_list (2)' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("192.168.43.250,18963", "_db1_3f9c2a7e-8b41-4d6f-9c25-1a7e5c0d2b8f"),
+				    rpt_booking_list = Source{[Schema="rpt",Item="booking_list"]}[Data]
+				in
+				    rpt_booking_list
+
+	annotation PBI_ResultType = Table
+

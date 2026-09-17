@@ -399,4 +399,4 @@ sudo shutdown -h now
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC Category Model (ML)]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[Network & VPN]] · [[AWS Services]] · [[Consent & PDPA]] · [[ITEC Category Toolkit]] · [[ITEC Model - Notebook Explained]]
+[[ITEC Category Model (ML)]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[Network & VPN]] · [[AWS Services]] · [[Consent & PDPA]] · [[ITEC Category Toolkit]]

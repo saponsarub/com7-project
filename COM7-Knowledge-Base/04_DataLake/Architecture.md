@@ -91,7 +91,7 @@ GuardDuty (Malware Protection for S3) สแกน object → EventBridge → St
 - **Glue ETL (Spark)** แปลงข้อมูลระหว่าง zone
 - **Glue Data Catalog** เป็น metadata กลาง — proposal ระบุว่า *"Both Amazon Athena and Amazon Redshift READ table definitions from the Catalog"*
 - **Athena** serverless SQL · **Redshift Serverless** เป็น data warehouse
-- ทั้งคู่รันใน VPC
+- เชื่อมผ่าน VPC endpoint (Athena compute เป็น serverless อยู่นอก VPC · Redshift Serverless workgroup ผูก VPC ได้)
 
 ### Security
 

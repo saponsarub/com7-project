@@ -1,0 +1,517 @@
+table 'ci npi_iphone (2)'
+	lineageTag: 9371e051-8d3e-4b4e-9cce-4b4aa1380513
+
+	column unique_key
+		dataType: string
+		lineageTag: c71c0bbe-d3e5-42e1-807d-9d66361867ca
+		summarizeBy: none
+		sourceColumn: unique_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column installment_type
+		dataType: string
+		lineageTag: 5a829212-b0ab-4711-9c54-155f7719678a
+		summarizeBy: none
+		sourceColumn: installment_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column clean_iPhone_model
+		dataType: string
+		lineageTag: 78ae38f4-b8b9-4c59-a709-b72f5be40c18
+		summarizeBy: none
+		sourceColumn: clean_iPhone_model
+
+		annotation SummarizationSetBy = Automatic
+
+	column clean_iPhone_submodel
+		dataType: string
+		lineageTag: 215e0e61-f8e0-46e7-b1f6-d1995d49288b
+		summarizeBy: none
+		sourceColumn: clean_iPhone_submodel
+
+		annotation SummarizationSetBy = Automatic
+
+	column device_memory
+		dataType: string
+		lineageTag: 08aca494-fa27-48cf-8f08-116fedf3e396
+		summarizeBy: none
+		sourceColumn: device_memory
+
+		annotation SummarizationSetBy = Automatic
+
+	column device_color
+		dataType: string
+		lineageTag: 192d8de1-d2f8-4845-a78a-af5d0b8babc9
+		summarizeBy: none
+		sourceColumn: device_color
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6ba6bd1d-b6d0-4406-b909-5451bddc16c0
+		summarizeBy: sum
+		sourceColumn: booking_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_branch
+		dataType: int64
+		formatString: 0
+		lineageTag: 84a5e13c-5d30-4ad5-9c58-4b880f6a71b5
+		summarizeBy: sum
+		sourceColumn: booking_branch
+
+		annotation SummarizationSetBy = Automatic
+
+	column CusCode
+		dataType: string
+		lineageTag: 87943745-9b70-4671-9267-262b241e828d
+		summarizeBy: none
+		sourceColumn: CusCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_datetime
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e0bead6e-c127-402b-ab26-16ad2a745e93
+		summarizeBy: none
+		sourceColumn: booking_datetime
+
+		variation Variation
+			isDefault
+			relationship: 04b57b2a-3730-44ab-83ba-bd5a26f29bb9
+			defaultHierarchy: LocalDateTable_d5b619cc-9a54-48c0-8a25-a8aedbf97696.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_name
+		dataType: string
+		lineageTag: 613a071c-963a-44ae-9072-326a31cd60ed
+		summarizeBy: none
+		sourceColumn: category_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Model
+		dataType: string
+		lineageTag: 285ce489-086b-4b20-abfc-af04a50ee939
+		summarizeBy: none
+		sourceColumn: Model
+
+		annotation SummarizationSetBy = Automatic
+
+	column product
+		dataType: string
+		lineageTag: 5ea508ff-2aa6-441d-83b8-a6501f8d8ff6
+		summarizeBy: none
+		sourceColumn: product
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		lineageTag: 9bd5d64d-074d-4f44-bcc6-537e5de05c47
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_qty
+		dataType: int64
+		formatString: 0
+		lineageTag: c4059658-6763-4d1b-919a-804a5d84f9f7
+		summarizeBy: sum
+		sourceColumn: booking_qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_amount
+		dataType: decimal
+		formatString: "฿"#,0.###############;-"฿"#,0.###############;"฿"#,0.###############
+		lineageTag: bacb17bf-9658-4dcd-b923-aee4754af899
+		summarizeBy: sum
+		sourceColumn: booking_amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"th-TH"}
+
+	column PayInfo
+		dataType: string
+		lineageTag: 77cbd45a-239e-447f-8bd4-2143d048eb47
+		summarizeBy: none
+		sourceColumn: PayInfo
+
+		annotation SummarizationSetBy = Automatic
+
+	column srp
+		dataType: decimal
+		formatString: "฿"#,0.###############;-"฿"#,0.###############;"฿"#,0.###############
+		lineageTag: 2f6946a3-f2a2-4d2f-97d1-9f282b46c023
+		summarizeBy: sum
+		sourceColumn: srp
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"th-TH"}
+
+	column finish
+		dataType: int64
+		formatString: 0
+		lineageTag: 1457e113-9451-490e-954f-cd08e7787f61
+		summarizeBy: sum
+		sourceColumn: finish
+
+		annotation SummarizationSetBy = Automatic
+
+	column finish_datetime
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e37ba68a-21bc-4fc6-b704-d629ea762943
+		summarizeBy: none
+		sourceColumn: finish_datetime
+
+		variation Variation
+			isDefault
+			relationship: 3f49ae2c-f7c0-43b3-8997-76361fa51880
+			defaultHierarchy: LocalDateTable_754dc4ba-83c7-4d7b-931b-8a03adfbbb01.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column FinishSalesId
+		dataType: int64
+		formatString: 0
+		lineageTag: 73903ea3-be7d-48f3-ac9f-f91fd426dd1d
+		summarizeBy: count
+		sourceColumn: FinishSalesId
+
+		annotation SummarizationSetBy = Automatic
+
+	column FinishSalesBranch
+		dataType: int64
+		formatString: 0
+		lineageTag: c2215a23-8139-4fc8-90d6-5c08d23cd9bc
+		summarizeBy: sum
+		sourceColumn: FinishSalesBranch
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_no
+		dataType: string
+		lineageTag: b7cdb3fa-6740-4849-9227-f9465b1afd69
+		summarizeBy: none
+		sourceColumn: order_no
+
+		annotation SummarizationSetBy = Automatic
+
+	column lot_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3fe32e79-d29c-46cc-b77d-37ce7ac4900c
+		summarizeBy: none
+		sourceColumn: lot_date
+
+		variation Variation
+			isDefault
+			relationship: c91ed171-b2ae-41bf-b13a-831048c7c405
+			defaultHierarchy: LocalDateTable_1c265477-8c66-4a4d-a9ad-00a523619883.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column MemberCode
+		dataType: string
+		lineageTag: 71dd7728-61fd-4538-8798-6a4fca2ff8a0
+		summarizeBy: none
+		sourceColumn: MemberCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column clean_bookdate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: fd3edf96-f265-48ff-8891-5d3f625e54f2
+		summarizeBy: none
+		sourceColumn: clean_bookdate
+
+		variation Variation
+			isDefault
+			relationship: 5dc99d99-af1b-4233-b538-22edb8eb85f5
+			defaultHierarchy: LocalDateTable_39aeb270-d12b-45e5-8de2-23caba1c5584.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column clean_finishdate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 361082fa-93bb-430e-909c-a9289a2fdcce
+		summarizeBy: none
+		sourceColumn: clean_finishdate
+
+		variation Variation
+			isDefault
+			relationship: 1b592cbc-8f02-4b5d-8443-e7a12b332457
+			defaultHierarchy: LocalDateTable_29750446-3929-4ad7-a931-d7d1dc12f3b0.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column clean_product_name1
+		dataType: string
+		lineageTag: 00b40162-882f-4d9b-9bd1-e494955bc888
+		summarizeBy: none
+		sourceColumn: clean_product_name1
+
+		annotation SummarizationSetBy = Automatic
+
+	column clean_product_name2
+		dataType: string
+		lineageTag: 440842dc-d57b-4b07-b49d-4264f56ac69f
+		summarizeBy: none
+		sourceColumn: clean_product_name2
+
+		annotation SummarizationSetBy = Automatic
+
+	column book_province
+		dataType: string
+		lineageTag: 2fcc8752-46a4-4e32-ac37-6639f41afaf8
+		summarizeBy: none
+		sourceColumn: book_province
+
+		annotation SummarizationSetBy = Automatic
+
+	column book_shop_brand
+		dataType: string
+		lineageTag: dd12b63e-ee3e-458c-8cbe-d522151f25d8
+		summarizeBy: none
+		sourceColumn: book_shop_brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column book_region_en
+		dataType: string
+		lineageTag: c1a4fdd1-aa88-4a93-b737-975afdae3545
+		summarizeBy: none
+		sourceColumn: book_region_en
+
+		annotation SummarizationSetBy = Automatic
+
+	column book_cleanbranchname
+		dataType: string
+		lineageTag: 3a3d9eb4-7599-4b61-b479-a6b8245a47be
+		summarizeBy: none
+		sourceColumn: book_cleanbranchname
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_book_branchname
+		dataType: string
+		lineageTag: 3907b8f2-5c94-48e4-b74b-01bc55ce4d4e
+		summarizeBy: none
+		sourceColumn: full_book_branchname
+
+		annotation SummarizationSetBy = Automatic
+
+	column finish_province
+		dataType: string
+		lineageTag: db8d4169-21cd-4d65-9e9d-f161125cd548
+		summarizeBy: none
+		sourceColumn: finish_province
+
+		annotation SummarizationSetBy = Automatic
+
+	column finish_shop_brand
+		dataType: string
+		lineageTag: 72870f28-78f8-45bc-925a-60bb83c1cb7e
+		summarizeBy: none
+		sourceColumn: finish_shop_brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column finish_region_en
+		dataType: string
+		lineageTag: 77919864-5ffa-4916-a7c6-806303136d5b
+		summarizeBy: none
+		sourceColumn: finish_region_en
+
+		annotation SummarizationSetBy = Automatic
+
+	column finish_cleanbranchname
+		dataType: string
+		lineageTag: 1de70e86-178d-49da-9cb3-a8ffc8acdef8
+		summarizeBy: none
+		sourceColumn: finish_cleanbranchname
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_finish_branchname
+		dataType: string
+		lineageTag: c2969bdd-46d5-4998-b423-9a154843e2f6
+		summarizeBy: none
+		sourceColumn: full_finish_branchname
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Launch Cohort' = VAR m = 'ci npi_iphone (2)'[clean_iPhone_model] RETURN SWITCH(TRUE(), m IN {"iPhone-15","iPhone-16","iPhone-17","iPhone-18"}, m, SEARCH("AIR", UPPER('ci npi_iphone (2)'[Model]), 1, 0) > 0, "iPhone-17", BLANK())
+		dataType: string
+		lineageTag: 329160f9-abb2-4ba2-8d6c-00d90d91db47
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Launch Open' = SWITCH('ci npi_iphone (2)'[Launch Cohort], "iPhone-15", DATE(2023,9,15), "iPhone-16", DATE(2024,9,13), "iPhone-17", DATE(2025,9,12), "iPhone-18", DATE(2026,9,12))
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 247adb1f-fac2-4301-b841-fe6b0fb51145
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Launch Day' = IF(ISBLANK('ci npi_iphone (2)'[Launch Open]), BLANK(), DATEDIFF('ci npi_iphone (2)'[Launch Open], 'ci npi_iphone (2)'[clean_bookdate], DAY))
+		dataType: int64
+		formatString: 0
+		lineageTag: 292886f7-25ea-4dc7-a557-204c15562180
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Model No' = IFERROR(VALUE(SUBSTITUTE('ci npi_iphone (2)'[Launch Cohort], "iPhone-", "")), BLANK())
+		dataType: int64
+		formatString: 0
+		lineageTag: ffd147f6-ea94-4a43-88db-a4c20d19957b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Test Row' = IF(LEFT('ci npi_iphone (2)'[Model], 5) = "DUMMY" || 'ci npi_iphone (2)'[booking_qty] > 10 || 'ci npi_iphone (2)'[booking_qty] <= 0, 1, 0)
+		dataType: int64
+		formatString: 0
+		lineageTag: 39027366-29e8-4d5b-978e-a5f53389436e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Launch Sale' = SWITCH('ci npi_iphone (2)'[Launch Cohort], "iPhone-15", DATE(2023,9,22), "iPhone-16", DATE(2024,9,20), "iPhone-17", DATE(2025,9,19), "iPhone-18", DATE(2026,9,18))
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: b3325be7-3972-46a2-9fd5-c34352acad7b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Launch Window Days' = IF(ISBLANK('ci npi_iphone (2)'[Launch Open]), BLANK(), DATEDIFF('ci npi_iphone (2)'[Launch Open], 'ci npi_iphone (2)'[Launch Sale], DAY))
+		dataType: int64
+		formatString: 0
+		lineageTag: 2c6b5c30-170a-494d-b0db-d3f3bf6badf3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'In Launch Window' = IF(NOT ISBLANK('ci npi_iphone (2)'[Launch Open]) && 'ci npi_iphone (2)'[clean_bookdate] >= 'ci npi_iphone (2)'[Launch Open] && 'ci npi_iphone (2)'[clean_bookdate] <= 'ci npi_iphone (2)'[Launch Sale], 1, 0)
+		dataType: int64
+		formatString: 0
+		lineageTag: d6052720-6a4b-412a-9fd1-4c3cfab6dc79
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Bookings' = CALCULATE(COUNTROWS('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
+		formatString: #,0
+		lineageTag: a4220428-0594-4e51-8b61-a93163389a87
+
+	measure 'Units' = CALCULATE(SUM('ci npi_iphone (2)'[booking_qty]), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
+		formatString: #,0
+		lineageTag: 3369db8d-24b5-45ac-a565-c715c66358fc
+
+	measure 'Value THB' = CALCULATE(SUM('ci npi_iphone (2)'[srp]), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
+		formatString: #,0
+		lineageTag: 3d01054d-8e50-4597-a0e3-f14bb3aa44e3
+
+	measure 'Value M' = DIVIDE([Value THB], 1000000)
+		formatString: #,0.0
+		lineageTag: 19328476-e8c2-418d-b03d-66f7742a1f2c
+
+	measure 'Avg Price' = DIVIDE([Value THB], [Bookings])
+		formatString: #,0
+		lineageTag: cd1e82ee-f088-43dd-a087-dc89426f91da
+
+	measure 'Branches' = CALCULATE(DISTINCTCOUNT('ci npi_iphone (2)'[booking_branch]), 'ci npi_iphone (2)'[Is Test Row] = 0, 'ci npi_iphone (2)'[In Launch Window] = 1)
+		formatString: #,0
+		lineageTag: 032c344b-9063-4d59-8b44-468c94f41d0f
+
+	measure 'Completed' = CALCULATE([Bookings], 'ci npi_iphone (2)'[finish] = 1)
+		formatString: #,0
+		lineageTag: 2748fd86-38d1-4896-8431-f2161304f0ab
+
+	measure 'Completion %' = DIVIDE([Completed], [Bookings])
+		formatString: 0.0%
+		lineageTag: 13349f0d-c529-4ee2-865d-ed29a109be12
+
+	measure 'Pro Max Share %' = DIVIDE(CALCULATE([Bookings], 'ci npi_iphone (2)'[clean_iPhone_submodel] = "Pro Max"), [Bookings])
+		formatString: 0.0%
+		lineageTag: ded2150c-d26e-458c-b5a0-008fc42fc1ae
+
+	measure 'Bookings All Time' = CALCULATE(COUNTROWS('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Is Test Row] = 0)
+		formatString: #,0
+		lineageTag: fdaf5a13-ecb7-4b26-8b07-484d83c4e806
+
+	measure 'Outside Window' = [Bookings All Time] - [Bookings]
+		formatString: #,0
+		lineageTag: a6427ebc-989e-49e2-9f74-f572e20b6082
+
+	measure 'Bookings Pro Only' = CALCULATE([Bookings], 'ci npi_iphone (2)'[clean_iPhone_submodel] IN {"Pro", "Pro Max"})
+		formatString: #,0
+		lineageTag: 6b243b65-1342-4de2-a27a-9cb86988e60c
+
+	measure 'Value M Pro Only' = CALCULATE([Value M], 'ci npi_iphone (2)'[clean_iPhone_submodel] IN {"Pro", "Pro Max"})
+		formatString: #,0.0
+		lineageTag: c02d3900-a9f9-4ff5-8873-e9b9eeb4f79e
+
+	measure 'Pending Pickup' = CALCULATE([Bookings], 'ci npi_iphone (2)'[finish] = 0)
+		formatString: #,0
+		lineageTag: 181b43c0-2bc2-4462-87e4-9d1569e71ef1
+
+	measure 'Unmapped Rows' = CALCULATE(COUNTROWS('ci npi_iphone (2)'), ISBLANK('ci npi_iphone (2)'[Launch Cohort]), 'ci npi_iphone (2)'[Is Test Row] = 0)
+		formatString: #,0
+		lineageTag: 51961aa8-1722-4025-8610-76b543146930
+
+	measure 'Bookings D0-2' = CALCULATE([Bookings], 'ci npi_iphone (2)'[Launch Day] >= 0, 'ci npi_iphone (2)'[Launch Day] <= 2)
+		formatString: #,0
+		lineageTag: a9027052-6284-4680-bb5b-42a0e597451e
+
+	measure 'Value M D0-2' = CALCULATE([Value M], 'ci npi_iphone (2)'[Launch Day] >= 0, 'ci npi_iphone (2)'[Launch Day] <= 2)
+		formatString: #,0.0
+		lineageTag: a9a92b81-4b31-4997-b083-f169239bc1c4
+
+	measure 'Bookings Prev Model' = VAR n = SELECTEDVALUE('ci npi_iphone (2)'[Model No]) RETURN CALCULATE([Bookings D0-2], ALL('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Model No] = n - 1)
+		formatString: #,0
+		lineageTag: 7db2899c-7a8a-49ff-aa7d-84b92a18b1bf
+
+	measure 'Bookings YoY %' = VAR p = [Bookings Prev Model] RETURN IF(p > 0, DIVIDE([Bookings D0-2] - p, p), BLANK())
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 3d1fc19f-5857-4a91-9cce-5ad4e736e096
+
+	measure 'Value Prev Model' = VAR n = SELECTEDVALUE('ci npi_iphone (2)'[Model No]) RETURN CALCULATE([Value M D0-2], ALL('ci npi_iphone (2)'), 'ci npi_iphone (2)'[Model No] = n - 1)
+		formatString: #,0.0
+		lineageTag: 005bb570-9dd0-4067-8e5c-70bcabdf82fb
+
+	measure 'Value YoY %' = VAR p = [Value Prev Model] RETURN IF(p > 0, DIVIDE([Value M D0-2] - p, p), BLANK())
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: c3db5d2f-adc3-4ed9-b974-d5a38b019890
+
+	partition 'ci npi_iphone (2)' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("192.168.43.250,18963", "_db1_3f9c2a7e-8b41-4d6f-9c25-1a7e5c0d2b8f"),
+				    ci_npi_iphone = Source{[Schema="ci",Item="npi_iphone"]}[Data]
+				in
+				    ci_npi_iphone
+

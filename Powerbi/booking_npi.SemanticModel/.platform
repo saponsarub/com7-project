@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "booking_npi"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "dd741db3-752f-4188-aefa-fb920f7b91b0"
+  }
+}

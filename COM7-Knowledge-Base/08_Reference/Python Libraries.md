@@ -56,4 +56,4 @@
 
 ## เชื่อมกับโน้ตอื่น
 
-[[Google Sheet to S3 (Lambda)]] · [[Google Sheet Pipeline]] · [[ETL & Spark]] · [[K2 Termination Automation]] · [[Glue Crawler]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Model - Notebook Explained]]
+[[Google Sheet to S3 (Lambda)]] · [[Google Sheet Pipeline]] · [[ETL & Spark]] · [[K2 Termination Automation]] · [[Glue Crawler]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Category Toolkit]]

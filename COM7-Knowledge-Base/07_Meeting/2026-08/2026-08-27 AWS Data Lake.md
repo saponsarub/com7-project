@@ -23,6 +23,8 @@ AWS ชี้แจงว่า **minimum requirement service อยู่ที
 | **SNS** | แจ้งเตือนผลจาก Macie |
 
 สองตัวนี้ยังไม่อยู่ที่ไทย → ต้องพิจารณาแยกว่ากระทบ PDPA อย่างไร
+
+> **Correction (2026-09-16):** ตรวจ endpoint จริงภายหลัง — **SNS มีที่ ap-southeast-7 แล้ว** (บันทึกจากประชุมคลาดเคลื่อน) · เหลือแค่ **Macie** ที่ยังไม่มีที่ไทย → ดู [[AWS Services]] · [[Decisions|D-19]]
 → [[Consent & PDPA]] · [[AWS Services]]
 
 ### 3. QuickSight ยังไม่มีแผนเปิดที่ไทย

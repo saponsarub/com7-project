@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "slDay",
+  "position": {
+    "x": 940,
+    "y": 520,
+    "z": 13,
+    "width": 160,
+    "height": 180,
+    "tabOrder": 13
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "Launch Day"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).Launch Day",
+              "nativeQueryRef": "Launch Day"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'วันที่นับจากเปิดจอง'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -4,7 +4,7 @@
 >
 > ส่วนที่ยังไม่ได้ลงมือกำกับ `[อนุมาน]` และเป็นข้อเสนอ ยังไม่ผ่านการตกลงกับทีม
 
-**เนื้อหาโค้ดและการแพ็กเกจ** → [[Google Sheet to S3 (Lambda)]] · [[Google Sheet to S3 - Code Walkthrough]]
+**เนื้อหาโค้ดและการแพ็กเกจ** → [[Google Sheet to S3 (Lambda)]]
 
 ---
 
@@ -308,4 +308,4 @@ Crawler ยังเห็นแค่เวอร์ชันล่าสุด
 
 ## เชื่อมกับโน้ตอื่น
 
-[[Google Sheet to S3 (Lambda)]] · [[Google Sheet to S3 - Code Walkthrough]] · [[Glue Crawler]] · [[Redshift]] · [[Athena Benchmark]] · [[ETL & Spark]] · [[Architecture]] · [[AWS Services]] · [[Data Standardization & Quality]] · [[Consent & PDPA]] · [[GI + EV7 to 7Club]] · [[Pipeline Issues]]
+[[Google Sheet to S3 (Lambda)]] · [[Glue Crawler]] · [[Redshift]] · [[Athena Benchmark]] · [[ETL & Spark]] · [[Architecture]] · [[AWS Services]] · [[Data Standardization & Quality]] · [[Consent & PDPA]] · [[GI + EV7 to 7Club]] · [[Pipeline Issues]]

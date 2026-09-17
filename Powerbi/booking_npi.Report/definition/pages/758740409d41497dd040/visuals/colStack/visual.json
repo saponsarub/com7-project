@@ -1,0 +1,89 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "colStack",
+  "position": {
+    "x": 20,
+    "y": 170,
+    "z": 10,
+    "width": 760,
+    "height": 330,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "columnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "clean_iPhone_model"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).clean_iPhone_model",
+              "nativeQueryRef": "clean_iPhone_model"
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "clean_iPhone_submodel"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).clean_iPhone_submodel",
+              "nativeQueryRef": "clean_iPhone_submodel"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ci npi_iphone (2)"
+                    }
+                  },
+                  "Property": "Bookings D0-2"
+                }
+              },
+              "queryRef": "ci npi_iphone (2).Bookings D0-2",
+              "nativeQueryRef": "Bookings D0-2"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'ใบจอง 3 วันแรก แยกตามรุ่นเครื่อง'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

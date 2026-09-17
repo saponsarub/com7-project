@@ -229,12 +229,14 @@ D365 **ไม่มีข้อมูลลูกค้าและไม่ม�
 
 ---
 
-## D-19 · PDPA on region is closed except Macie and SNS
+## D-19 · PDPA on region is closed except Macie
 
 **ที่มา:** ประชุม 27 ส.ค. 2026
 
 AWS ยืนยันว่า **minimum requirement service อยู่ที่ไทยทั้งหมด** → ตัดประเด็นข้อมูลออกนอกประเทศ
-**ยกเว้น Macie และ SNS** ที่ยังไม่อยู่ที่ไทย — ต้องประเมินผลกระทบแยก
+**ยกเว้น Macie** ที่ยังไม่อยู่ที่ไทย — ต้องประเมินผลกระทบแยก
+
+> **Correction (2026-09-16):** เดิมบันทึกว่า "Macie และ SNS ยังไม่อยู่ที่ไทย" — ตรวจ endpoint จริงแล้ว **SNS มีที่ ap-southeast-7** (`sns.ap-southeast-7.amazonaws.com` · ดู [[AWS Services]]) เหลือแค่ **Macie** ที่ยังไม่มี · ส่วนงานส่งอีเมลให้ใช้ SES (ก็ยังไม่มีที่ไทยเช่นกัน)
 
 **QuickSight ยังไม่มีแผนเปิดที่ไทย** — สนับสนุน [[Decisions|D-04]] ที่เลือก Power BI ใน Phase 1
 

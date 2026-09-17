@@ -437,6 +437,55 @@ HAVING SUM(CASE WHEN RECEIPT_NUMBER IS NULL AND DUEDATE <= @asof
 ทำไมถึงเปลี่ยน — รายชื่อรอบ 8/2026 มี **204 จาก 617 ราย** ที่ค้างจริงไม่ถึง 6 งวด
 เหตุผลเต็มอยู่ใน [[K2 - OD6 Selection Logic]] หัวข้อ v4
 
+### SQL v4 ฉบับสมบูรณ์ (คัดรายชื่อ + คำนวณยอดจากการ์ด)
+
+> รันวันไหนก็ได้ · ไม่ต้องรอ refresh 3/18 · ยอดตรงกับความจริง ณ วันที่รัน
+> บันทึก 2026-09-16 · แทนที่ `k2_termination_list_v2.sql` (เก่า)
+
+```sql
+DECLARE @asof date = CAST(GETDATE() AS date);   -- รันวันไหนก็ได้ (ค้างจริง ณ วันนี้)
+
+WITH card AS (
+    -- สรุปการ์ดลูกหนี้ต่อสัญญา: นับงวดที่ยังไม่มีใบเสร็จ ถึงวันที่รัน
+    SELECT CONTRACT_ID,
+           COUNT(*)                                                    AS N_CARD,
+           MAX(INSTALL_NUM)                                            AS LAST_INSTALL_NUM,
+           MIN(CASE WHEN RECEIPT_NUMBER IS NULL THEN INSTALL_NUM END)  AS FIRST_UNPAID_NUM,
+           MIN(CASE WHEN RECEIPT_NUMBER IS NULL THEN DUEDATE END)      AS FIRST_UNPAID_DUE,
+           SUM(CASE WHEN RECEIPT_NUMBER IS NULL AND DUEDATE <= @asof
+                    THEN 1 ELSE 0 END)                                 AS N_PASTDUE,
+           SUM(CASE WHEN RECEIPT_NUMBER IS NULL AND DUEDATE <= @asof
+                    THEN INSTALL_AMT ELSE 0 END)                       AS OD_AMT_CARD
+    FROM CUSTOMER_CARD
+    GROUP BY CONTRACT_ID
+)
+SELECT ct.CONTRACT_NUMBER,
+       ct.CONTRACT_ID,
+       cd.FIRST_UNPAID_NUM,
+       cd.N_PASTDUE,
+       -- งวดที่ครบ OD6 (ไม่เกินงวดสุดท้ายของสัญญา)
+       CASE WHEN cd.FIRST_UNPAID_NUM + 5 > cd.LAST_INSTALL_NUM
+            THEN cd.LAST_INSTALL_NUM
+            ELSE cd.FIRST_UNPAID_NUM + 5 END                           AS [งวดที่ครบ OD 6],
+       cd.OD_AMT_CARD                                                  AS [ยอดค้างจากการ์ด]
+FROM CONTRACT ct
+JOIN card cd ON cd.CONTRACT_ID = ct.CONTRACT_ID
+-- เกณฑ์ v4: ค้างจริง >= 6 งวด นับจากการ์ด (ไม่ใช้ CONTRACT_STATUS=48 / snapshot)
+WHERE cd.N_PASTDUE >= 6
+ORDER BY ct.CONTRACT_NUMBER;
+```
+
+**ต่างจาก v2 ตรงไหน:**
+| | v2 (เก่า) | v4 (นี้) |
+|---|---|---|
+| แหล่งงวดค้าง | `COLLECTION_OD` snapshot (refresh 3/18) | `CUSTOMER_CARD` นับตรง |
+| เกณฑ์คัด | `CONTRACT_STATUS = 48` | `N_PASTDUE >= 6` (นับจริง) |
+| วันรัน | ต้องตรงวัน refresh | รันวันไหนก็ได้ |
+| ยอดในหนังสือ | `OD_AMOUNT` (snapshot) | `OD_AMT_CARD` (จากการ์ด) |
+
+> คอลัมน์สำหรับกรอกหนังสือบอกเลิก → ดู [[K2 - Termination Letter Mapping]] (column R ต้องใช้ `OD_AMT_CARD` ตาม v4 นี้)
+
+
 ## ตัวเลือก
 
 | ตัวเลือก | ใช้ทำอะไร |

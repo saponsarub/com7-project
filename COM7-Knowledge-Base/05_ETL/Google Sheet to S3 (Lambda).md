@@ -487,6 +487,21 @@ Lambda Console (แก้ได้แล้วหลังมี layer)         
 
 ---
 
+
+## ไฟล์อยู่ที่ไหน (code + docs)
+
+> ยุบจาก `Google Sheet to S3 - Code Walkthrough` (2026-09-16) · คำอธิบายโค้ดทีละฟังก์ชันย้ายไปอยู่ในรีโปแล้ว (`docs/googlesheet-to-s3.md`) เพื่อให้เอกสารอัปเดตพร้อมโค้ด
+
+| | |
+|---|---|
+| โค้ด | `scripts/lambda/googlesheet-to-s3/lambda_function.py` |
+| เอกสารทีละฟังก์ชัน | `docs/googlesheet-to-s3.md` (ในรีโป) |
+| สคริปต์ดูหน้าตาอีเมล | `scripts/lambda/googlesheet-to-s3/make_preview.py` |
+| build script | `build-lambda.ps1` (เครื่อง) |
+| zip ที่ build แล้ว | `dist/com7-ingest-googlesheet-ev7-v*.zip` (เครื่อง) |
+
+---
+
 ## เชื่อมกับโน้ตอื่น
 
-[[Google Sheet Pipeline]] · [[Google Sheet to S3 - Code Walkthrough]] · [[Glue Crawler]] · [[DMS Full Load Validation (Lambda)]] · [[Python Libraries]] · [[ETL & Spark]] · [[Decisions]] · [[AWS Services]] · [[Consent & PDPA]] · [[Data Standardization & Quality]] · [[GI + EV7 to 7Club]] · [[Pipeline Issues]]
+[[Google Sheet Pipeline]] · [[Google Sheet to S3 (Lambda)]] · [[Glue Crawler]] · [[DMS Full Load Validation (Lambda)]] · [[Python Libraries]] · [[ETL & Spark]] · [[Decisions]] · [[AWS Services]] · [[Consent & PDPA]] · [[Data Standardization & Quality]] · [[GI + EV7 to 7Club]] · [[Pipeline Issues]]

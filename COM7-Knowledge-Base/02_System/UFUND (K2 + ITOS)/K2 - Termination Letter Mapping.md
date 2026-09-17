@@ -26,6 +26,8 @@ CONTRACT (CONTRACT_NUMBER)
 
 ---
 
+> ⚠️ **Version drift (2026-09-16):** ตาราง mapping นี้และ column R ยังอ้าง **v2** (`COLLECTION_OD.OD_AMOUNT` = snapshot รอ refresh 3/18) — แต่ **v4 (2026-08-31) เลิกใช้ snapshot แล้ว** เปลี่ยนไปนับงวดที่ยังไม่มีใบเสร็จจาก `CUSTOMER_CARD` ตรง ๆ (ต่างกันได้ถึง ~707,482 บาท) → **logic ที่ใช้จริงตอนนี้ดู [[K2 - Termination Letter How-To]] § v4** · ควรอัปเดต column R + regen SQL ให้ตรง v4 ก่อนใช้ในเอกสารกฎหมายรอบถัดไป
+
 > **SQL ที่ดึงครบทุกช่องนี้แล้ว:** `sql/k2_termination_list_v2.sql`
 > ทำเป็น Excel: `scripts/k2/k2_termination_v2_to_excel.py` (คอลัมน์ตัวหนังสือเขียนเป็นสูตร `=BAHTTEXT` ให้อัตโนมัติ)
 > ตรรกะการคัด → [[K2 - OD6 Selection Logic]]
@@ -52,8 +54,8 @@ CONTRACT (CONTRACT_NUMBER)
 | N | วันเริ่มชำระงวดแรก | `PRODUCT.FRIST_PAY_DATE` | (typo) · เท่ากับ `MIN(CUSTOMER_CARD.DUEDATE)` |
 | O | วันที่ชำระงวดต่อไป | `PRODUCT.DUEDATE_NUM` | มีแค่ 1 กับ 16 ทั้งฐาน |
 | P | ค้างชำระงวดแรก | **คำนวณ** | `MIN(CUSTOMER_CARD.INSTALL_NUM)` ที่ `RECEIPT_NUMBER IS NULL` |
-| Q | งวดที่ครบ OD 6 | ~~`MIN(P + 5, M)`~~ | ⚠️ **สูตรนี้ผิดกับคนเลี้ยง OD** — ใช้ `MIN(EXTRACT_DATE)` ที่ค้างครบ 6 งวดแทน → [[K2 - OD6 Selection Logic]] |
-| R | ค่าเช่าซื้อ 6 งวด | **`COLLECTION_OD.OD_AMOUNT`** | ⚠️ ไม่ใช่ `(Q−P+1) × K` — ระบบนับเฉพาะงวดที่**เลยกำหนดแล้ว** |
+| Q | งวดที่ครบ OD 6 | **v4:** `MIN(FIRST_UNPAID_NUM + 5, LAST_INSTALL_NUM)` จากการ์ด · ~~`MIN(EXTRACT_DATE)` snapshot~~ (v2) | ⚠️ v4 นับจาก `CUSTOMER_CARD` ไม่ใช้ snapshot → [[K2 - Termination Letter How-To]] § SQL v4 |
+| R | ค่าเช่าซื้อ 6 งวด | **`OD_AMT_CARD`** (v4) · ~~`COLLECTION_OD.OD_AMOUNT`~~ (v2) | ⚠️ **v4:** รวม `INSTALL_AMT` ของงวดที่ `RECEIPT_NUMBER IS NULL AND DUEDATE <= @asof` จาก `CUSTOMER_CARD` — ไม่ใช้ snapshot · ไม่ใช่ `(Q−P+1) × K` → [[K2 - Termination Letter How-To]] § SQL v4 |
 | S | ↳ txt | `=BAHTTEXT(R…)` | |
 | T | ค่าเบี้ยปรับชำระล่าช้า | `COLLECTION_OD.PENALTY_AMT` | ขั้น OD × 100 บาท → [[K2 - Fee Policy]] |
 | U | ↳ txt | `=BAHTTEXT(T…)` | |

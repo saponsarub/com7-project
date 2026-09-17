@@ -310,6 +310,8 @@ WHERE ct.CONTRACT_NUMBER = '26291598';
 
 ## 14 · Select contracts for termination letters (Overdue 6)
 
+> ⚠️ **Version drift (2026-09-16):** query นี้เป็น **v2** — ใช้ `EXTRACT_DATE` (รอ refresh 3/18) + `CONTRACT_STATUS = 48` + `OD_AMOUNT` (snapshot) · **v4 (2026-08-31) เลิกใช้ snapshot** นับจาก `CUSTOMER_CARD` ตรง ๆ ไม่ต้องรอวัน refresh → logic ที่ใช้จริงตอนนี้ดู [[K2 - Termination Letter How-To]] § v4 · เก็บ query นี้ไว้เป็นอ้างอิงประวัติ อย่าใช้คำนวณตัวเลขในหนังสือบอกเลิกจริง
+
 ```sql
 DECLARE @extract date = '2026-08-03';   -- วันที่ระบบ refresh OD6 (วันที่ 3 หรือ 18)
 DECLARE @due     date = '2026-08-01';   -- งวดที่ครบกำหนดของรอบนั้น (วันที่ 1 หรือ 16)

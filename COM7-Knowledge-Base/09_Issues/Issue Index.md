@@ -13,7 +13,7 @@
 | [[ITEC Issues]] | ระบบค้าปลีก ITEC (ฐาน MIS) — 16 คำถาม |
 | [[CRM Issues]] | ระบบสมาชิก/CRM |
 | [[Source System Issues]] | ITOS · D365 · SAP B1 · iCare · Tech Trade · Synapse · EV · ค้าปลีก |
-| [[Customer Data Issues]] | identity ลูกค้า · Customer 360 |
+| [[Open Questions & Risks]] | identity ลูกค้า · Customer 360 |
 | [[Pipeline Issues]] | ETL · เครือข่าย/VPN · โปรเจกต์ที่กำลังเดิน |
 | [[Collection Team Questions]] | คำถามเตรียมคุยทีมติดตามหนี้เรื่องบอกเลิกสัญญา |
 | [[Open Questions & Risks]] | ทะเบียนความเสี่ยงระดับโครงการ (High / Medium) |

@@ -1,0 +1,40 @@
+relationship 04b57b2a-3730-44ab-83ba-bd5a26f29bb9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'ci npi_iphone (2)'.booking_datetime
+	toColumn: LocalDateTable_d5b619cc-9a54-48c0-8a25-a8aedbf97696.Date
+
+relationship 3f49ae2c-f7c0-43b3-8997-76361fa51880
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'ci npi_iphone (2)'.finish_datetime
+	toColumn: LocalDateTable_754dc4ba-83c7-4d7b-931b-8a03adfbbb01.Date
+
+relationship c91ed171-b2ae-41bf-b13a-831048c7c405
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'ci npi_iphone (2)'.lot_date
+	toColumn: LocalDateTable_1c265477-8c66-4a4d-a9ad-00a523619883.Date
+
+relationship 5dc99d99-af1b-4233-b538-22edb8eb85f5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'ci npi_iphone (2)'.clean_bookdate
+	toColumn: LocalDateTable_39aeb270-d12b-45e5-8de2-23caba1c5584.Date
+
+relationship 1b592cbc-8f02-4b5d-8443-e7a12b332457
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'ci npi_iphone (2)'.clean_finishdate
+	toColumn: LocalDateTable_29750446-3929-4ad7-a931-d7d1dc12f3b0.Date
+
+relationship 5ec2c25b-390c-49ab-bc5a-43f3019425a9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'rpt booking_list (2)'.booking_datetime
+	toColumn: LocalDateTable_6430378c-f53a-4fc5-b284-2a74b670e2e5.Date
+
+relationship c3eb613e-61cd-4dfb-8cbd-a0eee2b68830
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'rpt booking_list (2)'.finish_datetime
+	toColumn: LocalDateTable_868697e0-ca05-4d23-8e26-b158589cc488.Date
+
+relationship 883f0f6a-7ef6-4dc7-a585-27bb35a91a28
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'rpt booking_list (2)'.lot_date
+	toColumn: LocalDateTable_8bbf90c5-31df-477e-9940-32b53f9a2bdb.Date
+

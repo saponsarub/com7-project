@@ -1,0 +1,29 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: th-TH
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["ci clean_branch","ci clean_category_ITEC","ci clean_brand_itec","ci clean_item_category_itec","ci creditcard_trn_bank","ci creditcard_trn_itec","ci integrated_sale_and_inventory","ci creditcard_trn_summary","ci monthly_item_inventory_itec","ci monthly_item_sale_itec","ci thailand_map","ci npi_iphone","ci trn_category_BANK","ci trn_category_ITEC","rpt dim_branch_itec","rpt dim_item_itec","rpt dim_mem_itec","rpt dim_officer_itec","rpt dim_sales_header_itec","rpt booking_list","rpt raw_bank_trans","rpt fact_bank_itec","rpt fact_sales_itec","rpt fact_trans_fo","rpt onhandendmonth_itec","ci npi_iphone (2)","rpt booking_list (2)"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'ci npi_iphone (2)'
+ref table DateTableTemplate_788c487e-7cb4-46bf-84c9-625adec32e16
+ref table LocalDateTable_d5b619cc-9a54-48c0-8a25-a8aedbf97696
+ref table LocalDateTable_754dc4ba-83c7-4d7b-931b-8a03adfbbb01
+ref table LocalDateTable_1c265477-8c66-4a4d-a9ad-00a523619883
+ref table LocalDateTable_39aeb270-d12b-45e5-8de2-23caba1c5584
+ref table LocalDateTable_29750446-3929-4ad7-a931-d7d1dc12f3b0
+ref table 'rpt booking_list (2)'
+ref table LocalDateTable_6430378c-f53a-4fc5-b284-2a74b670e2e5
+ref table LocalDateTable_868697e0-ca05-4d23-8e26-b158589cc488
+ref table LocalDateTable_8bbf90c5-31df-477e-9940-32b53f9a2bdb
+
+ref cultureInfo en-US
+

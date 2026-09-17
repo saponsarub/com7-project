@@ -172,4 +172,4 @@ Brief เดิมระบุ **Double7**, **Co-Ture Shop**, **Dtac Shop** เ�
 
 ## เชื่อมกับโน้ตอื่น
 
-[[SSOT Roadmap]] · [[Current Status]] · [[People & Teams]] · [[Source Inventory]] · [[EV Systems]] · [[Issue Index]]
+[[SSOT Roadmap]] · [[Current Status]] · [[People & Teams]] · [[Source Inventory]] · [[EV System Landscape]] · [[Issue Index]]

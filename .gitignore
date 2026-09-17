@@ -58,3 +58,13 @@ scripts/itec/*/_out/
 
 # zip ที่ build ไว้อัป Colab/Kaggle — สร้างใหม่ด้วย make_zip.py
 scripts/itec/*/*.zip
+
+# ─────────────────────────────────────────────────────────────
+#  Power BI (.pbip) — เก็บเฉพาะไฟล์ข้อความ ไม่เก็บ cache/ค่าเครื่อง
+# ─────────────────────────────────────────────────────────────
+# cache.abf คือข้อมูลที่ import ไว้ — 96 MB และ generate ใหม่ได้ด้วย Refresh
+Powerbi/**/.pbi/cache.abf
+Powerbi/**/.pbi/localSettings.json
+Powerbi/**/.pbi/editorSettings.json
+Powerbi/_backup_definition_*/
+*.pbix

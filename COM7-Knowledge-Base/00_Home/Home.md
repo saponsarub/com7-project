@@ -26,7 +26,7 @@
 | **ดึงยอดขาย / หาสินค้า / หาสาขา ITEC** | [[ITEC - Query Cookbook]] |
 | ระบบค้าปลีก ITEC | [[ITEC Overview]] |
 | ระบบสินเชื่อ ITOS | [[ITOS Overview]] |
-| ระบบฝั่ง EV | [[EV Systems]] |
+| ระบบฝั่ง EV | [[EV System Landscape]] |
 | ระบบที่ยังรู้น้อย (D365 · SAP B1 · iCare · Tech Trade · Synapse) | [[Other Systems]] |
 | **iCare Insurance ขายอะไร · เก็บข้อมูลอะไร** | [[iCare Insurance (ICI)]] |
 | **iCare vs Smart Care vs iCare Insurance ต่างกันยังไง** | [[Smart Care Service]] |
@@ -70,15 +70,15 @@
 | **Glue ต่อ MSSQL / on-prem · Client VPN vs Site-to-Site** | [[Glue Connectivity]] |
 | รวมข้อมูล collection K2 + ITOS | [[Collection Union (K2 + ITOS)]] |
 | **แพ็ก Lambda ยังไง ทำไมต้อง build บน Linux** | [[Google Sheet to S3 (Lambda)]] |
-| อ่านโค้ด Lambda ทีละฟังก์ชัน | `docs/googlesheet-to-s3.md` → [[Google Sheet to S3 - Code Walkthrough]] |
+| อ่านโค้ด Lambda ทีละฟังก์ชัน | `docs/googlesheet-to-s3.md` → [[Google Sheet to S3 (Lambda)]] |
 | **flow เต็ม + แผนล่วงหน้าของ pipeline ชีต** | [[Google Sheet Pipeline]] |
 | **ตรวจว่า DMS full-load จบจริง · นับแถว Parquet โดยไม่อ่านข้อมูล** | [[DMS Full Load Validation (Lambda)]] |
 | **DMS เป็น full load จะหา change ยังไง · ผังจากทีม Data Engineering** | [[Snapshot Change Detection (ITEC DMS)]] |
 | **ย้าย logic จำแนกสินค้า ITEC จาก SQL ไป pandas / Spark** | [[ITEC Item Category Mapping (SQL to Python)]] |
 | **งานจัดหมวดสินค้า ITEC — เริ่มที่นี่** | [[ITEC Category Toolkit]] |
-| **อธิบาย notebook ทีละ cell · YAML คืออะไร · ใช้โมเดลอะไร ทำไม** | [[ITEC Model - Notebook Explained]] |
-| **fine-tune backbone · พิสูจน์ว่าคุ้มไหม** | [[ITEC Model - Fine-tune Design]] |
-| **ควรเพิ่ม/ลด flag ตัวไหน · กอง Accessory 31.6% แก้ยังไง** | [[ITEC Flag & Category Review Guide]] |
+| **อธิบาย notebook ทีละ cell · YAML คืออะไร · ใช้โมเดลอะไร ทำไม** | [[ITEC Category Toolkit]] |
+| **fine-tune backbone · พิสูจน์ว่าคุ้มไหม** | [[ITEC Category Model (ML)]] |
+| **ควรเพิ่ม/ลด flag ตัวไหน · กอง Accessory 31.6% แก้ยังไง** | [[ITEC Item Category Mapping (SQL to Python)]] |
 
 ### สถานะ · ปัญหา · อ้างอิง
 
@@ -138,7 +138,7 @@
 | [[EV Business]] — รถไฟฟ้า | Ev7core · Ev7 tracking · GI Core · 365 · **K2** | `02_System/EV/` |
 | ยังไม่ระบุ | D365 · SAP B1 · Tech Trade · Synapse · iCare Insurance · Smart Care | `02_System/TBD/` |
 
-> **K2 อยู่ 2 ธุรกิจ** — ไฟล์เก็บไว้ใต้ UFUND เพราะเป็นเจ้าของหลัก แต่ทำใบแจ้งหนี้/บิลค้าง/ค่าปรับจราจรให้ EV ด้วย → [[EV Systems]]
+> **K2 อยู่ 2 ธุรกิจ** — ไฟล์เก็บไว้ใต้ UFUND เพราะเป็นเจ้าของหลัก แต่ทำใบแจ้งหนี้/บิลค้าง/ค่าปรับจราจรให้ EV ด้วย → [[EV System Landscape]]
 
 ---
 

@@ -370,6 +370,67 @@ types:
   - โปรเจคเตอร์
   - โปรเจกเตอร์
   whole_word: false
+- label: DroneCam
+  words:
+  - drone
+  - โดรน
+  - mavic
+  - tello
+  - gopro
+  - insta360
+  - osmo
+  - action cam
+  - action camera
+  whole_word: false
+- label: VR
+  words:
+  - meta quest
+  - oculus
+  - gear vr
+  - vr headset
+  - vive pro
+  whole_word: false
+- label: PersonalCare
+  words:
+  - hair dryer
+  - ไดร์เป่าผม
+  - hair glory
+  - electric shaver
+  - โกนหนวด
+  - toothbrush
+  - แปรงสีฟัน
+  - massage
+  - นวด
+  - เครื่องรีดผม
+  - epilator
+  - เครื่องม้วนผม
+  whole_word: false
+- label: SportOutdoor
+  words:
+  - scooter
+  - สกู๊ตเตอร์
+  - จักรยาน
+  - bicycle
+  - treadmill
+  - ลู่วิ่ง
+  - dumbbell
+  - ดัมเบล
+  - skate
+  - หมวกกันน็อค
+  - helmet
+  - อุปกรณ์กีฬา
+  whole_word: false
+- label: HealthDevice
+  words:
+  - smart scale
+  - เครื่องชั่ง
+  - blood pressure
+  - วัดความดัน
+  - oximeter
+  - ปรอทวัด
+  - smart ring
+  - เครื่องวัดอุณหภูมิ
+  whole_word: false
 - label: Camera
   words:
   - camera
@@ -378,7 +439,6 @@ types:
   - dslr
   - mirrorless
   - handycam
-  - gopro
   whole_word: false
 - label: Storage
   words:
@@ -441,7 +501,6 @@ types:
   - nintendo
   - xbox
   - console
-  - meta quest
   whole_word: false
 - label: Console
   words:
@@ -478,9 +537,7 @@ types:
   - หม้อหุงข้าว
   - กาต้มน้ำ
   - เครื่องทำน้ำอุ่น
-  - เครื่องฟอกอากาศ
   - เครื่องชงกาแฟ
-  - hair dryer
   - appliance
   whole_word: false
 - label: Battery
@@ -965,12 +1022,15 @@ category_map:
   - SmartHome
   - ''
   HEALTH & SPORT:
-  - HealthSport
+  - HealthDevice
   - ''
   OUTDOOR ACTIVITIES:
-  - HealthSport
+  - SportOutdoor
   - ''
   TOYS:
+  - Toy
+  - ''
+  HOBBY:
   - Toy
   - ''
   STATIONARY:
@@ -1034,10 +1094,15 @@ main_of_type:
   Warranty: Insurance
   Telecom: Telecom Package
   HomeAppliance: Appliance
-  SmartHome: Appliance
-  HealthSport: Appliance
   MusicPlayer: Appliance
-  Monitor: Appliance
+  SmartHome: Smart Home
+  PersonalCare: Personal Care & Health
+  HealthDevice: Personal Care & Health
+  HealthSport: Personal Care & Health
+  DroneCam: Lifestyle & Hobby
+  SportOutdoor: Lifestyle & Hobby
+  VR: Lifestyle & Hobby
+  Toy: Lifestyle & Hobby
   RAM: IT Accessories
   CPU: IT Accessories
   Mainboard: IT Accessories
@@ -1052,6 +1117,7 @@ main_of_type:
   Accessory: IT Accessories
   UPS: IT Accessories
   Charger: IT Accessories
+  Monitor: IT Accessories
   Projector: IT Accessories
   Printer: IT Accessories
   Storage: IT Accessories
@@ -1063,7 +1129,6 @@ main_of_type:
   Battery: Others
   Furniture: Others
   Merchandise: Others
-  Toy: Others
   Stationery: Others
   Case: Others
   Bag: Others
