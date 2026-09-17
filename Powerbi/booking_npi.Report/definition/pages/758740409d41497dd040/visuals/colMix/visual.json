@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "colMix",
   "position": {
-    "x": 16,
-    "y": 162,
-    "z": 10,
-    "width": 762,
-    "height": 284,
-    "tabOrder": 10
+    "x": 278,
+    "y": 252,
+    "z": 13,
+    "height": 200,
+    "width": 628,
+    "tabOrder": 13
   },
   "visual": {
     "visualType": "columnChart",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "ci npi_iphone (2).Launch Cohort",
-              "nativeQueryRef": "Launch Cohort"
+              "nativeQueryRef": "Launch Cohort",
+              "active": true
             }
           ]
         },
@@ -69,7 +70,6 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
     "objects": {
       "labels": [
         {
@@ -85,20 +85,6 @@
         }
       ]
     },
-    "visualContainerObjects": {
-      "title": [
-        {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'ใบจองสัปดาห์เปิดตัว แยกตามรุ่นย่อย'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "kpi4",
   "position": {
-    "x": 1020,
-    "y": 54,
-    "z": 4,
-    "width": 243,
-    "height": 96,
-    "tabOrder": 4
+    "x": 1095,
+    "y": 114,
+    "z": 10,
+    "height": 44,
+    "width": 149,
+    "tabOrder": 10
   },
   "visual": {
     "visualType": "card",
@@ -33,21 +33,13 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
+    "objects": {
+      "labels": [
         {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'รอมารับเครื่อง'"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

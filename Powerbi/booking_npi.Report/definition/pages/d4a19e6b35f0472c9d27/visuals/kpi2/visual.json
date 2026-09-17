@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "pk2",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "kpi2",
   "position": {
-    "x": 646,
-    "y": 54,
-    "z": 2,
-    "width": 307,
-    "height": 96,
-    "tabOrder": 2
+    "x": 780,
+    "y": 114,
+    "z": 4,
+    "height": 44,
+    "width": 212,
+    "tabOrder": 4
   },
   "visual": {
     "visualType": "card",
@@ -33,21 +33,13 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
+    "objects": {
+      "labels": [
         {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'อัตรามารับ'"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

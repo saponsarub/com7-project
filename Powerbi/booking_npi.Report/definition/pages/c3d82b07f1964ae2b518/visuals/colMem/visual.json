@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "colMem",
   "position": {
-    "x": 648,
-    "y": 54,
-    "z": 1,
-    "width": 616,
-    "height": 280,
-    "tabOrder": 1
+    "x": 782,
+    "y": 124,
+    "z": 4,
+    "height": 198,
+    "width": 460,
+    "tabOrder": 4
   },
   "visual": {
     "visualType": "columnChart",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "ci npi_iphone (2).device_memory",
-              "nativeQueryRef": "device_memory"
+              "nativeQueryRef": "device_memory",
+              "active": true
             }
           ]
         },
@@ -69,21 +70,21 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
           "properties": {
-            "text": {
+            "show": {
               "expr": {
                 "Literal": {
-                  "Value": "'ความจุที่ลูกค้าเลือก'"
+                  "Value": "false"
                 }
               }
             }
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

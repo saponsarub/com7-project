@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "barBrand",
   "position": {
-    "x": 648,
-    "y": 162,
-    "z": 11,
-    "width": 616,
-    "height": 284,
-    "tabOrder": 11
+    "x": 782,
+    "y": 252,
+    "z": 9,
+    "height": 200,
+    "width": 460,
+    "tabOrder": 9
   },
   "visual": {
     "visualType": "barChart",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "ci npi_iphone (2).book_shop_brand",
-              "nativeQueryRef": "book_shop_brand"
+              "nativeQueryRef": "book_shop_brand",
+              "active": true
             }
           ]
         },
@@ -69,21 +70,43 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
+    "objects": {
+      "legend": [
         {
           "properties": {
-            "text": {
+            "showGradientLegend": {
               "expr": {
                 "Literal": {
-                  "Value": "'ใบจองแยกตามแบรนด์ร้าน'"
+                  "Value": "true"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }
           }
         }
       ]
-    }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
   }
 }

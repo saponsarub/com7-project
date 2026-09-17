@@ -85,6 +85,24 @@ table 'ci npi_iphone (2)'
 		formatString: +0.0%;-0.0%;0.0%
 		lineageTag: c3db5d2f-adc3-4ed9-b974-d5a38b019890
 
+	measure 'Avg Price Prev Model' = VAR n = SELECTEDVALUE('ci npi_iphone (2)'[Model No]) RETURN CALCULATE([Avg Price], REMOVEFILTERS('ci npi_iphone (2), 'ci npi_iphone (2)'[Model No] = n - 1)
+		formatString: #,0
+		isHidden
+		lineageTag: dae290df-92b7-4428-9e83-4061a7babf1c
+
+	measure 'Avg Price YoY %' = VAR p = [Avg Price Prev Model] RETURN IF(p > 0, DIVIDE([Avg Price] - p, p), BLANK())
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 294655fb-109a-47a0-9768-d5b8fee2d143
+
+	measure 'Branches Prev Model' = VAR n = SELECTEDVALUE('ci npi_iphone (2)'[Model No]) RETURN CALCULATE([Branches], REMOVEFILTERS('ci npi_iphone (2), 'ci npi_iphone (2)'[Model No] = n - 1)
+		formatString: #,0
+		isHidden
+		lineageTag: 71b5b727-3c8f-435d-b724-a8d275897f2b
+
+	measure 'Branches YoY %' = VAR p = [Branches Prev Model] RETURN IF(p > 0, DIVIDE([Branches] - p, p), BLANK())
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 2783ffbe-dc8a-4ada-b8c9-c11ef4aca286
+
 	column unique_key
 		dataType: string
 		lineageTag: c71c0bbe-d3e5-42e1-807d-9d66361867ca

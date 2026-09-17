@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
   "name": "tblSub",
   "position": {
-    "x": 16,
-    "y": 598,
-    "z": 4,
-    "width": 1000,
-    "height": 112,
-    "tabOrder": 4
+    "x": 278,
+    "y": 602,
+    "z": 7,
+    "width": 964,
+    "height": 66,
+    "tabOrder": 7
   },
   "visual": {
     "visualType": "tableEx",
@@ -75,21 +75,6 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
-        {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'สรุปรายรุ่นย่อย'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

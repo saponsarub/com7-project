@@ -1,0 +1,27 @@
+# ─────────────────────────────────────────────────────────────────────
+#  ส่วน ML ของงานจัดหมวดสินค้า ITEC — ลงเฉพาะเมื่อจะรัน Cell 8.x
+#  ขนาดรวมประมาณ 2.5 GB (torch ตัวเดียว ~2 GB)
+#
+#  ลงแกนหลักก่อน:  pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────────────────
+
+-r requirements.txt
+
+scikit-learn>=1.9.0
+joblib>=1.5.3
+
+# ── embedding backbone ───────────────────────────────────────────────
+# ⚠️ ค่าตั้งต้นใน notebook ใช้ bge-m3 เมื่อมี GPU (ดาวน์โหลดอีก ~2.3 GB)
+#    ไม่มี GPU มันจะสลับไปใช้ MiniLM ให้เอง
+sentence-transformers>=6.0.1
+transformers>=5.16.1
+
+# torch: บรรทัดนี้ได้ตัว CPU
+#   ถ้าเครื่องมี NVIDIA GPU อย่าลงจากบรรทัดนี้ ให้ลงตามคำสั่งของ pytorch.org
+#   เช่น  pip install torch --index-url https://download.pytorch.org/whl/cu124
+torch>=2.14.0
+
+# ── เฉพาะตอน fine-tune (Cell 8.3) ────────────────────────────────────
+# ยังไม่ได้ติดตั้งบนเครื่อง Sapon.S — notebook จะ pip install ให้เองตอนรัน
+datasets>=3.0.0
+accelerate>=1.0.0

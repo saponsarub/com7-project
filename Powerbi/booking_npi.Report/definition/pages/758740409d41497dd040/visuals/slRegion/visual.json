@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "slRegion",
   "position": {
-    "x": 968,
-    "y": 458,
-    "z": 13,
-    "width": 148,
-    "height": 252,
-    "tabOrder": 13
+    "x": 20,
+    "y": 196,
+    "z": 11,
+    "height": 168,
+    "width": 200,
+    "tabOrder": 11
   },
   "visual": {
     "visualType": "slicer",
@@ -27,27 +27,62 @@
                 }
               },
               "queryRef": "ci npi_iphone (2).book_region_en",
-              "nativeQueryRef": "book_region_en"
+              "nativeQueryRef": "book_region_en",
+              "active": true
             }
           ]
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
+    "objects": {
+      "general": [
         {
           "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'ภาค'"
-                }
+            "filter": {
+              "filter": {
+                "Version": 2,
+                "From": [
+                  {
+                    "Name": "c",
+                    "Entity": "ci npi_iphone (2)",
+                    "Type": 0
+                  }
+                ],
+                "Where": [
+                  {
+                    "Condition": {
+                      "In": {
+                        "Expressions": [
+                          {
+                            "Column": {
+                              "Expression": {
+                                "SourceRef": {
+                                  "Source": "c"
+                                }
+                              },
+                              "Property": "book_region_en"
+                            }
+                          }
+                        ],
+                        "Values": [
+                          [
+                            {
+                              "Literal": {
+                                "Value": "'South'"
+                              }
+                            }
+                          ]
+                        ]
+                      }
+                    }
+                  }
+                ]
               }
             }
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

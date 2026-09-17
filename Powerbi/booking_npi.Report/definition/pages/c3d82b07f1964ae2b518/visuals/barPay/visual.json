@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "barPay",
   "position": {
-    "x": 648,
-    "y": 346,
-    "z": 3,
-    "width": 616,
-    "height": 240,
-    "tabOrder": 3
+    "x": 782,
+    "y": 390,
+    "z": 6,
+    "height": 148,
+    "width": 460,
+    "tabOrder": 6
   },
   "visual": {
     "visualType": "barChart",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "ci npi_iphone (2).installment_type",
-              "nativeQueryRef": "installment_type"
+              "nativeQueryRef": "installment_type",
+              "active": true
             }
           ]
         },
@@ -69,21 +70,21 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
           "properties": {
-            "text": {
+            "show": {
               "expr": {
                 "Literal": {
-                  "Value": "'วิธีชำระเงิน'"
+                  "Value": "false"
                 }
               }
             }
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

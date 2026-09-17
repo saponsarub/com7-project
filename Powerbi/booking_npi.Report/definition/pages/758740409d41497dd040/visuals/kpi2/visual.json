@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "kpi2",
   "position": {
-    "x": 518,
-    "y": 54,
-    "z": 2,
-    "width": 243,
-    "height": 96,
-    "tabOrder": 2
+    "x": 717,
+    "y": 114,
+    "z": 6,
+    "height": 44,
+    "width": 149,
+    "tabOrder": 6
   },
   "visual": {
     "visualType": "card",
@@ -33,21 +33,13 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
+    "objects": {
+      "labels": [
         {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'ราคาเฉลี่ยต่อเครื่อง'"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

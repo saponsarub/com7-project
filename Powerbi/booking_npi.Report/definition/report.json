@@ -65,14 +65,29 @@
       "type": "RegisteredResources",
       "items": [
         {
+          "name": "bg_p1.png",
+          "path": "bg_p1.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg_p2.png",
+          "path": "bg_p2.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg_p3.png",
+          "path": "bg_p3.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg_p4.png",
+          "path": "bg_p4.png",
+          "type": "Image"
+        },
+        {
           "name": "com7_launch_theme",
           "path": "com7_launch_theme",
           "type": "CustomTheme"
-        },
-        {
-          "name": "logocom7.png",
-          "path": "logocom7.png",
-          "type": "Image"
         }
       ]
     }

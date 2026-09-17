@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "kpi1",
   "position": {
-    "x": 267,
-    "y": 54,
-    "z": 1,
-    "width": 243,
-    "height": 96,
-    "tabOrder": 1
+    "x": 528,
+    "y": 114,
+    "z": 4,
+    "height": 44,
+    "width": 149,
+    "tabOrder": 4
   },
   "visual": {
     "visualType": "card",
@@ -33,21 +33,13 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
+    "objects": {
+      "labels": [
         {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'มูลค่า (ล้านบาท)'"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "k2",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "kpi3",
   "position": {
-    "x": 646,
-    "y": 54,
-    "z": 2,
-    "width": 307,
-    "height": 96,
-    "tabOrder": 2
+    "x": 1032,
+    "y": 114,
+    "z": 5,
+    "height": 44,
+    "width": 212,
+    "tabOrder": 5
   },
   "visual": {
     "visualType": "card",
@@ -33,21 +33,13 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
+    "objects": {
+      "labels": [
         {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'สาขาที่รับจอง'"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

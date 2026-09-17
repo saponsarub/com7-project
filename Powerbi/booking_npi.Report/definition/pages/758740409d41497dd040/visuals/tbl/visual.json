@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
   "name": "tbl",
   "position": {
-    "x": 16,
-    "y": 458,
-    "z": 12,
-    "width": 940,
-    "height": 252,
-    "tabOrder": 12
+    "x": 278,
+    "y": 520,
+    "z": 15,
+    "width": 964,
+    "height": 148,
+    "tabOrder": 15
   },
   "visual": {
     "visualType": "tableEx",
@@ -131,21 +131,6 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
-        {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'เทียบฐานเดียวกัน · เฉพาะ Pro / Pro Max'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

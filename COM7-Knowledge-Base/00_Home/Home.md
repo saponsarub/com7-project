@@ -94,6 +94,7 @@
 | **library ไหนใช้ทำอะไร · เลือกยังไง** | [[Python Libraries]] |
 | **ใช้ git/GitHub ยังไง · SSH 2 บัญชี · แก้ตอน push ไม่ผ่าน** | [[Git & GitHub]] |
 | **ทำ dashboard Power BI · แก้ .pbip ด้วยโค้ด · สี CI · กับดัก TMDL/DAX** | [[Power BI PBIP Cookbook]] |
+| **ตั้งเครื่องใหม่ · pip · ODBC · env · GPU · Colab** | [[Environment Setup]] |
 | บันทึกประชุม | [[Meeting Index]] |
 | ของเก่าที่เลิกใช้ | [[Archive]] |
 
@@ -128,7 +129,7 @@
 07_Meeting/     บันทึกประชุม (ภาษาไทย)
 08_Reference/   Source Inventory · People & Teams · SQL & Source Schemas · Python Libraries · Git & GitHub
                 Analytics & AI · Athena Benchmark · EV China Benchmark
-                Power BI PBIP Cookbook
+                Power BI PBIP Cookbook · Environment Setup
 09_Issues/      คำถามที่ยังไม่มีคำตอบ · งานค้าง · ความเสี่ยง
 99_Archive/     ของเก่าที่เลิกใช้แล้ว
 ```

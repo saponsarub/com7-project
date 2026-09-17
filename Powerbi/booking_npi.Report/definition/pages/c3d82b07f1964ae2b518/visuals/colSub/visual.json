@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "colSub",
   "position": {
-    "x": 16,
-    "y": 54,
-    "z": 0,
-    "width": 620,
-    "height": 280,
-    "tabOrder": 0
+    "x": 278,
+    "y": 124,
+    "z": 3,
+    "height": 198,
+    "width": 460,
+    "tabOrder": 3
   },
   "visual": {
     "visualType": "columnChart",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "ci npi_iphone (2).Launch Cohort",
-              "nativeQueryRef": "Launch Cohort"
+              "nativeQueryRef": "Launch Cohort",
+              "active": true
             }
           ]
         },
@@ -69,7 +70,6 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
     "objects": {
       "labels": [
         {
@@ -89,16 +89,17 @@
       "title": [
         {
           "properties": {
-            "text": {
+            "show": {
               "expr": {
                 "Literal": {
-                  "Value": "'สัดส่วนรุ่นย่อยในแต่ละปี'"
+                  "Value": "false"
                 }
               }
             }
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

@@ -595,6 +595,23 @@ hosts:
   - headset
   - buds
   whole_word: false
+- label: Camera
+  words:
+  - digital camera
+  - กล้อง
+  - dslr
+  - mirrorless
+  - gopro
+  - ixus
+  - powershot
+  - cybershot
+  whole_word: false
+- label: Music Player
+  words:
+  - ipod
+  - mp3 player
+  - walkman
+  whole_word: false
 - label: Notebook
   words:
   - macbook
@@ -821,6 +838,39 @@ disambiguate:
   - เคสคอม
   - เคส pc
   - case & cooling
+  - fan p4
+  - w 2 fan
+  - w 1 fan
+  - mid tower
+  - micro atx
+  - power 250w
+  - power 300w
+  - power 350w
+  - power 400w
+  - power 450w
+  - power 500w
+  - power 550w
+  - power 600w
+  - power 650w
+  - power 700w
+  whole_word: false
+  use_context: true
+- from: Case
+  to: Toy
+  words:
+  - case club
+  - cosbi
+  - cosbaby
+  whole_word: false
+  use_context: true
+- from: Case
+  to: Film
+  words:
+  - protection lcd
+  - pre-protection
+  - lcd screen
+  - screen protector
+  - proguard
   whole_word: false
   use_context: true
 - from: Case
@@ -831,6 +881,7 @@ disambiguate:
   - sleeve
   - pouch
   - ซองใส่
+  - carrying
   whole_word: false
   use_context: false
 - from: Notebook
@@ -1124,7 +1175,7 @@ main_of_type:
   Network: IT Accessories
   SparePart: IT Accessories
   Powerbank: Powerbank
-  Service: Others
+  Service: Service
   Unknown: Others
   Battery: Others
   Furniture: Others
@@ -1157,3 +1208,11 @@ not_product:
 - Service
 - SparePart
 - Unknown
+main_from_platform:
+  MacBook:
+    main: Mac
+    only_types:
+    - Notebook
+    - Desktop
+main_from_type:
+  Case: Case

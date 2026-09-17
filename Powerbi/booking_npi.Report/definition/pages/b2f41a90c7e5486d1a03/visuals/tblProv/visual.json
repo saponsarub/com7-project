@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
   "name": "tblProv",
   "position": {
-    "x": 16,
-    "y": 458,
-    "z": 12,
-    "width": 980,
-    "height": 252,
-    "tabOrder": 12
+    "x": 278,
+    "y": 520,
+    "z": 10,
+    "width": 964,
+    "height": 148,
+    "tabOrder": 10
   },
   "visual": {
     "visualType": "tableEx",
@@ -117,21 +117,6 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
-        {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'รายจังหวัด · คลิกหัวคอลัมน์เพื่อเรียงลำดับ'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

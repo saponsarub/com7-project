@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
   "name": "pkBranch",
   "position": {
-    "x": 16,
-    "y": 458,
-    "z": 12,
-    "width": 1000,
-    "height": 252,
-    "tabOrder": 12
+    "x": 278,
+    "y": 520,
+    "z": 10,
+    "width": 964,
+    "height": 148,
+    "tabOrder": 10
   },
   "visual": {
     "visualType": "tableEx",
@@ -103,21 +103,6 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
-        {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'รายสาขา · เรียงตามคิวรอรับ เพื่อจัดกำลัง back office'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

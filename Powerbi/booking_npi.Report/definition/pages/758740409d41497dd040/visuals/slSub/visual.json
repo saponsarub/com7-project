@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "slSub",
   "position": {
-    "x": 1124,
-    "y": 458,
-    "z": 14,
-    "width": 140,
-    "height": 252,
-    "tabOrder": 14
+    "x": 20,
+    "y": 380,
+    "z": 12,
+    "height": 168,
+    "width": 200,
+    "tabOrder": 12
   },
   "visual": {
     "visualType": "slicer",
@@ -27,27 +27,20 @@
                 }
               },
               "queryRef": "ci npi_iphone (2).clean_iPhone_submodel",
-              "nativeQueryRef": "clean_iPhone_submodel"
+              "nativeQueryRef": "clean_iPhone_submodel",
+              "active": true
             }
           ]
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
+    "objects": {
+      "general": [
         {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'รุ่นย่อย'"
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

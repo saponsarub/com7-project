@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "lineDay",
   "position": {
-    "x": 790,
-    "y": 162,
-    "z": 11,
-    "width": 474,
-    "height": 284,
-    "tabOrder": 11
+    "x": 950,
+    "y": 252,
+    "z": 14,
+    "height": 200,
+    "width": 292,
+    "tabOrder": 14
   },
   "visual": {
     "visualType": "lineChart",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "ci npi_iphone (2).Launch Day",
-              "nativeQueryRef": "Launch Day"
+              "nativeQueryRef": "Launch Day",
+              "active": true
             }
           ]
         },
@@ -69,21 +70,6 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
-    "visualContainerObjects": {
-      "title": [
-        {
-          "properties": {
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'จังหวะการจองรายวัน (วันที่ 0 = วันเปิดจอง)'"
-                }
-              }
-            }
-          }
-        }
-      ]
-    }
+    "drillFilterOtherVisuals": true
   }
 }

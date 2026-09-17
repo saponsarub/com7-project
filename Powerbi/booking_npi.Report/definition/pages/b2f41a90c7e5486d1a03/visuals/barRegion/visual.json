@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "barRegion",
   "position": {
-    "x": 16,
-    "y": 162,
-    "z": 10,
-    "width": 620,
-    "height": 284,
-    "tabOrder": 10
+    "x": 278,
+    "y": 252,
+    "z": 8,
+    "height": 200,
+    "width": 460,
+    "tabOrder": 8
   },
   "visual": {
     "visualType": "barChart",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "ci npi_iphone (2).book_region_en",
-              "nativeQueryRef": "book_region_en"
+              "nativeQueryRef": "book_region_en",
+              "active": true
             }
           ]
         },
@@ -69,21 +70,21 @@
         }
       }
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
           "properties": {
-            "text": {
+            "show": {
               "expr": {
                 "Literal": {
-                  "Value": "'ใบจองแยกตามภาค · เทียบทุกรุ่น'"
+                  "Value": "false"
                 }
               }
             }
           }
         }
       ]
-    }
+    },
+    "drillFilterOtherVisuals": true
   }
 }

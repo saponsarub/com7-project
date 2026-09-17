@@ -98,6 +98,8 @@ def load_rules(path=RULES_FILE):
         "acc_suffix": d.get("acc_suffix", {}),
         "acc_hosts": set(d.get("acc_hosts", [])),
         "not_product": set(d.get("not_product", [])),
+        "main_from_platform": d.get("main_from_platform", {}),
+        "main_from_type": d.get("main_from_type", {}),
     }
     return (tab("types"), tab("hosts"), tab("platforms"), dis, host_from_platform,
             host_from_type, cat_map, cat_force, type_from_platform, compose_tbl)
@@ -371,6 +373,39 @@ def compose(df, taxonomy="extended"):
     # เก็บรายละเอียดไว้ที่ Sub — IT Accessories จะได้ยังรู้ว่าเป็น RAM หรือ CPU
     m3 = rest & main.isin(["IT Accessories", "Mouse&Keyboard", "Others"]) & (ts != "Unknown")
     sub[m3] = ts[m3]
+
+    # 2) แยกออกมาเป็นหมวดหลักของตัวเอง — ทำ *หลัง* คำนวณ sub เสร็จแล้ว
+    #    จะได้ไม่ไปกระทบสูตร sub ด้านบน และยังเก็บรายละเอียดเดิมไว้ใน sub
+    #      Mac   MacBook/iMac/Mac mini/Mac Studio ไม่ควรปนกับ Notebook/PC ทั่วไป
+    #      Case  เคสมือถือ/แท็บเล็ต เดิมถูกนับรวมเป็น Smart Phone ทำให้ยอดเครื่องเฟ้อ
+    MFP = COMPOSE.get("main_from_platform", {})
+    if MFP:
+        pl = df["Item_Platform"].astype(str)
+        on = rest & pl.isin(MFP)
+        label = pl[on].map(lambda k: MFP[k]["main"])
+        sub[on] = label + " " + ts[on]                     # Mac Notebook · Mac Bag
+        # เฉพาะ "ตัวเครื่อง" เท่านั้นที่ย้ายหมวดหลัก
+        # กระเป๋า/ฟิล์ม/อะไหล่ของ MacBook ยังเป็นอุปกรณ์เสริม ไม่ใช่ Mac
+        okty = pl[on].map(lambda k: tuple(MFP[k]["only_types"]))
+        dev = on.copy()
+        dev[on] = [t in ok for t, ok in zip(ts[on], okty)]
+        main[dev] = pl[dev].map(lambda k: MFP[k]["main"])
+
+    MFT = COMPOSE.get("main_from_type", {})
+    if MFT:
+        # จับ 2 ทาง ไม่งั้น Sub เดียวจะชี้ไป 2 Main
+        #   ① ชนิดตรง ๆ            Item_Type = Case
+        #   ② อุปกรณ์เสริมที่ลงท้ายเหมือนกัน  Item_Type = Bag -> acc_suffix "Case"
+        #      (กระเป๋ากล้อง/โน้ตบุ๊กไม่เข้าข่าย เพราะ host ไม่ได้อยู่ใน acc_hosts)
+        lab = ts.map(MFT)
+        lab = lab.fillna(ts.map(ACC).map(MFT).where(is_acc))
+        hit = lab.notna()
+        main[hit] = lab[hit]
+        # ข้อจำกัด acc_hosts มีไว้ตัดสินว่า "host ได้ขึ้นเป็น Main ไหม"
+        # พอ Case เป็น Main ของตัวเองแล้ว host เหลือหน้าที่บอกแค่ "เคสของอะไร"
+        # จึงใช้ host ได้ทุกตัว รวม Notebook / Camera / Music Player ที่ไม่อยู่ใน acc_hosts
+        known = hit & (hs != "") & (hs != "PC")            # เลี่ยง "PC Case" ที่ชนกับโครงเครื่องคอม
+        sub[known] = hs[known] + " " + lab[known]
 
     df["Main_Product_Dimension"] = main.to_numpy(dtype=object)
     df["Sub_Product_Dimension"] = sub.to_numpy(dtype=object)
