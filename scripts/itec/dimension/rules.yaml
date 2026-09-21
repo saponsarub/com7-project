@@ -456,6 +456,13 @@ types:
   - cd-rw
   - dvd-rw
   whole_word: false
+- label: Speaker
+  words:
+  - speaker
+  - ลำโพง
+  - soundbar
+  - sound bar
+  whole_word: false
 - label: Audio
   words:
   - headphone
@@ -463,9 +470,6 @@ types:
   - earphone
   - ear-phone
   - earbud
-  - speaker
-  - ลำโพง
-  - soundbar
   - headset
   - airpod
   - microphone
@@ -522,6 +526,13 @@ types:
   - network
   - เราเตอร์
   - airport extreme
+  whole_word: false
+- label: Solar
+  words:
+  - solar
+  - โซล่า
+  - โซลาร์
+  - แผงพลังงานแสง
   whole_word: false
 - label: HomeAppliance
   words:
@@ -858,11 +869,11 @@ disambiguate:
 - from: Case
   to: Toy
   words:
-  - case club
   - cosbi
   - cosbaby
+  - be@rbrick
   whole_word: false
-  use_context: true
+  use_context: false
 - from: Case
   to: Film
   words:
@@ -1005,6 +1016,191 @@ disambiguate:
   - laserjet
   whole_word: false
   use_context: false
+- from: AppleServicePart
+  to: AppleCare
+  words:
+  - applecare
+  - apple care
+  - care+
+  whole_word: false
+  use_context: false
+- from: AppleServicePart
+  to: Service
+  words:
+  - ค่าบริการ
+  - service fee
+  - labor
+  - ซ่อม
+  - repair
+  whole_word: false
+  use_context: false
+- from: Warranty
+  to: AppleCare
+  words:
+  - applecare
+  - apple care
+  whole_word: false
+  use_context: false
+- from: Strap
+  to: Network
+  words:
+  - dual-band
+  - dual band
+  - tri-band
+  - tri band
+  - wi-fi
+  - wifi
+  - router
+  - mesh
+  whole_word: false
+  use_context: false
+- from: Accessory
+  to: MousePad
+  words:
+  - mouse pad
+  - mousepad
+  - แผ่นรองเมาส์
+  whole_word: false
+  use_context: false
+- from: Speaker
+  to: Audio
+  words:
+  - headphone
+  - earphone
+  - earbud
+  - airpod
+  - หูฟัง
+  - headset
+  - buds
+  whole_word: false
+  use_context: false
+- from: Speaker
+  to: SpeakerComputer
+  words:
+  - computer speaker
+  - pc speaker
+  - ลำโพงคอม
+  - multimedia speaker
+  - 2.1 channel
+  - usb speaker
+  whole_word: false
+  use_context: false
+- from: Speaker
+  to: SpeakerHome
+  words:
+  - partybox
+  - party box
+  - home theat
+  - home audio
+  - tower speaker
+  - subwoofer
+  - ซับวูฟ
+  - ลำโพงบ้าน
+  whole_word: false
+  use_context: false
+- from: Speaker
+  to: SpeakerPortable
+  words:
+  - bluetooth speaker
+  - portable speaker
+  - ลำโพงพกพา
+  - ลำโพงบลูทู
+  - soundlink
+  - wireless speaker
+  whole_word: false
+  use_context: false
+- from: Mouse
+  to: MousePad
+  words:
+  - mouse pad
+  - mousepad
+  - แผ่นรองเมาส์
+  - pad wireless
+  whole_word: false
+  use_context: false
+- from: Monitor
+  to: Stand
+  words:
+  - monitor arm
+  - monitor stand
+  - arm link
+  - ขาตั้งจอ
+  whole_word: false
+  use_context: false
+- from: Console
+  to: Furniture
+  words:
+  - gaming desk
+  - gaming chair
+  - โต๊ะ
+  - เก้าอี้
+  - chair
+  - desk
+  whole_word: false
+  use_context: false
+- from: Audio
+  to: Stand
+  words:
+  - headphone stand
+  - stand display
+  - ขาตั้งหูฟัง
+  whole_word: false
+  use_context: false
+- from: Smartphone
+  to: Stand
+  words:
+  - phone holder
+  - phone stand
+  - ขาตั้งมือถือ
+  - car holder
+  whole_word: false
+  use_context: false
+- from: Smartphone
+  to: Audio
+  words:
+  - headphone
+  - earphone
+  - earbud
+  - หูฟัง
+  - buds
+  whole_word: false
+  use_context: false
+- from: Tablet
+  to: Audio
+  words:
+  - headphone
+  - earphone
+  - หูฟัง
+  whole_word: false
+  use_context: false
+- from: CPU
+  to: Merchandise
+  words:
+  - t-shirt
+  - tshirt
+  - shirt
+  - เสื้อ
+  - mug
+  - แก้ว
+  whole_word: false
+  use_context: false
+- from: GraphicCard
+  to: Merchandise
+  words:
+  - t-shirt
+  - tshirt
+  - shirt
+  - เสื้อ
+  whole_word: false
+  use_context: false
+- from: Bag
+  to: Merchandise
+  words:
+  - shopping bag
+  - ถุงช้อป
+  - ถุงผ้า
+  whole_word: false
+  use_context: false
 - from: Charger
   to: Adapter
   words:
@@ -1128,80 +1324,215 @@ category_map:
   - ''
 category_force:
   APPLE SERVICE:
-  - SparePart
-main_of_type:
-  Smartphone: Smart Phone
-  Tablet: Tablet
-  Smartwatch: Smart Watch
-  Audio: HeadSet&Earpiece
-  Notebook: Notebook
-  Desktop: PC
-  Camera: Camera
-  TV: TV
-  Console: Console Gaming
-  Mouse: Mouse&Keyboard
-  Keyboard: Mouse&Keyboard
-  Software: Software
-  Warranty: Insurance
-  Telecom: Telecom Package
-  HomeAppliance: Appliance
-  MusicPlayer: Appliance
-  SmartHome: Smart Home
-  PersonalCare: Personal Care & Health
-  HealthDevice: Personal Care & Health
-  HealthSport: Personal Care & Health
-  DroneCam: Lifestyle & Hobby
-  SportOutdoor: Lifestyle & Hobby
-  VR: Lifestyle & Hobby
-  Toy: Lifestyle & Hobby
-  RAM: IT Accessories
-  CPU: IT Accessories
-  Mainboard: IT Accessories
-  GraphicCard: IT Accessories
-  Cooling: IT Accessories
-  PowerSupply: IT Accessories
-  PC Case: IT Accessories
-  Adapter: IT Accessories
-  Cable: IT Accessories
-  Stand: IT Accessories
-  Memory: IT Accessories
-  Accessory: IT Accessories
-  UPS: IT Accessories
-  Charger: IT Accessories
-  Monitor: IT Accessories
-  Projector: IT Accessories
-  Printer: IT Accessories
-  Storage: IT Accessories
-  Network: IT Accessories
-  SparePart: IT Accessories
-  Powerbank: Powerbank
-  Service: Service
-  Unknown: Others
-  Battery: Others
-  Furniture: Others
-  Merchandise: Others
-  Stationery: Others
-  Case: Others
-  Bag: Others
-  Film: Others
-  Strap: Others
+  - AppleServicePart
+taxonomy:
+  Smartphone:
+  - Phone
+  - Smart Phone
+  Tablet:
+  - Tablet
+  - Tablet
+  Notebook:
+  - Notebook
+  - Notebook
+  Desktop:
+  - PC
+  - Desktop
+  Smartwatch:
+  - Smart Watch
+  - Smart Watch
+  Camera:
+  - Camera
+  - Digital Camera
+  Audio:
+  - HeadSet&Earpiece
+  - Headphone & Earphone
+  Speaker:
+  - Speaker
+  - Other Speaker
+  SpeakerPortable:
+  - Speaker
+  - Portable Speaker
+  SpeakerComputer:
+  - Speaker
+  - Computer Speaker
+  SpeakerHome:
+  - Speaker
+  - Home Speaker
+  Console:
+  - Console Gaming
+  - Console & Game
+  Monitor:
+  - Monitor
+  - Monitor
+  TV:
+  - TV
+  - TV
+  HomeAppliance:
+  - Home Appliance
+  - Other Appliance
+  Solar:
+  - Home Appliance
+  - Solar
+  SmartHome:
+  - Home Appliance
+  - Smart Living
+  Storage:
+  - Storage
+  - HDD & SSD
+  Memory:
+  - Storage
+  - Memory Card
+  Network:
+  - Network
+  - Other Network
+  CPU:
+  - PC Component
+  - CPU/GPU/RAM/Mainboard
+  GraphicCard:
+  - PC Component
+  - CPU/GPU/RAM/Mainboard
+  RAM:
+  - PC Component
+  - CPU/GPU/RAM/Mainboard
+  Mainboard:
+  - PC Component
+  - CPU/GPU/RAM/Mainboard
+  PC Case:
+  - PC Component
+  - PC Case & Cooling
+  Cooling:
+  - PC Component
+  - PC Case & Cooling
+  PowerSupply:
+  - PC Component
+  - Power Supply
+  UPS:
+  - PC Component
+  - UPS
+  Printer:
+  - PC Component
+  - Printer & Ink
+  Projector:
+  - PC Component
+  - Projector
+  Mouse:
+  - Mouse&Keyboard
+  - Mouse
+  Keyboard:
+  - Mouse&Keyboard
+  - Keyboard
+  Case:
+  - Case
+  - Other Case
+  Charger:
+  - Adapter&Cable&Film
+  - Charger
+  Adapter:
+  - Adapter&Cable&Film
+  - Adapter
+  Cable:
+  - Adapter&Cable&Film
+  - Charging Cable
+  Film:
+  - Adapter&Cable&Film
+  - Film
+  Powerbank:
+  - Power Bank
+  - Power Bank
+  Bag:
+  - Accessory&Bag
+  - Bag
+  Strap:
+  - Accessory&Bag
+  - Strap
+  Stand:
+  - Accessory&Bag
+  - Stand
+  Battery:
+  - Accessory&Bag
+  - Battery
+  Accessory:
+  - Accessory&Bag
+  - Other Accessory
+  MousePad:
+  - Accessory&Bag
+  - Mouse Pad
+  SparePart:
+  - Spare Part
+  - Other Part
+  AppleServicePart:
+  - Spare Part
+  - Apple Service Part
+  Software:
+  - Software
+  - Software
+  Telecom:
+  - Telecom Package
+  - Promo Operator
+  Service:
+  - Service & Insurance
+  - Other Service
+  Warranty:
+  - Service & Insurance
+  - Insurance
+  AppleCare:
+  - Service & Insurance
+  - Apple Care
+  PersonalCare:
+  - Health & Sport
+  - Health Product
+  HealthDevice:
+  - Health & Sport
+  - Health Product
+  HealthSport:
+  - Health & Sport
+  - Gym & Fitness
+  SportOutdoor:
+  - Health & Sport
+  - Sport Gadget
+  Toy:
+  - Lifestyle & Hobby
+  - Art Toy & Figure
+  DroneCam:
+  - Lifestyle & Hobby
+  - Drone & Action Cam
+  VR:
+  - Lifestyle & Hobby
+  - VR
+  Merchandise:
+  - Lifestyle & Hobby
+  - Merchandise
+  Furniture:
+  - Lifestyle & Hobby
+  - Furniture
+  MusicPlayer:
+  - Lifestyle & Hobby
+  - Music Player
+  Stationery:
+  - Others
+  - Stationery
+  Unknown:
+  - Others
+  - Other
 acc_suffix:
   Case: Case
-  Bag: Case
+  Bag: Bag
   Film: Film
   Cable: Cable
-  Charger: Adapter/Charger
-  Adapter: Adapter/Charger
-  Powerbank: Adapter/Charger
+  Charger: Charger
+  Adapter: Adapter
+  Powerbank: Power Bank
   Warranty: Insurance
-  Strap: Other Accessory
-  Stand: Other Accessory
-  Battery: Other Accessory
-  Memory: Other Accessory
-acc_hosts:
+  Strap: Strap
+  Stand: Stand
+  Battery: Battery
+  Memory: Memory Card
+sub_hosts:
 - Smart Phone
 - Tablet
 - Smart Watch
+- Notebook
 - HeadSet&Earpiece
 not_product:
 - Others
@@ -1214,5 +1545,10 @@ main_from_platform:
     only_types:
     - Notebook
     - Desktop
-main_from_type:
-  Case: Case
+brand_force:
+  case club: Case
+  casetify: Case
+  case-mate: Case
+  case studi: Case
+  incase: Case
+min_sub_rows: 300

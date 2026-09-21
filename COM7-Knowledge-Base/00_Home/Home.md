@@ -60,6 +60,7 @@
 | PDPA / consent | [[Consent & PDPA]] |
 | ข้อมูลแต่ละระบบไม่เป็นมาตรฐานเดียวกัน | [[Data Standardization & Quality]] |
 | ฟิลด์ลูกค้าที่ต้องการ มีใน K2 ไหม | [[K2 Customer Field Survey]] |
+| **ฟิลด์ลูกค้าที่ต้องการ มีใน CRM ไหม** | [[CRM Customer Field Survey]] |
 | ฟิลด์ค้าปลีกที่ต้องการ มีใน ITEC ไหม | [[ITEC Data Requirement Survey]] |
 | UFUND เข้า Customer 360 ยังไง | [[UFUND in Customer 360]] |
 | สถาปัตยกรรม AWS | [[Architecture]] · [[AWS Services]] |
@@ -177,6 +178,7 @@
 | สมาชิก CRM | ~8,000,000 · 7Club+ ~800,000 | เอกสารทีม CRM |
 | ลูกค้าใน ITOS | 165,722 | schema wiki |
 | ความพร้อมฟิลด์ลูกค้าใน K2 | 69 มี / 4 ทดแทนได้ / 25 ขาด (จาก 98) | [[K2 Customer Field Survey]] |
+| **ความพร้อมฟิลด์ลูกค้าใน CRM** | **17 มี / 7 ทดแทนได้ / 78 ขาด (จาก 102)** | [[CRM Customer Field Survey]] |
 | ช่วงเวลาโครงการ | ส.ค. 2569 – ก.พ. 2570 | Project Timeline |
 
 ---

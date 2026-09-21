@@ -38,6 +38,9 @@
 
 🔴 = มีเลขบัตรเครดิต · ห้าม ingest
 
+> **`PRODUCT_ID` ใน view ฝั่ง `ci` คือ `ItemId` ตัวเดียวกับฝั่ง `rpt`** — join ตรงได้เลย
+> → [ชื่อฟิลด์เดียวกัน คนละชื่อ](#-ชื่อฟิลด์เดียวกัน-คนละชื่อ)
+
 ---
 
 # Fact views
@@ -501,7 +504,7 @@ EduProject 7 · Service 7 · Wholesale 5 · HeadOffice 5 · Honor 5 · GA 5
 | `END_MONTH_DATE` 🔑 | date | วันสิ้นเดือน |
 | `SALE_MONTH_YEAR` | varchar | เดือน/ปี แบบข้อความ |
 | `BRANCH_ID` 🔑 | int | สาขา |
-| `PRODUCT_ID` 🔑 | varchar | สินค้า |
+| `PRODUCT_ID` 🔑🔗 | varchar | รหัสสินค้า — **ฟิลด์เดียวกับ `dim_item_itec.ItemId`** คนละชื่อเท่านั้น |
 | `NO_OF_SALE_UNIT` | int | จำนวนที่ขาย |
 | `PRODUCT_COST_AMT` | float | ต้นทุนรวม |
 | `PRODUCT_SALE_AMT` | float | ยอดขายรวม |
@@ -520,7 +523,7 @@ EduProject 7 · Service 7 · Wholesale 5 · HeadOffice 5 · Honor 5 · GA 5
 | `AS_OF_DATE` 🔑 | date | วันที่ตัดยอด |
 | `STOCK_MONTH_YEAR` | varchar | เดือน/ปี |
 | `BRANCH_ID` 🔑 | int | สาขา |
-| `PRODUCT_ID` 🔑 | varchar | สินค้า |
+| `PRODUCT_ID` 🔑🔗 | varchar | รหัสสินค้า — **ฟิลด์เดียวกับ `dim_item_itec.ItemId`** คนละชื่อเท่านั้น |
 | `NO_OF_INVENTORY_UNIT` | int | จำนวนคงเหลือ |
 
 ---
@@ -534,12 +537,50 @@ EduProject 7 · Service 7 · Wholesale 5 · HeadOffice 5 · Honor 5 · GA 5
 |---|---|
 | **วันที่** | `AS_OF_DATE` · `STOCK_MONTH_YEAR` · `SALE_MONTH_YEAR` · `END_MONTH_DATE` · `MAIN_AS_OF_DATE` |
 | **สาขา** | `BRANCH_ID_STOCK` · `BRANCH_ID_SALE` · `BRANCH_ID_MAIN` |
-| **สินค้า** | `PRODUCT_ID_STOCK` · `PRODUCT_ID_SALE` · `PRODUCT_ID_MAIN` |
+| **สินค้า** 🔗 | `PRODUCT_ID_STOCK` · `PRODUCT_ID_SALE` · `PRODUCT_ID_MAIN` — ทั้ง 3 ตัวคือ `dim_item_itec.ItemId` |
 | **ตัวเลข** | `NO_OF_INVENTORY_UNIT` · `NO_OF_SALE_UNIT` · `PRODUCT_COST_AMT` · `PRODUCT_SALE_AMT` · `SHELF_LIFE_DAY` |
 | **มิติ** | `category_itec` · `Subcategory_itec` · `ItemName` · `Brand` · `Sale_Type` · `Product_Dimension` · `Main_Product_Dimension` · `Sub_Product_Dimension` · `Product_Purpose` |
 
 > มี `BRANCH_ID` และ `PRODUCT_ID` **3 ชุด** (STOCK / SALE / MAIN) เพราะเป็น full outer join ระหว่างฝั่งสต็อกกับฝั่งขาย
 > **ให้ใช้ `_MAIN` เป็นตัวหลักเสมอ** — อีกสองชุดจะเป็น NULL เมื่อเดือนนั้นมีแต่ขายหรือมีแต่สต็อก `[อนุมาน]`
+
+---
+
+# ⚠️ ชื่อฟิลด์เดียวกัน คนละชื่อ
+
+## `PRODUCT_ID` = `ItemId` — รหัสสินค้าตัวเดียวกัน
+
+**view ฝั่ง `rpt` เรียก `ItemId` · view ฝั่ง `ci` (aggregate) เรียก `PRODUCT_ID`** — เป็นรหัสชุดเดียวกัน join ตรงได้เลย ไม่ต้องแปลง
+
+| view | ชื่อฟิลด์ |
+|---|---|
+| `rpt.dim_item_itec` · `rpt.fact_sales_itec` | `ItemId` |
+| `ci.monthly_item_sale_itec` | `PRODUCT_ID` |
+| `ci.monthly_item_inventory_itec` | `PRODUCT_ID` |
+| `ci.integrated_sale_and_inventory` | `PRODUCT_ID_MAIN` · `_SALE` · `_STOCK` |
+
+```sql
+-- join ได้ตรง ๆ ไม่ต้อง CAST ไม่ต้อง TRIM
+SELECT s.PRODUCT_ID, i.ItemName, i.Brand, s.NO_OF_SALE_UNIT
+FROM   ci.monthly_item_sale_itec s
+JOIN   rpt.dim_item_itec i ON i.ItemId = s.PRODUCT_ID
+```
+
+**ทดสอบแล้ว 2026-09-21**
+
+| ตรวจอะไร | ผล |
+|---|---|
+| รหัสไม่ซ้ำใน `monthly_item_sale_itec` | 69,861 |
+| ในนั้นหาไม่เจอใน `dim_item_itec` | **529 (0.76%)** |
+| สุ่ม 500,000 แถว `monthly_item_inventory_itec` join ติด | **100%** |
+| สุ่ม 500,000 แถว `integrated_sale_and_inventory` (`_MAIN`) join ติด | 99.9% |
+
+ค่าที่เห็นเป็นบาร์โค้ด EAN หรือรหัสภายในแบบเดียวกันเป๊ะ เช่น `8858824192461` · `195949036798`
+
+> 529 รหัสที่หาไม่เจอ **ยังไม่รู้สาเหตุ** — น่าจะเป็นสินค้าที่เลิกขายแล้วและถูกตัดออกจาก `dim_item_itec` `[อนุมาน]` ยังไม่ได้ตรวจ
+
+⚠️ **อย่าสับสนกับ `PRODUCT_ID` ของ K2** — คนละระบบ คนละความหมายโดยสิ้นเชิง
+ของ K2 คือรหัส**ผลิตภัณฑ์สินเชื่อ** (`PRODUCT.PRODUCT_ID`, int) ไม่ใช่รหัสสินค้า → [[K2 - Data Dictionary]]
 
 ---
 
@@ -746,6 +787,9 @@ EduProject 7 · Service 7 · Wholesale 5 · HeadOffice 5 · Honor 5 · GA 5
 | `fact_sales_itec` | `fact_bank_itec` | `SalesId` | ยังไม่ทดสอบ |
 | `dim_mem_itec` | CRM `members` | `crmid` = `member_id` | 57% มีค่า |
 | `fact_trans_fo` | `dim_item_itec` | `ITEC-ITEMNO` = `ItemId` | ยังไม่ทดสอบ |
+| `ci.monthly_item_sale_itec` | `dim_item_itec` | **`PRODUCT_ID` = `ItemId`** | ✅ 99.2% ของรหัสไม่ซ้ำ |
+| `ci.monthly_item_inventory_itec` | `dim_item_itec` | **`PRODUCT_ID` = `ItemId`** | ✅ 100% (สุ่ม 500k) |
+| `ci.integrated_sale_and_inventory` | `dim_item_itec` | **`PRODUCT_ID_MAIN` = `ItemId`** | ✅ 99.9% (สุ่ม 500k) |
 | `dim_branch_itec` | `ci.clean_branch` | `Branch` = `Branch_ID` | ✅ 100% |
 | `ci.trn_category_ITEC` | `fact_bank_itec` | `TYPE` | ยังไม่ทดสอบ |
 

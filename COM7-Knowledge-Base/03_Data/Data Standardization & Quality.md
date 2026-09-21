@@ -32,6 +32,17 @@
 | `CONTRACT_STATUS_ID` | `CONTRACT_STATUS` |
 | `PRODUCT_NAME` | `MODEL_NAME` |
 
+**ภายใน ITEC เองก็มี** — รหัสสินค้าตัวเดียวกันเรียก 2 ชื่อตาม schema
+
+| schema `rpt` | schema `ci` (aggregate) |
+|---|---|
+| `ItemId` | `PRODUCT_ID` · `PRODUCT_ID_MAIN` · `_SALE` · `_STOCK` |
+
+join ตรงได้ ไม่ต้องแปลง · ทดสอบแล้ว 99.2% ของรหัสไม่ซ้ำ → [[ITEC - Data Dictionary]]
+
+⚠️ `PRODUCT_ID` ของ ITEC (รหัสสินค้า varchar) **ไม่ใช่** `PRODUCT_ID` ของ K2 (รหัสผลิตภัณฑ์สินเชื่อ int)
+ชื่อชนกันข้ามระบบ — ต้องระบุ schema ทุกครั้งที่พูดถึง
+
 ### Data types do not match
 
 ต้อง `CAST` เกือบทุกคอลัมน์:

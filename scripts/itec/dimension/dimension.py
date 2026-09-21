@@ -94,13 +94,14 @@ def load_rules(path=RULES_FILE):
     type_from_platform = d.get("type_from_platform", {})
     # ตารางประกอบ Main/Sub — ย้ายมาอยู่ใน rules.yaml เพื่อให้แก้ได้จาก Cell 3
     compose_tbl = {
-        "main_of_type": d.get("main_of_type", {}),
+        "taxonomy": {k: tuple(v) for k, v in d.get("taxonomy", {}).items()},
         "acc_suffix": d.get("acc_suffix", {}),
-        "acc_hosts": set(d.get("acc_hosts", [])),
+        "sub_hosts": set(d.get("sub_hosts", [])),
         "not_product": set(d.get("not_product", [])),
         "main_from_platform": d.get("main_from_platform", {}),
-        "main_from_type": d.get("main_from_type", {}),
+        "min_sub_rows": d.get("min_sub_rows", 0),
     }
+    compose_tbl["brand_force"] = {k.lower(): v for k, v in d.get("brand_force", {}).items()}
     return (tab("types"), tab("hosts"), tab("platforms"), dis, host_from_platform,
             host_from_type, cat_map, cat_force, type_from_platform, compose_tbl)
 
@@ -299,6 +300,17 @@ def add_columns(df, col="ItemName", context_cols=("CategoryName", "SubCategoryNa
         t[m] = cf[m]
         by_cat |= m
 
+    # แบรนด์ที่ขายของชนิดเดียวล้วน -> เชื่อแบรนด์มากกว่าชื่อสินค้า
+    # ⚠️ Case Club ขายแต่เคส/ฟิล์ม  ชื่อรุ่นเป็นชื่อลายอาร์ตเวิร์ก ("Bicolor Cat Life")
+    #    ชื่อแบบนั้นบอกอะไรไม่ได้เลย ต้องให้แบรนด์ตัดสิน
+    BF = COMPOSE.get("brand_force", {})
+    if BF and "Brand" in df.columns:
+        bkey = _clean(df["Brand"])
+        m = bkey.isin(BF)
+        if m.any():
+            t[m] = bkey[m].map(BF)
+            log(f"   แบรนด์ตัดสินแทน {int(m.sum()):,} แถว")
+
     log("④ แก้ความกำกวม (DISAMBIGUATE) ...")
     both = name + " | " + ctx
     changed = pd.Series(False, index=df.index)
@@ -326,15 +338,15 @@ def add_columns(df, col="ItemName", context_cols=("CategoryName", "SubCategoryNa
 #    / acc_hosts / not_product) โค้ดตรงนี้แค่เอามาใช้ ไม่มีค่าฝังไว้
 
 def compose(df, taxonomy="extended"):
-    """เติมคอลัมน์ผลลัพธ์จาก Item_Type / Item_Host
+    """เติมคอลัมน์ผลลัพธ์จาก Item_Type / Item_Host / Item_Platform
 
-    Main  อุปกรณ์เสริมที่รู้ host -> host เป็น Main   (เคสมือถือ -> Smart Phone)
-          นอกนั้นใช้ main_of_type
-    Sub   ต่อท้าย host หรือใช้ Item_Type -> คำนวณจาก Main เสมอ จึงไม่ขัดกันเอง
+    Main + Sub  มาจากตาราง TAXONOMY ตรง ๆ (Item_Type -> คู่ Main/Sub)
+    host        ไม่ได้กำหนด Main อีกต่อไป — ใช้บอกแค่ว่า "อุปกรณ์เสริมชิ้นนี้ของอะไร"
+                เคสมือถือจึงเป็น Main "Case" ไม่ใช่ "Phone"  ยอดตัวเครื่องจะได้ไม่เฟ้อ
+    platform    ใช้ยกตัวเครื่อง Apple ออกมาเป็น Main "Mac"
     """
-    MAIN = COMPOSE.get("main_of_type", {})
+    TAX = COMPOSE.get("taxonomy", {})
     ACC = COMPOSE.get("acc_suffix", {})
-    ACC_HOSTS = COMPOSE.get("acc_hosts", set())
     NOT_PRODUCT = COMPOSE.get("not_product", set())
 
     t = df["Item_Type"].to_numpy(dtype=object)
@@ -346,72 +358,51 @@ def compose(df, taxonomy="extended"):
         return pd.Series(txt).str.contains(pat, regex=True).to_numpy()
 
     promo = has(r"promo|โปรโมชั่น|ส่วนลด|รายการส่งเสริมการขาย") | (t == "Telecom")
-    df["IS_Promotion"] = promo                      # 🆕 คอลัมน์ boolean แยกต่างหาก
+    df["IS_Promotion"] = promo
     df["Sale_Type"] = np.where(promo, "Promotion Sale", "Normal Sale")
     df["Product_Dimension"] = np.where(
-        has(r"demo|เครื่องโชว์|ตัวโชว์|display test"), "Demo Product", "Normal Product")
+        has(r"demo|เครื่องโชว์|ตัวโชว์|display test"), "Demo Product", "Normal Product")
     df["Product_Purpose"] = np.where(
-        has(r"gaming|rog|tuf|predator|nitro|legion|omen|เกมมิ่ง"),
+        has(r"gaming|rog|tuf|predator|nitro|legion|omen|เกมมิ่ง"),
         "Gaming", "Ordinary")
 
-    # ทำทั้งคอลัมน์รวดเดียว ไม่วน for ทีละแถว
     ts = pd.Series(t, index=df.index)
     hs = pd.Series(h, index=df.index)
-    pu = df["Product_Purpose"].astype(str)
 
-    # 1) อุปกรณ์เสริมที่รู้ว่าใช้กับเครื่องอะไร -> host เป็น Main
-    is_acc = ts.isin(ACC) & hs.isin(ACC_HOSTS)
-    main = pd.Series(np.where(is_acc, hs, ts.map(MAIN).fillna("Others")), index=df.index)
+    # ① Main + Sub จากตารางเดียว
+    main = ts.map(lambda k: TAX.get(k, ("Others", "Other"))[0])
+    sub = ts.map(lambda k: TAX.get(k, ("Others", "Other"))[1])
 
-    sub = main.copy()
+    # ② อุปกรณ์เสริมที่รู้ host -> เอา host ไปใส่ "Sub" (ไม่แตะ Main)
+    #    เคส iPhone  ->  Main "Case"  ·  Sub "Smart Phone Case"
+    is_acc = ts.isin(ACC) & hs.isin(COMPOSE.get("sub_hosts", set()))
     sub[is_acc] = hs[is_acc] + " " + ts[is_acc].map(ACC)
-    rest = ~is_acc
-    m1 = rest & main.isin(["PC", "Notebook"])
-    sub[m1] = pu[m1] + "-" + main[m1]
-    m2 = rest & main.isin(["Smart Phone", "Tablet", "Smart Watch", "HeadSet&Earpiece"])
-    sub[m2] = main[m2] + " Main&Other"
-    # เก็บรายละเอียดไว้ที่ Sub — IT Accessories จะได้ยังรู้ว่าเป็น RAM หรือ CPU
-    m3 = rest & main.isin(["IT Accessories", "Mouse&Keyboard", "Others"]) & (ts != "Unknown")
-    sub[m3] = ts[m3]
 
-    # 2) แยกออกมาเป็นหมวดหลักของตัวเอง — ทำ *หลัง* คำนวณ sub เสร็จแล้ว
-    #    จะได้ไม่ไปกระทบสูตร sub ด้านบน และยังเก็บรายละเอียดเดิมไว้ใน sub
-    #      Mac   MacBook/iMac/Mac mini/Mac Studio ไม่ควรปนกับ Notebook/PC ทั่วไป
-    #      Case  เคสมือถือ/แท็บเล็ต เดิมถูกนับรวมเป็น Smart Phone ทำให้ยอดเครื่องเฟ้อ
+    # ③ ตัวเครื่อง Apple ยกออกมาเป็น Main ของตัวเอง
+    #    ⚠️ only_types ขาดไม่ได้ ไม่งั้นกระเป๋า/ฟิล์มของ MacBook จะถูกนับเป็น Mac
     MFP = COMPOSE.get("main_from_platform", {})
     if MFP:
         pl = df["Item_Platform"].astype(str)
-        on = rest & pl.isin(MFP)
-        label = pl[on].map(lambda k: MFP[k]["main"])
-        sub[on] = label + " " + ts[on]                     # Mac Notebook · Mac Bag
-        # เฉพาะ "ตัวเครื่อง" เท่านั้นที่ย้ายหมวดหลัก
-        # กระเป๋า/ฟิล์ม/อะไหล่ของ MacBook ยังเป็นอุปกรณ์เสริม ไม่ใช่ Mac
+        on = pl.isin(MFP)
         okty = pl[on].map(lambda k: tuple(MFP[k]["only_types"]))
         dev = on.copy()
-        dev[on] = [t in ok for t, ok in zip(ts[on], okty)]
+        dev[on] = [x in ok for x, ok in zip(ts[on], okty)]
         main[dev] = pl[dev].map(lambda k: MFP[k]["main"])
+        sub[dev] = pl[dev].map(lambda k: MFP[k]["main"]) + " " + ts[dev]
 
-    MFT = COMPOSE.get("main_from_type", {})
-    if MFT:
-        # จับ 2 ทาง ไม่งั้น Sub เดียวจะชี้ไป 2 Main
-        #   ① ชนิดตรง ๆ            Item_Type = Case
-        #   ② อุปกรณ์เสริมที่ลงท้ายเหมือนกัน  Item_Type = Bag -> acc_suffix "Case"
-        #      (กระเป๋ากล้อง/โน้ตบุ๊กไม่เข้าข่าย เพราะ host ไม่ได้อยู่ใน acc_hosts)
-        lab = ts.map(MFT)
-        lab = lab.fillna(ts.map(ACC).map(MFT).where(is_acc))
-        hit = lab.notna()
-        main[hit] = lab[hit]
-        # ข้อจำกัด acc_hosts มีไว้ตัดสินว่า "host ได้ขึ้นเป็น Main ไหม"
-        # พอ Case เป็น Main ของตัวเองแล้ว host เหลือหน้าที่บอกแค่ "เคสของอะไร"
-        # จึงใช้ host ได้ทุกตัว รวม Notebook / Camera / Music Player ที่ไม่อยู่ใน acc_hosts
-        known = hit & (hs != "") & (hs != "PC")            # เลี่ยง "PC Case" ที่ชนกับโครงเครื่องคอม
-        sub[known] = hs[known] + " " + lab[known]
+    # ยุบ Sub ที่เล็กเกินไป — ตัวอย่างน้อยไปทั้งสำหรับ ML และสำหรับอ่านกราฟ
+    # ยุบเป็น "Other <Main>" ไม่ใช่ทิ้งไป Others ระดับ Main จะได้ไม่เสียข้อมูลว่าอยู่หมวดไหน
+    MIN = COMPOSE.get("min_sub_rows", 0)
+    if MIN:
+        cnt = sub.value_counts()
+        small = set(cnt[cnt < MIN].index)
+        tiny = sub.isin(small)
+        if tiny.any():
+            sub[tiny] = "Other " + main[tiny]
 
     df["Main_Product_Dimension"] = main.to_numpy(dtype=object)
     df["Sub_Product_Dimension"] = sub.to_numpy(dtype=object)
-    # 🆕 ไม่ใช่สินค้าขายจริง — บริการ/อะไหล่/รายการที่แยกไม่ได้
-    # เช็คทั้ง Main และ Item_Type — SparePart ถูกยุบเข้า IT Accessories แล้ว
-    # ถ้าเช็คแต่ Main อะไหล่จะกลายเป็นสินค้าขายจริง
+    # ไม่ใช่สินค้าขายจริง — เช็คทั้ง Main และ Item_Type
     df["IS_Product"] = ~(main.isin(NOT_PRODUCT) | ts.isin(NOT_PRODUCT)).to_numpy()
     return df
 

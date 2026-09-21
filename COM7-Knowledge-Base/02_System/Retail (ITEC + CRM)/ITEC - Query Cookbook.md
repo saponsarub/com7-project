@@ -378,6 +378,35 @@ ORDER BY avg_shelf DESC;
 
 ---
 
+## R11 · ต่อ view รายเดือน (`ci`) เข้ากับมิติสินค้า (`rpt`)
+
+**`PRODUCT_ID` ในฝั่ง `ci` คือ `ItemId` ตัวเดียวกับฝั่ง `rpt`** — join ตรงได้ ไม่ต้อง CAST ไม่ต้อง TRIM
+
+ใช้ตอนที่ view รายเดือนไม่มีคอลัมน์ที่อยากได้ เช่น `CategoryName` หรือ `Model/Series`
+
+```sql
+SELECT TOP 20 i.Brand, i.ItemName, i.CategoryName,
+       SUM(s.NO_OF_SALE_UNIT)  AS qty,
+       SUM(s.PRODUCT_SALE_AMT) AS amount
+FROM   ci.monthly_item_sale_itec s
+JOIN   rpt.dim_item_itec        i ON i.ItemId = s.PRODUCT_ID
+WHERE  s.END_MONTH_DATE >= '2026-01-01'
+GROUP  BY i.Brand, i.ItemName, i.CategoryName
+ORDER  BY amount DESC;
+```
+
+ใน `ci.integrated_sale_and_inventory` ให้ใช้ **`PRODUCT_ID_MAIN`**
+
+```sql
+JOIN rpt.dim_item_itec i ON i.ItemId = v.PRODUCT_ID_MAIN
+```
+
+> ⚠️ รหัสในฝั่ง `ci` **0.76% หาไม่เจอ** ใน `dim_item_itec` (529 จาก 69,861 รหัสไม่ซ้ำ)
+> ถ้าไม่อยากให้ยอดหาย ใช้ `LEFT JOIN` แล้ว `ISNULL(i.ItemName, s.PRODUCT_ID)`
+> สาเหตุยังไม่ได้ตรวจ — น่าจะเป็นสินค้าเลิกขายที่ถูกตัดออกจาก dim `[อนุมาน]`
+
+---
+
 ## เชื่อมลูกค้า ITEC เข้ากับ UFUND
 
 ยังทดสอบไม่ได้เพราะอยู่คนละ server แต่เส้นทางที่ควรใช้:
