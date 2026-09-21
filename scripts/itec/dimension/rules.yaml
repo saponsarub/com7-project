@@ -352,6 +352,15 @@ types:
   words:
   - tv
   whole_word: true
+- label: Ink
+  words:
+  - ink
+  - toner
+  - cartridge
+  - ribbon
+  - หมึกพิมพ์
+  - ตลับหมึก
+  whole_word: true
 - label: Printer
   words:
   - printer
@@ -1017,6 +1026,59 @@ disambiguate:
   whole_word: false
   use_context: false
 - from: Telecom
+  to: Tablet
+  words:
+  - ipad
+  whole_word: false
+  use_context: false
+- from: Telecom
+  to: Notebook
+  words:
+  - macbook
+  - notebook
+  - laptop
+  - surface
+  - imac
+  - mac mini
+  - mac studio
+  whole_word: false
+  use_context: false
+- from: Telecom
+  to: Smartwatch
+  words:
+  - watch
+  whole_word: false
+  use_context: false
+- from: Telecom
+  to: Tablet
+  words:
+  - galaxy tab
+  - tab
+  whole_word: true
+  use_context: false
+- from: Telecom
+  to: Smartphone
+  words:
+  - iphone
+  - galaxy
+  - samsung
+  - oppo
+  - vivo
+  - xiaomi
+  - redmi
+  - realme
+  - reno
+  - huawei
+  - honor
+  - infinix
+  - poco
+  - nokia
+  - zenfone
+  - note10
+  - "\bmac\b"
+  whole_word: false
+  use_context: false
+- from: Telecom
   to: TelecomSubsidy
   words:
   - จ่ายล่วงหน้า
@@ -1069,6 +1131,123 @@ disambiguate:
   - apple care
   whole_word: false
   use_context: false
+- from: Service
+  to: Case
+  words:
+  - phone case
+  whole_word: false
+  use_context: true
+- from: SparePart
+  to: Case
+  words:
+  - phone case
+  whole_word: false
+  use_context: true
+- from: Accessory
+  to: Ink
+  words:
+  - ink
+  - toner
+  - cartridge
+  - ribbon
+  - หมึก
+  whole_word: true
+  use_context: false
+- from: Accessory
+  to: Printer
+  words:
+  - scanner
+  - สแกนเนอร์
+  whole_word: false
+  use_context: false
+- from: Accessory
+  to: Printer
+  words:
+  - paper tray
+  - sheet paper
+  - photo paper
+  - กระดาษ
+  whole_word: false
+  use_context: false
+- from: Accessory
+  to: Mainboard
+  words:
+  - raid
+  - sfp
+  - transceiver
+  - serial ata
+  whole_word: false
+  use_context: false
+- from: Accessory
+  to: Network
+  words:
+  - bluetooth
+  - wi-fi
+  - wifi
+  - rs-232
+  - serial adapter
+  whole_word: false
+  use_context: false
+- from: Accessory
+  to: Software
+  words:
+  - creative cloud
+  - botflow
+  - "\brpa\b"
+  - license
+  - subscription
+  whole_word: false
+  use_context: false
+- from: Adapter
+  to: Network
+  words:
+  - wi-fi
+  - wifi
+  - rs-232
+  - serial
+  - network
+  whole_word: false
+  use_context: true
+- from: Unknown
+  to: Speaker
+  words:
+  - ซาวด์บาร์
+  - ซาวน์บาร์
+  - โฮมเธียเตอร์
+  - home theat
+  whole_word: false
+  use_context: false
+- from: Case
+  to: Smartwatch
+  words:
+  - aluminium case
+  - aluminum case
+  - titanium case
+  - stainless steel case
+  - ceramic case
+  whole_word: false
+  use_context: false
+- from: MusicPlayer
+  to: Case
+  words:
+  - casing
+  - case
+  - silicone
+  - skin
+  - เคส
+  whole_word: false
+  use_context: true
+- from: Camera
+  to: SmartHome
+  words:
+  - security camera
+  - cctv
+  - ip camera
+  - กล้องวงจรปิด
+  - home automation
+  - smart living
+  whole_word: false
+  use_context: true
 - from: Strap
   to: Network
   words:
@@ -1263,6 +1442,9 @@ type_from_platform:
   AirPods: Audio
   MacBook: Notebook
 category_map:
+  Gaming Gear:
+  - Accessory
+  - PC
   SERVICE:
   - Service
   - ''
@@ -1338,9 +1520,6 @@ category_map:
   APP ENABLED-ACCESSORY:
   - Accessory
   - ''
-  Gaming Gear:
-  - Accessory
-  - PC
   RESERVE:
   - Accessory
   - ''
@@ -1440,7 +1619,10 @@ taxonomy:
   - UPS
   Printer:
   - PC Component
-  - Printer & Ink
+  - Printer & Scanner
+  Ink:
+  - PC Component
+  - Ink & Toner
   Projector:
   - PC Component
   - Projector
@@ -1587,6 +1769,26 @@ brand_force:
   incase: Case
 min_sub_rows: 300
 demo_as_main: true
+platform_sub:
+  iPhone:
+    Phone: iPhone
+    Case: iPhone Case
+    Adapter&Cable&Film: iPhone Adapter&Cable&Film
+    Accessory&Bag: iPhone Accessory
+  iPad:
+    Tablet: iPad
+    Case: iPad Case
+    Accessory&Bag: iPad Accessory
+  AppleWatch:
+    Smart Watch: Apple Watch
+    Case: Apple Watch Case
+    Accessory&Bag: Apple Watch Strap
+  AirPods:
+    HeadSet&Earpiece: AirPods
+    Case: AirPods Case
+  MacBook:
+    Case: Mac Case
+    Accessory&Bag: Mac Accessory
 flag_words:
   promotion:
     loose:

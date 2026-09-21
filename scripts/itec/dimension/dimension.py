@@ -101,6 +101,7 @@ def load_rules(path=RULES_FILE):
         "main_from_platform": d.get("main_from_platform", {}),
         "min_sub_rows": d.get("min_sub_rows", 0),
         "demo_as_main": bool(d.get("demo_as_main", False)),
+        "platform_sub": d.get("platform_sub", {}),
         "flag_words": d.get("flag_words", {}),
     }
     compose_tbl["brand_force"] = {k.lower(): v for k, v in d.get("brand_force", {}).items()}
@@ -433,6 +434,22 @@ def compose(df, taxonomy="extended"):
         dev[on] = [x in ok for x, ok in zip(ts[on], okty)]
         main[dev] = pl[dev].map(lambda k: MFP[k]["main"])
         sub[dev] = pl[dev].map(lambda k: MFP[k]["main"]) + " " + ts[dev]
+
+    # ③.5 แยก Apple ออกจากยี่ห้ออื่นในระดับ Sub
+    #     สเปกของเจ้าของงานให้แยก Apple ทุกตระกูล — iPhone / iPad / Apple Watch / AirPods
+    #     ไม่ใช่แค่ Mac  ตัวเครื่องและเคสต้องแยกได้หมด
+    #     ใช้ Item_Platform ที่จับไว้แล้ว ไม่ต้องเขียนกฎ keyword ใหม่
+    PS = COMPOSE.get("platform_sub", {})
+    if PS:
+        pl = df["Item_Platform"].astype(str)
+        for plat, mapping in PS.items():
+            on = pl.eq(plat)
+            if not on.any():
+                continue
+            for mn, sb in mapping.items():
+                hit = on & main.eq(mn)
+                if hit.any():
+                    sub[hit] = sb
 
     # ④ เครื่องโชว์แยกเป็นหมวดของตัวเอง
     #    เหตุผล: 69% ของเครื่องโชว์มี "ฝาแฝด" ชื่อเดียวกันที่เป็นของจริงอยู่ในฐาน
