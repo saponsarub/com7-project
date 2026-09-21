@@ -100,6 +100,8 @@ def load_rules(path=RULES_FILE):
         "not_product": set(d.get("not_product", [])),
         "main_from_platform": d.get("main_from_platform", {}),
         "min_sub_rows": d.get("min_sub_rows", 0),
+        "demo_as_main": bool(d.get("demo_as_main", False)),
+        "flag_words": d.get("flag_words", {}),
     }
     compose_tbl["brand_force"] = {k.lower(): v for k, v in d.get("brand_force", {}).items()}
     return (tab("types"), tab("hosts"), tab("platforms"), dis, host_from_platform,
@@ -357,14 +359,56 @@ def compose(df, taxonomy="extended"):
     def has(pat):
         return pd.Series(txt).str.contains(pat, regex=True).to_numpy()
 
-    promo = has(r"promo|โปรโมชั่น|ส่วนลด|รายการส่งเสริมการขาย") | (t == "Telecom")
+    # ⚠️ คำสั้นต้องมีขอบเขตคำ ไม่งั้นจับคำอื่นมาเต็ม
+    #    rog  จับ program · hydrogel · ifrogz   ไปแล้ว 1,825 แถว
+    #    omen จับ women · momentum             · tuf จับ stuff
+    #    demo จับ demon · demos
+    #    เขียนขอบเขตเอง เพราะ  ของ RE2 ไม่ทำงานกับอักษรไทย
+    FLAGS = COMPOSE.get("flag_words", {})
+
+    FIELD = {"name": normalize(df["ItemName"]),
+             "cat": normalize(df["CategoryName"]),
+             "sub": normalize(df["SubCategoryName"])}
+
+    def any_of(key, field=None):
+        """field=None คือค้นทั้ง 3 ช่องรวมกัน · ระบุชื่อ = ค้นเฉพาะช่องนั้น"""
+        loose = list(FLAGS.get(key, {}).get("loose", []))
+        tight = list(FLAGS.get(key, {}).get("tight", []))
+        parts = []
+        if loose:
+            parts.append("|".join(re.escape(w) for w in loose))
+        if tight:
+            parts.append(r"(?:^|[^a-z0-9])(?:" + "|".join(re.escape(w) for w in tight)
+                         + r")(?![a-z0-9])")
+        if not parts:
+            return np.zeros(len(df), dtype=bool)
+        pat = "|".join(parts)
+        if field is None:
+            return has(pat)
+        return FIELD[field].str.contains(pat, regex=True, na=False).to_numpy()
+
+    # ── โปรโมชั่น ────────────────────────────────────────────────────
+    # ⚠️ ต่างจาก DEMO โดยสิ้นเชิง
+    #    DEMO      = เครื่องโชว์ ไม่ได้ขายจริง -> แยกเป็น Main เพื่อไม่ให้นับ SKU ซ้ำ
+    #    Promotion = ขายจริง นับเป็นยอดขายได้ -> ต้องเป็น "คอลัมน์" ไม่ใช่ Main
+    #                สินค้าตัวเดิมที่ติดโปร ยังเป็นสินค้าตัวเดิมอยู่
+    #                "Apple Watch Sport Band" ใน sub "ACC WATCH PROMOTION"
+    #                ยังต้องเป็น Accessory&Bag > Smart Watch Strap เหมือนเดิม
+    #
+    # แหล่งที่บอกว่าเป็นโปรไม่สม่ำเสมอ — บางตัวเขียนใน CategoryName บางตัวไม่เขียน
+    # จึงเก็บ "ที่มา" ไว้ด้วย จะได้ตรวจย้อนได้ว่าธงนี้มาจากไหน
+    src_nm = any_of("promotion", "name")
+    src_cat = any_of("promotion", "cat")
+    src_sub = any_of("promotion", "sub")
+    src_tel = (t == "Telecom")
+    promo = src_nm | src_cat | src_sub | src_tel
     df["IS_Promotion"] = promo
+    df["Promotion_Source"] = np.select(
+        [src_nm, src_cat, src_sub, src_tel],
+        ["ItemName", "CategoryName", "SubCategoryName", "Telecom"], default="")
     df["Sale_Type"] = np.where(promo, "Promotion Sale", "Normal Sale")
-    df["Product_Dimension"] = np.where(
-        has(r"demo|เครื่องโชว์|ตัวโชว์|display test"), "Demo Product", "Normal Product")
-    df["Product_Purpose"] = np.where(
-        has(r"gaming|rog|tuf|predator|nitro|legion|omen|เกมมิ่ง"),
-        "Gaming", "Ordinary")
+    df["Product_Dimension"] = np.where(any_of("demo"), "Demo Product", "Normal Product")
+    df["Product_Purpose"] = np.where(any_of("gaming"), "Gaming", "Ordinary")
 
     ts = pd.Series(t, index=df.index)
     hs = pd.Series(h, index=df.index)
@@ -389,6 +433,19 @@ def compose(df, taxonomy="extended"):
         dev[on] = [x in ok for x, ok in zip(ts[on], okty)]
         main[dev] = pl[dev].map(lambda k: MFP[k]["main"])
         sub[dev] = pl[dev].map(lambda k: MFP[k]["main"]) + " " + ts[dev]
+
+    # ④ เครื่องโชว์แยกเป็นหมวดของตัวเอง
+    #    เหตุผล: 69% ของเครื่องโชว์มี "ฝาแฝด" ชื่อเดียวกันที่เป็นของจริงอยู่ในฐาน
+    #    (Tengu Gaming Chair Kusanagi White มีทั้งตัว Demo และตัวขายจริง)
+    #    ถ้าปล่อยไว้หมวดเดียวกัน จำนวน SKU ต่อหมวดจะถูกนับซ้ำ
+    #    Sub เก็บหมวดเดิมไว้ จึงยังรู้ว่าเครื่องโชว์ตัวนั้นคือสินค้าอะไร
+    if COMPOSE.get("demo_as_main") and "Product_Dimension" in df.columns:
+        dm = df["Product_Dimension"].astype(str).eq("Demo Product")
+        if dm.any():
+            # ต้องเติมคำว่า Demo นำหน้า ไม่งั้น Sub ชนกับหมวดจริง
+            #   DEMO ▸ "TV"  จะชนกับ  TV ▸ "TV"
+            sub[dm] = "Demo " + main[dm]
+            main[dm] = "DEMO"
 
     # ยุบ Sub ที่เล็กเกินไป — ตัวอย่างน้อยไปทั้งสำหรับ ML และสำหรับอ่านกราฟ
     # ยุบเป็น "Other <Main>" ไม่ใช่ทิ้งไป Others ระดับ Main จะได้ไม่เสียข้อมูลว่าอยู่หมวดไหน

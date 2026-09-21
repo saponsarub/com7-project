@@ -1016,6 +1016,34 @@ disambiguate:
   - laserjet
   whole_word: false
   use_context: false
+- from: Telecom
+  to: TelecomSubsidy
+  words:
+  - จ่ายล่วงหน้า
+  - mnp
+  - ย้ายค่าย
+  - trade up
+  - tradeup
+  - ช่วยออก
+  - ผ่อน 0
+  - ลดราคาหน้าบิล
+  - walking
+  - existing
+  - ส่วนลด
+  - แลกซื้อ
+  whole_word: false
+  use_context: false
+- from: Telecom
+  to: TelecomSim
+  words:
+  - sim
+  - ซิม
+  - รายเดือน
+  - เติมเงิน
+  - prepaid
+  - postpaid
+  whole_word: false
+  use_context: false
 - from: AppleServicePart
   to: AppleCare
   words:
@@ -1469,7 +1497,13 @@ taxonomy:
   - Software
   Telecom:
   - Telecom Package
-  - Promo Operator
+  - Operator Subsidy
+  TelecomSim:
+  - Telecom Package
+  - SIM & Plan
+  TelecomSubsidy:
+  - Telecom Package
+  - Operator Subsidy
   Service:
   - Service & Insurance
   - Other Service
@@ -1552,3 +1586,30 @@ brand_force:
   case studi: Case
   incase: Case
 min_sub_rows: 300
+demo_as_main: true
+flag_words:
+  promotion:
+    loose:
+    - promo
+    - โปรโมชั่น
+    - ส่วนลด
+    - รายการส่งเสริมการขาย
+    tight: []
+  demo:
+    loose:
+    - เครื่องโชว์
+    - ตัวโชว์
+    - display test
+    tight:
+    - demo
+  gaming:
+    loose:
+    - gaming
+    - เกมมิ่ง
+    - predator
+    - legion
+    tight:
+    - rog
+    - tuf
+    - omen
+    - nitro
