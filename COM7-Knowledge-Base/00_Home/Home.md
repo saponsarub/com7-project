@@ -96,6 +96,7 @@
 | **ใช้ git/GitHub ยังไง · SSH 2 บัญชี · แก้ตอน push ไม่ผ่าน** | [[Git & GitHub]] |
 | **ทำ dashboard Power BI · แก้ .pbip ด้วยโค้ด · สี CI · กับดัก TMDL/DAX** | [[Power BI PBIP Cookbook]] |
 | **ตั้งเครื่องใหม่ · pip · ODBC · env · GPU · Colab** | [[Environment Setup]] |
+| **จัดหมวดหมู่สินค้า ITEC ใหม่ · 29 Main / 98 Sub** | [[ITEC Product Dimension]] |
 | บันทึกประชุม | [[Meeting Index]] |
 | ของเก่าที่เลิกใช้ | [[Archive]] |
 
@@ -179,6 +180,7 @@
 | ลูกค้าใน ITOS | 165,722 | schema wiki |
 | ความพร้อมฟิลด์ลูกค้าใน K2 | 69 มี / 4 ทดแทนได้ / 25 ขาด (จาก 98) | [[K2 Customer Field Survey]] |
 | **ความพร้อมฟิลด์ลูกค้าใน CRM** | **17 มี / 7 ทดแทนได้ / 78 ขาด (จาก 102)** | [[CRM Customer Field Survey]] |
+| **ความแม่นการจัดหมวดหมู่สินค้า ITEC** | 85.7% จาก gold set 300 แถว (ยังปนเปื้อน) | [[ITEC Product Dimension]] |
 | ช่วงเวลาโครงการ | ส.ค. 2569 – ก.พ. 2570 | Project Timeline |
 
 ---
