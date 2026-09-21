@@ -433,7 +433,11 @@ def compose(df, taxonomy="extended"):
         dev = on.copy()
         dev[on] = [x in ok for x, ok in zip(ts[on], okty)]
         main[dev] = pl[dev].map(lambda k: MFP[k]["main"])
-        sub[dev] = pl[dev].map(lambda k: MFP[k]["main"]) + " " + ts[dev]
+        # หลายชนิด -> ต่อชื่อชนิดไว้ด้วย (Mac Notebook / Mac Desktop)
+        # ชนิดเดียว  -> ใช้ชื่อ Main เฉย ๆ  (iPhone / iPad / Apple Watch)
+        multi = pl[dev].map(lambda k: len(MFP[k]["only_types"]) > 1)
+        lab = pl[dev].map(lambda k: MFP[k]["main"])
+        sub[dev] = lab.where(~multi, lab + " " + ts[dev])
 
     # ③.5 แยก Apple ออกจากยี่ห้ออื่นในระดับ Sub
     #     สเปกของเจ้าของงานให้แยก Apple ทุกตระกูล — iPhone / iPad / Apple Watch / AirPods
