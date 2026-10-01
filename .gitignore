@@ -51,10 +51,14 @@ COM7-Knowledge-Base/.trash/
 *.csv.gz
 *.parquet
 
-# โฟลเดอร์ข้อมูลเข้า/ผลลัพธ์ของสคริปต์ ITEC
-# _data/  มาจาก export SQL · _out/ สร้างใหม่ได้จากโน้ตบุ๊กเสมอ
+# โฟลเดอร์ข้อมูลเข้า/ผลลัพธ์ของสคริปต์ทุกตัว
+# _data/ มาจาก export SQL · _out/ สร้างใหม่ได้ด้วยการรันสคริปต์เสมอ
+# ครอบทุก _out* เพราะเคยต้องสร้าง _out2/_out3 ชั่วคราวตอน Excel ล็อกไฟล์อยู่
 scripts/itec/*/_data/
 scripts/itec/*/_out/
+scripts/*/_out/
+scripts/*/_out[0-9]/
+scripts/*/_data/
 
 # zip ที่ build ไว้อัป Colab/Kaggle — สร้างใหม่ด้วย make_zip.py
 scripts/itec/*/*.zip
@@ -68,3 +72,17 @@ Powerbi/**/.pbi/localSettings.json
 Powerbi/**/.pbi/editorSettings.json
 Powerbi/_backup_definition_*/
 *.pbix
+
+# ─────────────────────────────────────────────────────────────
+#  notebook ที่มี output ติดข้อมูลลูกค้าจริง
+# ─────────────────────────────────────────────────────────────
+# .ipynb เก็บผลการรันไว้ในไฟล์ — เซลล์ที่โชว์ df จะฝังชื่อ · ที่อยู่ ·
+# เบอร์โทร · เลขสัญญา ของลูกค้าจริงลงไปด้วย ตรวจแล้วพบจริงในสองไฟล์นี้
+# (wave_flood 40 เบอร์ · 40 เลขสัญญา · Untitled 40 เบอร์ · 40 เลขสัญญา)
+# ถ้าจะเก็บเข้า git ต้อง Clear All Outputs ก่อน
+wave_flood.ipynb
+Untitled.ipynb
+**/Untitled*.ipynb
+
+# JupyterLab สร้างสำเนาไฟล์ที่เปิดอยู่ไว้ที่นี่ — ไม่ใช่ต้นฉบับ
+.virtual_documents/
