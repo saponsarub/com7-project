@@ -26,6 +26,7 @@
 | **ดึงยอดขาย / หาสินค้า / หาสาขา ITEC** | [[ITEC - Query Cookbook]] |
 | ระบบค้าปลีก ITEC | [[ITEC Overview]] |
 | ระบบสินเชื่อ ITOS | [[ITOS Overview]] |
+| **หาจังหวัด/อำเภอ/ตำบล ของลูกหนี้ ITOS** | [[ITOS - Address & Geography]] |
 | ระบบฝั่ง EV | [[EV System Landscape]] |
 | ระบบที่ยังรู้น้อย (D365 · SAP B1 · iCare · Tech Trade · Synapse) | [[Other Systems]] |
 | **iCare Insurance ขายอะไร · เก็บข้อมูลอะไร** | [[iCare Insurance (ICI)]] |
@@ -109,6 +110,7 @@
 01_Business/    Group Structure · UFUND · Retail · EV Business
 02_System/      System Inventory
                 ├── UFUND (K2 + ITOS)/    K2 Overview · K2 - *.md (12) · ITOS Overview
+                │                         ITOS - Address & Geography
                 ├── Retail (ITEC + CRM)/  ITEC Overview · ITEC - Data Dictionary · ITEC - Query Cookbook
                 │                         CRM Overview · CRM - Data Dictionary
                 ├── EV/                   EV Systems
@@ -127,7 +129,8 @@
                 DMS Full Load Validation (Lambda)
 06_Project/     K2 + ITOS Integration · GI + EV7 → 7Club · OD6 Collection Delivery
                 Data Framework Scope · SSOT Roadmap · K2 Termination Automation
-                Google Sheet Pipeline
+                Google Sheet Pipeline · Warehouse Consultant Data Request
+                ITOS Flood Waiver 2026-09
 07_Meeting/     บันทึกประชุม (ภาษาไทย)
 08_Reference/   Source Inventory · People & Teams · SQL & Source Schemas · Python Libraries · Git & GitHub
                 Analytics & AI · Athena Benchmark · EV China Benchmark
