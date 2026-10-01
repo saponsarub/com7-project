@@ -89,6 +89,7 @@ def load_rules(path=RULES_FILE):
     host_from_type = d.get("host_from_type", {})
     # CategoryName -> [Item_Type, Item_Host]  ใช้เป็นชั้นสุดท้ายก่อนตก Unknown
     cat_map = {k.strip().lower(): v for k, v in d.get("category_map", {}).items()}
+    sub_map = {k.strip().lower(): v for k, v in d.get("subcategory_map", {}).items()}
     # category ที่เชื่อได้มากกว่าชื่อสินค้า -> ทับผลจากชื่อไปเลย
     cat_force = {k.strip().lower(): v for k, v in d.get("category_force", {}).items()}
     type_from_platform = d.get("type_from_platform", {})
@@ -101,10 +102,12 @@ def load_rules(path=RULES_FILE):
         "main_from_platform": d.get("main_from_platform", {}),
         "min_sub_rows": d.get("min_sub_rows", 0),
         "demo_as_main": bool(d.get("demo_as_main", False)),
+        "operator_promo_cats": {c.lower() for c in d.get("operator_promo_cats", [])},
         "platform_sub": d.get("platform_sub", {}),
         "flag_words": d.get("flag_words", {}),
     }
     compose_tbl["brand_force"] = {k.lower(): v for k, v in d.get("brand_force", {}).items()}
+    compose_tbl["subcategory_map"] = sub_map
     return (tab("types"), tab("hosts"), tab("platforms"), dis, host_from_platform,
             host_from_type, cat_map, cat_force, type_from_platform, compose_tbl)
 
@@ -293,6 +296,17 @@ def add_columns(df, col="ItemName", context_cols=("CategoryName", "SubCategoryNa
     fill_h = (h == "") & (cm_h != "")
     h[fill_h] = cm_h[fill_h]
 
+    # ชั้นกันตกอีกชั้น — SubCategoryName บางทีบอกชนิดชัดกว่า CategoryName
+    # ⚠️ จำเป็นมากกับของ DEMO: cat = "BTB DEMO" ไม่บอกอะไร
+    #    แต่ sub = "HEALTH&SPORT DEMO" · "MONITOR DEMO" บอกตรง ๆ
+    SUB_MAP = COMPOSE.get("subcategory_map", {})
+    if SUB_MAP and "SubCategoryName" in df.columns:
+        sub_key = _clean(df["SubCategoryName"])
+        sm_t = sub_key.map(lambda k: (SUB_MAP.get(k) or ["", ""])[0])
+        use_sm = (t == "Unknown") & (sm_t != "")
+        t[use_sm] = sm_t[use_sm]
+        by_cat |= use_sm
+
     m = (t == "Unknown") & pl.isin(TYPE_FROM_PLATFORM)
     t[m] = pl[m].map(TYPE_FROM_PLATFORM)
 
@@ -454,6 +468,17 @@ def compose(df, taxonomy="extended"):
                 hit = on & main.eq(mn)
                 if hit.any():
                     sub[hit] = sb
+
+    # ③.7 รายการที่พนักงานหน้าร้าน key ข้อความเอง ไม่ใช่สินค้าในสต็อก
+    #     ตรวจกับตารางยอดขายแล้วไม่มีการขายจริง — เป็นข้อความบันทึกโปรของค่าย
+    #     ถ้าปล่อยไว้จะทำให้ยอดเครื่องเฟ้อหนัก (iPhone 67% มาจากกองนี้)
+    #     Sub เก็บรุ่นที่โปรพูดถึงไว้ จึงยังรู้ว่าเป็นโปรของอะไร
+    OP = COMPOSE.get("operator_promo_cats", set())
+    if OP and "CategoryName" in df.columns:
+        op = _clean(df["CategoryName"]).isin(OP)
+        if op.any():
+            sub[op] = "Promo " + main[op]
+            main[op] = "Operator Promo"
 
     # ④ เครื่องโชว์แยกเป็นหมวดของตัวเอง
     #    เหตุผล: 69% ของเครื่องโชว์มี "ฝาแฝด" ชื่อเดียวกันที่เป็นของจริงอยู่ในฐาน

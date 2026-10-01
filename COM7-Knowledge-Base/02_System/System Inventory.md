@@ -1,6 +1,6 @@
 # System Inventory
 
-อัปเดต 2026-08-24 · ที่มา: `D:\Project Timeline _ Data Team.xlsx` + เอกสารประกอบ
+อัปเดต 2026-09-23 · ที่มา: `D:\Project Timeline _ Data Team.xlsx` + เอกสารประกอบ
 
 **ห้ามเดาใส่ช่องว่าง** ไม่รู้ให้เขียนว่าไม่รู้
 
@@ -16,7 +16,7 @@
 | 1.1.2.1 | [[K2 Overview\|K2]] (UFund) | **Done** (survey ฐานจริง 2026-08-26) | MIS-Fintech |
 | 1.1.2.2 | [[ITOS Overview\|ITOS]] (UFund) | **ตอบแบบสำรวจฟิลด์ลูกค้าแล้ว 2026-09-04** (53 มี · 31 ทดแทน · 14 ไม่มี) | K.Ton |
 | 1.1.3 | [[EV Business\|GI Core]] | Todo | Punt, Nut |
-| 1.1.4 | [[Other Systems\|D365]] | Todo | MIS-ERP |
+| 1.1.4 | [[D365 F&O Overview\|D365 F&O]] | **Done** (survey ฐานจริง 2026-09-23) | MIS-ERP |
 | 1.1.5 | [[EV Business\|EV7]] | Todo | **ไม่มีชื่อในตาราง** |
 | 1.1.6.1 | [[iCare Insurance (ICI)\|iCare]] — Insurance | Todo | P.Pui |
 | 1.1.6.2 | [[ICS (iCare Service)]] — Mobile Service | **ประชุมภาพรวมแล้ว 2026-09-11** · data field survey กำลังตามมา | P.Pui |
@@ -24,7 +24,10 @@
 | 1.2.1 | [[CRM Overview\|7Club+/CRM]] | **มี data dictionary แล้ว 2026-08-28** (3 ตาราง 61 ฟิลด์) · เหลือ coverage | P.Por |
 | 1.2.2 | [[Other Systems\|Tech Trade]] | Todo | K.Koj, K.Poj |
 
-**เสร็จ 2 จาก 11** — งานนี้เป็นคอขวดของทุกอย่าง
+**เสร็จ 3 จาก 11** — งานนี้เป็นคอขวดของทุกอย่าง
+
+> D365 เลื่อนเป็น Done เพราะสำรวจ `PROJECT_1` + `syndpdev001` โดยตรงเมื่อ 2026-09-23
+> ผลอยู่ที่ [[D365 F&O Overview]] — **ยังไม่มีเอกสารจาก MIS-ERP ยืนยัน** สถานะนี้อ้างจากการสำรวจของทีมเราเอง
 
 > K2 เลื่อนจาก In-Progress เป็น Done เพราะสำรวจฐาน `HPCOM7` โดยตรงครบ 542 tables เมื่อ 2026-08-26 ผลอยู่ที่ [[K2 Overview]] — **ยังไม่มีเอกสารจาก MIS-Fintech ยืนยัน** สถานะนี้อ้างจากการสำรวจของทีมเราเอง
 
@@ -38,7 +41,7 @@
 | [[K2 Overview\|K2]] | สินเชื่อเช่าซื้อ IT **(legacy — ปิดสิ้นปี 2026)** | ฐาน `HPCOM7` · **542 tables · 288,205 สัญญา · 343,249 เลขบัตรไม่ซ้ำ** · กลุ่มหลักคือนักศึกษา | **Confirmed** | survey ฐานจริง 2026-08-26 |
 | [[ITOS Overview\|ITOS]] | สินเชื่อ (collection) | `ILOAN_COLLECTION` 55 tables · ลูกค้า 165,722 ราย | Confirmed | schema wiki |
 | [[EV Business\|GI Core]] | EV / AION | ระบบหลักปัจจุบันฝั่ง GI · MySQL 166 Prisma models | Confirmed | schema.prisma · ClickUp |
-| [[Other Systems\|D365]] | ERP / GI เก่า | ข้อมูลผ่าน `D365FO_DATALAKE` | To Verify | Timeline · SQL |
+| [[D365 F&O Overview\|D365 F&O]] | ERP ทุก BU | สต็อกเคลื่อนไหวรวมศูนย์ · `Transaction_FO` **276.1M แถว · 21 CompanyCode** · 2005 ถึงปัจจุบัน · เชื่อมรหัสสินค้ากับ ITEC ได้ 100% ของแถว | **Confirmed** | survey ฐานจริง 2026-09-23 |
 | AION DMS | GI | ระบบ vendor — บันทึกประชุมเขียนว่า "ของจีน" | To Verify | ClickUp |
 | EV7CORE | EV7 | ระบุเป็นระบบแยกในปัญหาข้อมูลซ้ำ | To Verify | ClickUp |
 | EVTRACKING | EV7 / GI | ยังมีบางรายการของ GI ค้างอยู่หลังโอนไป EV7 | To Verify | ClickUp |

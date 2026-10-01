@@ -108,7 +108,20 @@ Proposal บอก Bronze = raw ที่ scan แล้ว · ทีมร่�
 | **VPN Client รองรับ DMS CDC ที่ต้องเชื่อมต่อเนื่องยังไง** | AWS Team |
 | **แผน Site-to-Site VPN 30 tunnels เดิม ยกเลิกหรือเลื่อน** | AWS Team |
 | K2 กับ ITOS มีข้อมูลสัญญาซ้ำกันไหม | K.Ton |
-| `PROJECT_1` / `TAN_MIS` อยู่ใน scope ingest ไหม | Data Team |
+| ~~`PROJECT_1` / `TAN_MIS` อยู่ใน scope ingest ไหม~~ **สำรวจ `PROJECT_1` แล้ว 2026-09-23** → [[D365 F&O Overview]] · `TAN_MIS` ยังไม่ได้เปิดดู | Data Team |
+| **ชื่อเต็มของ BU ใน D365** — `drph` `lor` `drl` `pss` `nov` `skh` `gih` `gi01`–`gi12` · รู้แค่ com7=COMSEVEN · bnn=Adept · dou7=Double7 | MIS-ERP |
+| **ใบสั่งซื้อของ com7 อยู่ฐานไหน** — `tb_PurchOrder` มีทุก BU **ยกเว้น com7** · สงสัย `D365FO_COM7` หรือ `Com7_FO` | MIS-ERP |
+| **`drph` หยุดส่งข้อมูลตั้งแต่ 2026-07-07** (ช้า 78 วัน) — ตั้งใจหรือ pipeline พัง | MIS-ERP |
+| **`drl` หยุดตั้งแต่ 2024-01** — ปิดกิจการ หรือย้ายระบบ | MIS-ERP |
+| **`Transaction_Type = 'Transaction'` หมายถึงอะไร** — 17.5M แถว ชื่อกว้างเกินจะเดา | MIS-ERP |
+| **ทำไม Sales order 14.7% มี `RealCost = 0`** (15.4M แถว) | MIS-ERP |
+| **`rpt.fact_trans_fo` ฝั่ง MIS ช้ากว่าต้นทาง 45 วัน** — ตั้งใจให้เป็น batch รายเดือน หรือ pipeline ค้าง | Data Team |
+| **หมวดสินค้า D365 ไม่ใช่ลำดับชั้นจริง** — 345/487 หมวดชี้ไปหลายกลุ่ม · `Common` อยู่ใต้ 67 กลุ่ม · ตั้งใจหรือข้อมูลเพี้ยน | MIS-ERP |
+| **com7 จัดของ demo ทุกชนิดไว้ใต้กลุ่ม `iPhone`** — แอร์ Xiaomi หูฟัง Redmi ก็อยู่ในนั้น รายงานกลุ่ม iPhone จึงเฟ้อ | MIS-ERP |
+| **`statusissue` / `statusreceipt` ค่า 5 และ 6 แปลว่าอะไร** — เดาว่า Ordered / OnOrder ตามมาตรฐาน D365 ยังไม่ยืนยัน | MIS-ERP |
+| **DATALAKE มีมากกว่า `Transaction_FO` 13.7 ล้านแถว** — น่าจะเป็นรายการสถานะเปิด ยังไม่ได้พิสูจน์ | MIS-ERP |
+| **`bnn ▸ NOTHING SMARTPHONE` ต้นทุนรวม 46.7 พันล้านบาท** จาก 145 SKU — ตัวเลขเป็นไปไม่ได้ | MIS-ERP |
+| **บริษัทใน `tm_FinDimValueSet` ที่ไม่มีใน `Transaction_FO`** — `PRIME` `TFF` `ITEC` `C7H` `NOVUS` `SKH` `GIH` `ICI` คืออะไร | MIS-ERP |
 | ADLS Gen1 หรือ Gen2 · มี Azure Data Factory ไหม | Data Team |
 | AION DMS / EV7CORE / EVTRACKING คืออะไร · RPA ย้ายอะไร | Punt, Nut |
 | **Double7 / Co-Ture Shop / Dtac Shop ใช้ระบบอะไร** — ไม่พบชื่อเหล่านี้ในเอกสารต้นฉบับไฟล์ไหนเลย | — |

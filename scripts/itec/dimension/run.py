@@ -146,9 +146,27 @@ def score(df):
     if not GOLD_DONE.exists():
         sys.exit(f"ไม่พบ {GOLD_DONE}\n  กรอก gold_set_check.csv แล้วเซฟเป็นชื่อนี้ก่อน")
     g = pd.read_csv(GOLD_DONE, encoding="utf-8-sig", dtype=str).fillna("")
-    key = ["ItemId"] if "ItemId" in g.columns and g.ItemId.ne("").all() else FALLBACK_KEY
-    if key != ["ItemId"]:
-        print("⚠️ gold set ไม่มี ItemId — ใช้คีย์ 4 ช่องแทน อาจจับคู่ไม่ตรงบางแถว")
+    # ทิ้งแถวว่าง (เผลอเลื่อนเมาส์ใน Excel แล้วได้แถวเปล่าติดมา)
+    blank = g.ItemName.str.strip().eq("") if "ItemName" in g.columns else pd.Series(False, index=g.index)
+    if blank.any():
+        print(f"ข้ามแถวว่าง {int(blank.sum())} แถว")
+        g = g[~blank].reset_index(drop=True)
+
+    # ⚠️ Excel แปลงบาร์โค้ด EAN 13 หลักเป็นเลขวิทยาศาสตร์ตอนเปิด/เซฟ
+    #    "4960999036595" -> "4.961E+12"  ข้อมูลหายถาวร กู้จากไฟล์ไม่ได้
+    #    จึงใช้ ItemId เฉพาะเมื่อยังดีอยู่ ที่เหลือถอยไปคีย์ 4 ช่อง
+    key = FALLBACK_KEY
+    if "ItemId" in g.columns:
+        bad = g.ItemId.str.strip().eq("") | g.ItemId.str.contains("E+", regex=False)
+        if not bad.any():
+            key = ["ItemId"]
+        else:
+            print(f"⚠️ ItemId ใช้ไม่ได้ {int(bad.sum())}/{len(g)} แถว "
+                  f"({int(g.ItemId.str.contains('E+', regex=False).sum())} ตัวโดน Excel "
+                  f"แปลงเป็นเลขวิทยาศาสตร์) — ถอยไปใช้คีย์ 4 ช่อง")
+            print("   ครั้งหน้าเปิดไฟล์ด้วย Data > From Text/CSV แล้วตั้ง ItemId เป็น Text")
+    else:
+        print("⚠️ gold set ไม่มี ItemId — ใช้คีย์ 4 ช่องแทน")
 
     cur = df.drop_duplicates(key)
     m = g.merge(cur[key + ["Main_Product_Dimension", "Sub_Product_Dimension"]],

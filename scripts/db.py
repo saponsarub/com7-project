@@ -48,6 +48,22 @@ PROFILES = {
         "user_env": "K2_USER",
         "pwd_env": "K2_PWD",
     },
+    # 🆕 D365 F&O — transaction ของทุก BU รวมที่เดียว · กรองมาแล้ว
+    "fo": {
+        "ชื่อ": "D365 F&O — Transaction ทุก BU (เรียบเรียงแล้ว)",
+        "server": os.environ.get("FO_SERVER", "192.168.43.84"),
+        "database": os.environ.get("FO_DB", "PROJECT_1"),
+        "user_env": "FO_USER",
+        "pwd_env": "FO_PWD",
+    },
+    # ฐานต้นทางของ fo — ยังไม่เรียบเรียง ต้องกรอง SysSourceRef = FO เอง
+    "fo_raw": {
+        "ชื่อ": "D365 F&O ต้นทาง — tb_InventTrans",
+        "server": os.environ.get("FO_SERVER", "192.168.43.84"),
+        "database": os.environ.get("FO_RAW_DB", "syndpdev001"),
+        "user_env": "FO_USER",
+        "pwd_env": "FO_PWD",
+    },
 }
 
 

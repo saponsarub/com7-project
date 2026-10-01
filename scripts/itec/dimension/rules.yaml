@@ -1442,6 +1442,33 @@ type_from_platform:
   AirPods: Audio
   MacBook: Notebook
 category_map:
+  demo fs - smartphone:
+  - Smartphone
+  smartphone demo:
+  - Smartphone
+  demo fs - small appliance:
+  - HomeAppliance
+  small appliance demo:
+  - HomeAppliance
+  demo fs - home appliance:
+  - HomeAppliance
+  demo fs - audio & visual:
+  - Audio
+  demo fs - speaker:
+  - Speaker
+  demo fs - headphone:
+  - Audio
+  demo fs - notebook:
+  - Notebook
+  notebook demo:
+  - Notebook
+  demo fs - tablet:
+  - Tablet
+  tablet demo:
+  - Tablet
+  smartphone acc demo:
+  - Accessory
+  - Smart Phone
   Gaming Gear:
   - Accessory
   - PC
@@ -1529,6 +1556,28 @@ category_map:
   ทรัพย์สิน:
   - Accessory
   - ''
+subcategory_map:
+  health&sport demo:
+  - HealthSport
+  smart living demo:
+  - SmartHome
+  home automation demo:
+  - SmartHome
+  outdoor activities demo:
+  - SportOutdoor
+  gaming gear demo:
+  - Console
+  console and gaming gadget demo:
+  - Console
+  monitor demo:
+  - Monitor
+  camera demo:
+  - Camera
+  gadget demo:
+  - Accessory
+  demo sale apple acc watch:
+  - Strap
+  - Smart Watch
 category_force:
   APPLE SERVICE:
   - AppleServicePart
@@ -1755,6 +1804,7 @@ not_product:
 - Service
 - SparePart
 - Unknown
+- Operator Promo
 main_from_platform:
   MacBook:
     main: Mac
@@ -1781,6 +1831,9 @@ brand_force:
   incase: Case
 min_sub_rows: 300
 demo_as_main: true
+operator_promo_cats:
+- promo operator
+- รายการส่งเสริมการขาย
 platform_sub:
   iPhone:
     Case: iPhone Case
