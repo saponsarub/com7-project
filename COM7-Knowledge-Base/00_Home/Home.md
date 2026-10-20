@@ -27,6 +27,8 @@
 | ระบบค้าปลีก ITEC | [[ITEC Overview]] |
 | ระบบสินเชื่อ ITOS | [[ITOS Overview]] |
 | **หาจังหวัด/อำเภอ/ตำบล ของลูกหนี้ ITOS** | [[ITOS - Address & Geography]] |
+| **query ITOS — อยากได้อะไร ใช้ตารางไหน** | [[ITOS - Query Cookbook]] |
+| **ขนาดข้อมูล K2 + ITOS ถ้าย้ายไป S3 (Parquet · ไฟล์ฝัง 7 TB)** | [[K2 + ITOS - Storage Sizing]] |
 | ระบบฝั่ง EV | [[EV System Landscape]] |
 | ระบบที่ยังรู้น้อย (D365 · SAP B1 · iCare · Tech Trade · Synapse) | [[Other Systems]] |
 | **iCare Insurance ขายอะไร · เก็บข้อมูลอะไร** | [[iCare Insurance (ICI)]] |
@@ -70,12 +72,24 @@
 | เชื่อมเครือข่าย on-prem ↔ AWS | [[Network & VPN]] |
 | เขียน Glue job ยังไง | [[ETL & Spark]] |
 | **Glue ต่อ MSSQL / on-prem · Client VPN vs Site-to-Site** | [[Glue Connectivity]] |
+| **ย้ายข้อมูลจาก ADLS Gen2 / Azure Synapse ลง S3 · ทุกวิธี** | [[ADLS Gen2 to S3]] |
+| **ADLS → S3 แบบคลิกผ่าน console + ค่าใช้จ่าย** | [[ADLS Gen2 to S3 - Console Runbook]] |
+| **ทดสอบ Glue อ่าน ADLS (container staging)** | [[ADLS Gen2 to S3 - Glue Pilot (staging)]] |
+| **แผน EV7 Taxi tracking รายคัน (map matching · ตัดสัญญาณ · realtime)** | [[EV7 Taxi Tracking Map]] |
+| **สร้าง/เทรน/ใช้งาน AI — แชตบอต · tool · RAG · fine-tune (รวมทุกเรื่อง)** | [[AI-ML Index]] |
+| **ถามตอบภาษาไทยเรื่องรถแท็กซี่ (notebook Kaggle)** | [[EV7 Taxi - Q&A Notebook (Kaggle)]] |
+| **ประชุม Manager 12 ต.ค. — แนวทางทีม** | [[2026-10-12 Manager แนวทางทีม]] |
+| **ทบทวนราคา AWS Data Lake (สไลด์ sale) + คำถามที่ต้องถาม** | [[AWS Data Lake Proposal Review 2026-10]] |
+| **Glue job ที่รันอยู่จริงใน ap-southeast-7 · อะไรสั่งรัน · ปัญหาที่เจอ** | [[Glue Jobs (ap-southeast-7)]] |
 | รวมข้อมูล collection K2 + ITOS | [[Collection Union (K2 + ITOS)]] |
 | **แพ็ก Lambda ยังไง ทำไมต้อง build บน Linux** | [[Google Sheet to S3 (Lambda)]] |
 | อ่านโค้ด Lambda ทีละฟังก์ชัน | `docs/googlesheet-to-s3.md` → [[Google Sheet to S3 (Lambda)]] |
 | **flow เต็ม + แผนล่วงหน้าของ pipeline ชีต** | [[Google Sheet Pipeline]] |
 | **ตรวจว่า DMS full-load จบจริง · นับแถว Parquet โดยไม่อ่านข้อมูล** | [[DMS Full Load Validation (Lambda)]] |
 | **DMS เป็น full load จะหา change ยังไง · ผังจากทีม Data Engineering** | [[Snapshot Change Detection (ITEC DMS)]] |
+| **Reconcile pipeline (Terraform) — ทำให้ Iceberg ตรงกับ SQL Server โดยไม่มี CDC** | [[Reconcile Pipeline - Overview]] |
+| **arg / ตัวแปรแต่ละตัวมาจากไหน · sys.argv ของ Glue เก็บที่ไหน** | [[Reconcile Pipeline - Arguments & Variables]] |
+| deploy / ทดสอบ / ลบ reconcile pipeline · ปัญหาที่เจอ | [[Reconcile Pipeline - Runbook]] |
 | **ย้าย logic จำแนกสินค้า ITEC จาก SQL ไป pandas / Spark** | [[ITEC Item Category Mapping (SQL to Python)]] |
 | **งานจัดหมวดสินค้า ITEC — เริ่มที่นี่** | [[ITEC Category Toolkit]] |
 | **อธิบาย notebook ทีละ cell · YAML คืออะไร · ใช้โมเดลอะไร ทำไม** | [[ITEC Category Toolkit]] |
@@ -87,6 +101,7 @@
 | อยากรู้ | เปิด |
 |---|---|
 | ตอนนี้โครงการถึงไหน | [[Current Status]] |
+| **ผลงานแรกให้ CBO: map ลูกค้าแต่ละ BU + customer main (ธ.ค. 2026)** | [[Customer Main MVP]] |
 | ตกลงอะไรไปแล้ว | [[Decisions]] |
 | **ติดอะไรอยู่ ใครต้องตอบ** | [[Issue Index]] |
 | ความเสี่ยงระดับโครงการ | [[Open Questions & Risks]] |
@@ -110,7 +125,7 @@
 01_Business/    Group Structure · UFUND · Retail · EV Business
 02_System/      System Inventory
                 ├── UFUND (K2 + ITOS)/    K2 Overview · K2 - *.md (12) · ITOS Overview
-                │                         ITOS - Address & Geography
+                │                         ITOS - Address & Geography · ITOS - Query Cookbook
                 ├── Retail (ITEC + CRM)/  ITEC Overview · ITEC - Data Dictionary · ITEC - Query Cookbook
                 │                         CRM Overview · CRM - Data Dictionary
                 ├── EV/                   EV Systems
@@ -120,13 +135,15 @@
 03_Data/        Customer Identity · Consent & PDPA · Data Standardization · Customer 360 · K2 Field Survey
 04_DataLake/    Architecture · AWS Services · Network & VPN · Decisions · Redshift · Glue Crawler
                 Snapshot Change Detection (ITEC DMS)
+                └── Reconcile Pipeline (Terraform)/  Overview · Arguments & Variables · Source Simulator
+                                                     Terraform Modules · Glue Jobs · Orchestration & Alerts · Runbook
 05_ETL/         ETL & Spark · Collection Union (K2 + ITOS) · Google Sheet to S3 (Lambda)
                 ITEC Item Category Mapping (SQL to Python)
                 ITEC Flag & Category Review Guide · ITEC Category Toolkit
                 ITEC Model - Notebook Explained
                 ITEC Model - Fine-tune Design
                 Google Sheet to S3 - Code Walkthrough
-                DMS Full Load Validation (Lambda)
+                DMS Full Load Validation (Lambda) · ADLS Gen2 to S3 (+ Console Runbook)
 06_Project/     K2 + ITOS Integration · GI + EV7 → 7Club · OD6 Collection Delivery
                 Data Framework Scope · SSOT Roadmap · K2 Termination Automation
                 Google Sheet Pipeline · Warehouse Consultant Data Request
@@ -136,6 +153,8 @@
                 Analytics & AI · Athena Benchmark · EV China Benchmark
                 Power BI PBIP Cookbook · Environment Setup
 09_Issues/      คำถามที่ยังไม่มีคำตอบ · งานค้าง · ความเสี่ยง
+10_AI-ML/       AI-ML Index · How AI Assistant Works · Train vs Prompting · Text-to-SQL Fine-tune
+                EV7 Taxi Q&A Notebook / Design · ITEC Model - Run on EC2 · BaNANA IT AI Assistant
 99_Archive/     ของเก่าที่เลิกใช้แล้ว
 ```
 

@@ -121,9 +121,30 @@ prefix `tm_` / `tb_` น่าจะเป็น convention master / transaction
 **Source ที่ป้อนเข้ามา** ตาม PoC review:
 > "ปัจจุบันข้อมูลจาก SharePoint 365 / Azure Data Lake Storage ใช้ Azure Synapse"
 
+## จากคู่มือ Alphametrics (อ่านละเอียด 2026-10-08)
+
+| ส่วน | รายละเอียด |
+|---|---|
+| Workspace | `synw-com7dw-dev` |
+| Serverless SQL | `synw-com7dw-dev-ondemand.sql.azuresynapse.net` · lake database `dataverse_com7_…` = ตาราง D365 F&O จาก **Azure Synapse Link** |
+| Dedicated SQL pool | **`syndpdev001` คือชื่อ dedicated SQL pool** (Azure SQL Data Warehouse) บน `synw-com7dw-dev.sql.azuresynapse.net` · ตั้งเวลาเปิด **จ.–ศ. 09:00–18:00 · ส.–อา. ปิด** |
+| ADLS | **Gen2** · เปิดดูผ่าน Data > Linked > Azure Data Lake Storage Gen2 · Synapse Link profile ชื่อ `stcom7dw001` (น่าจะเป็นชื่อ storage account `[อนุมาน]`) |
+| Schema `raws` | `FO_` D365 F&O · `BC_` **Dynamics 365 Business Central (LS Retail)** · `ITEC_` · `MT_` ไฟล์ master จาก SharePoint |
+| Pipeline | Synapse pipeline (ไม่ใช่ ADF แยก) · ขับด้วย control table `cfg._bcls_control_table` · `cfg._itec_control_table` · `cfg._master_control_table` · ดึงแบบ watermark (`timestamp` / row version) |
+| SharePoint | `/sites/COM7_Team/Shared Documents/Data Lake Source file/…` |
+| สิทธิ์ | Entra ID (Synapse Administrator / Synapse SQL Administrator) + SQL login แยกราย BU (`sqluser_com7` `sqluser_dou7` `sqluser_ppw` `sqluser_lor` `sqluser_drph` `sqluser_bnn` `sqluser_gi` `sqluser_nov` `sqluser_pss` `sqluser_skh` `sqluser_c7h`) + **Row-Level Security ตาม Company** |
+| Source control | Azure DevOps (POWERBI) |
+
+**คำตอบใหม่ที่ได้**
+- **Double7 ใช้ Business Central LS Retail** — ตัวอย่างตาราง `raws.BC_D7_Trans_Sales_Entry` · ต้นทาง `D7$Item` → [[Customer Main MVP]]
+- ADLS เป็น **Gen2** · ใช้ **Synapse pipeline** · `syndpdev001` คือ dedicated pool ในชื่อ workspace `-dev`
+- ⚠️ เอกสาร training มี **รหัสผ่าน SQL login ทุก BU เป็นข้อความธรรมดา** → [[Source System Issues]]
+
 ## Migration approach
 
 > "สำรวจการใช้งานระบบเดิมก่อนว่าใช้ Service และ Function ใดบ้าง จากนั้นนำมาเปรียบเทียบกับ AWS Services ที่เหมาะสม เช่น S3, Glue, Athena และ Redshift และออกแบบ Flow ใหม่"
+
+**วิธีย้าย ADLS Gen2 → S3 ทุกวิธี (DataSync · Glue · data flow · rclone · Python · Synapse SQL · ต้นทางตรง)** → [[ADLS Gen2 to S3]]
 
 ## Priority
 

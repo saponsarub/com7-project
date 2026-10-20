@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EV7 Smart Taxi Monitor</title>
+<link rel="icon" href="__LOGO_DATA_URI__">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/deck.gl@9.0.38/dist.min.js"></script>
+<style>
+/* ── tokens ──────────────────────────────────────────────────────────── */
+:root{
+  --bg:#eef2f0; --panel:#ffffff; --panel-2:#f6f8f7; --line:#dfe5e2; --line-2:#cbd4cf;
+  --ink:#10231a; --ink-2:#4a5a52; --ink-3:#7d8b84;
+  --green:#00a332; --green-d:#00601c; --green-l:#e3f4e8;
+  --blue:#0d93d6;  --blue-d:#0a5f8c;  --blue-l:#e1f2fb;
+  --red:#d93a40;   --red-l:#fbe7e8;
+  --amber:#c98a00; --amber-l:#fbf1d9;
+  --slate:#8a97a6;
+  --shadow:0 1px 2px rgba(16,35,26,.06),0 4px 16px rgba(16,35,26,.06);
+  --r:10px;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  --sans:'IBM Plex Sans Thai','Sarabun',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:13px;overflow:hidden}
+button,select,input{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ── shell ───────────────────────────────────────────────────────────── */
+.app{display:grid;grid-template-rows:56px 1fr auto;grid-template-columns:372px 1fr;height:100vh}
+header{grid-column:1/3;display:flex;align-items:center;gap:16px;padding:0 16px;background:var(--panel);border-bottom:1px solid var(--line);z-index:5}
+header .brand{display:flex;align-items:center;gap:12px;min-width:0}
+header .brand img{height:30px;width:auto;display:block}
+header .brand .t{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+header .brand b{font-size:15px;font-weight:700;letter-spacing:.01em;white-space:nowrap}
+header .brand small{font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpis{display:flex;gap:6px;margin-left:auto;flex-wrap:nowrap;overflow-x:auto}
+.kpi{display:flex;flex-direction:column;align-items:flex-start;padding:4px 12px;border-left:1px solid var(--line);min-width:84px}
+.kpi:first-child{border-left:0}
+.kpi .k{font-size:10.5px;color:var(--ink-3);letter-spacing:.02em;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.kpi .v{font-family:var(--mono);font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+
+aside{grid-row:2/3;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;z-index:4}
+main{position:relative;min-width:0;min-height:0}
+#map{position:absolute;inset:0}
+footer{grid-column:1/3;background:var(--panel);border-top:1px solid var(--line);z-index:5}
+
+/* ── sidebar ─────────────────────────────────────────────────────────── */
+.filters{padding:12px 14px 10px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.frow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.frow>label{font-size:11px;color:var(--ink-3);width:52px;flex:none}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{border:1px solid var(--line-2);background:var(--panel);border-radius:999px;padding:2px 10px;font-size:12px;display:inline-flex;align-items:center;gap:6px;line-height:20px}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip.area{background:var(--green-l);border-color:#bfe3ca;color:var(--green-d)}
+.chip.area button{border:0;background:none;color:inherit;font-size:13px;line-height:1;padding:0 0 0 2px}
+.search{position:relative;flex:1;min-width:0}
+.search input{width:100%;border:1px solid var(--line-2);border-radius:8px;padding:6px 10px;background:var(--panel)}
+.search .dd{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--panel);border:1px solid var(--line-2);border-radius:8px;box-shadow:var(--shadow);max-height:280px;overflow:auto;z-index:20;display:none}
+.search .dd.open{display:block}
+.search .dd div{padding:6px 10px;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.search .dd div:hover,.search .dd div.on{background:var(--panel-2)}
+.search .dd small{color:var(--ink-3)}
+
+.tabs{display:flex;border-bottom:1px solid var(--line);padding:0 8px}
+.tabs button{flex:1 1 auto;border:0;background:none;padding:10px 2px 9px;font-weight:600;color:var(--ink-3);border-bottom:2px solid transparent;font-size:12.5px;display:flex;justify-content:center;gap:5px;align-items:center;white-space:nowrap}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--green)}
+.tabs .badge{font-family:var(--mono);font-size:10.5px;background:var(--red-l);color:var(--red);border-radius:999px;padding:0 6px;line-height:16px}
+.pane{flex:1;overflow:auto;padding:14px;display:none;min-height:0}
+.pane.on{display:flex;flex-direction:column;gap:14px}
+.sec h3{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sec h3 span{text-transform:none;letter-spacing:0;font-weight:500}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.card{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
+.card .k{font-size:11px;color:var(--ink-3)}
+.card .v{font-family:var(--mono);font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}
+.card .s{font-size:11px;color:var(--ink-2);margin-top:2px}
+.card.alert{background:var(--red-l);border-color:#f3c9cb}
+.card.alert .v{color:var(--red)}
+.note{font-size:11.5px;color:var(--ink-2);background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;line-height:1.55}
+.note b{color:var(--ink)}
+.ctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:none;padding:5px 10px;font-size:12px;border-left:1px solid var(--line)}
+.seg button:first-child{border-left:0}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+select.sel{border:1px solid var(--line-2);border-radius:8px;padding:5px 8px;background:var(--panel)}
+.btn{border:1px solid var(--line-2);background:var(--panel);border-radius:8px;padding:5px 10px;font-weight:500}
+.btn:hover{background:var(--panel-2)}
+.btn.pri{background:var(--green);border-color:var(--green);color:#fff}
+
+/* bars list */
+.bars{display:flex;flex-direction:column;gap:2px}
+.bar{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:4px 6px;border-radius:6px;cursor:pointer;position:relative}
+.bar:hover{background:var(--panel-2)}
+.bar.on{background:var(--green-l)}
+.bar .n{position:relative;z-index:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .n small{color:var(--ink-3);margin-left:4px}
+.bar .c{position:relative;z-index:1;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12px}
+.bar i{position:absolute;left:0;top:3px;bottom:3px;background:var(--green-l);border-radius:4px;z-index:0}
+.bar.on i{background:#c6e9d1}
+.bar.red i{background:var(--red-l)}
+
+/* table */
+table.t{width:100%;border-collapse:collapse;font-size:12px}
+table.t th{position:sticky;top:-14px;background:var(--panel);text-align:left;font-weight:600;color:var(--ink-3);font-size:11px;padding:6px 6px;border-bottom:1px solid var(--line);cursor:pointer;white-space:nowrap;user-select:none}
+table.t th.r,table.t td.r{text-align:right}
+table.t th[aria-sort]::after{content:" ↓";color:var(--ink)}
+table.t th[aria-sort=ascending]::after{content:" ↑"}
+table.t td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t td.r{font-family:var(--mono);font-variant-numeric:tabular-nums}
+table.t tr{cursor:pointer}
+table.t tbody tr:hover{background:var(--panel-2)}
+table.t tr.on{background:var(--blue-l)}
+.sev{display:inline-block;font-size:10.5px;border-radius:4px;padding:0 5px;line-height:17px;font-weight:600;white-space:nowrap}
+.sev.far{background:var(--red-l);color:var(--red)}
+.sev.near{background:var(--amber-l);color:var(--amber)}
+.sev.all{background:#efe5f7;color:#7a3fa6}
+.plate{font-family:var(--mono);font-weight:600;white-space:nowrap}
+.muted{color:var(--ink-3)}
+
+/* vehicle card */
+.vhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.vhead .p{font-family:var(--mono);font-size:20px;font-weight:600}
+.vhead .m{font-size:11px;color:var(--ink-3);margin-top:2px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:12px}
+.kv span:nth-child(even){font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.exlist{display:flex;flex-direction:column;gap:4px}
+.ex{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:6px 8px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--panel)}
+.ex:hover{border-color:var(--line-2);background:var(--panel-2)}
+canvas.spark{width:100%;height:56px;display:block}
+.vlist{display:flex;flex-direction:column}
+.vrow{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:6px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.vrow:hover{background:var(--panel-2)}
+.vrow.on{background:var(--blue-l)}
+
+/* ── map overlays ────────────────────────────────────────────────────── */
+.mapctl{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:8px;z-index:3}
+.mbox{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.mbox .lbl{font-size:10.5px;color:var(--ink-3);font-weight:600;letter-spacing:.05em}
+.legend{position:absolute;left:12px;bottom:28px;z-index:3;min-width:200px}
+.legend .row{display:flex;align-items:center;gap:8px;font-size:12px}
+.ramp{display:flex;height:8px;border-radius:3px;overflow:hidden;margin-top:4px}
+.ramp i{flex:1}
+.rampl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);font-family:var(--mono)}
+.zoomto{position:absolute;right:12px;top:12px;z-index:3;display:flex;gap:6px}
+.loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(238,242,240,.9);z-index:30;flex-direction:column;gap:10px;font-size:13px;color:var(--ink-2)}
+.loading.hide{display:none}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--green);border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+.deck-tooltip{font-family:var(--sans)!important;font-size:12px!important;background:#10231a!important;color:#fff!important;border-radius:8px!important;padding:8px 10px!important;box-shadow:var(--shadow)!important;max-width:280px}
+.deck-tooltip b{font-family:var(--mono)}
+.deck-tooltip .tt-k{color:#9fb3a8}
+
+/* ── timeline ────────────────────────────────────────────────────────── */
+.tl{display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:8px 16px 10px}
+.play{width:38px;height:38px;border-radius:50%;border:0;background:var(--green);color:#fff;display:grid;place-items:center;font-size:15px}
+.play:hover{background:var(--green-d)}
+.clock{display:flex;flex-direction:column;line-height:1.15;min-width:150px}
+.clock .d{font-size:11px;color:var(--ink-3)}
+.clock .h{font-family:var(--mono);font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.chartwrap{position:relative;height:64px;min-width:0}
+#tlc{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;touch-action:none}
+.tlright{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.tlright .ctl{justify-content:flex-end}
+.rng{font-size:11px;color:var(--ink-2);font-family:var(--mono);white-space:nowrap}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr;grid-template-rows:56px 46vh 1fr auto}
+  aside{grid-row:3/4;border-right:0;border-top:1px solid var(--line)}
+  main{grid-row:2/3}
+  header,footer{grid-column:1/2}
+  .kpis .kpi:nth-child(n+4){display:none}
+  .tl{grid-template-columns:auto 1fr;gap:10px}
+  .tl .clock{min-width:0}
+  .tl .chartwrap{grid-column:1/3}
+  .tlright{grid-column:1/3;align-items:stretch}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <img src="__LOGO_DATA_URI__" alt="EV7">
+    <div class="t"><b>Smart Taxi Monitor</b><small id="subtitle">กำลังโหลดข้อมูล…</small></div>
+  </div>
+  <div class="kpis" aria-label="สถานะ ณ เวลาที่เลือก">
+    <div class="kpi"><span class="k">ออนไลน์</span><span class="v" id="kOnline">–</span></div>
+    <div class="kpi"><span class="k"><i class="dot" style="background:var(--blue)"></i>มีผู้โดยสาร</span><span class="v" id="kHired">–</span></div>
+    <div class="kpi"><span class="k"><i class="dot" style="background:var(--green)"></i>ว่าง · วิ่ง</span><span class="v" id="kMove">–</span></div>
+    <div class="kpi"><span class="k"><i class="dot" style="background:var(--slate)"></i>จอด</span><span class="v" id="kPark">–</span></div>
+    <div class="kpi"><span class="k">อัตรามีผู้โดยสาร</span><span class="v" id="kUtil">–</span></div>
+    <div class="kpi"><span class="k"><i class="dot" style="background:var(--red)"></i>อยู่นอกเขต</span><span class="v" id="kOut" style="color:var(--red)">–</span></div>
+  </div>
+</header>
+
+<aside>
+  <div class="filters">
+    <div class="frow">
+      <div class="search" id="qbox">
+        <input id="q" type="search" placeholder="ค้นหาทะเบียน · VIN · จังหวัด · เขต" autocomplete="off" aria-label="ค้นหา">
+        <div class="dd" id="qdd" role="listbox"></div>
+      </div>
+    </div>
+    <div class="frow"><label>ศูนย์</label><div class="chips" id="fCenter"></div></div>
+    <div class="frow"><label>สถานะ</label><div class="chips" id="fStatus"></div></div>
+    <div class="frow" id="areaRow" style="display:none"><label>พื้นที่</label><div class="chips" id="fArea"></div></div>
+  </div>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="ov">ภาพรวม</button>
+    <button role="tab" aria-selected="false" data-tab="viol">นอกเขต <span class="badge" id="violBadge">–</span></button>
+    <button role="tab" aria-selected="false" data-tab="area">พื้นที่</button>
+    <button role="tab" aria-selected="false" data-tab="veh">รถ</button>
+  </div>
+
+  <!-- ภาพรวม -->
+  <div class="pane on" id="p-ov">
+    <div class="sec">
+      <h3>ในช่วงเวลาที่เลือก <span id="ovRange" class="num"></span></h3>
+      <div class="grid2">
+        <div class="card"><div class="k">รถที่มีสัญญาณ</div><div class="v" id="ovActive">–</div><div class="s" id="ovActiveS"></div></div>
+        <div class="card"><div class="k">อัตรามีผู้โดยสาร</div><div class="v" id="ovUtil">–</div><div class="s">สัดส่วนเวลาที่ออนไลน์</div></div>
+        <div class="card alert"><div class="k">ออกนอกเขต</div><div class="v" id="ovViol">–</div><div class="s" id="ovViolS"></div></div>
+        <div class="card"><div class="k">ขาดสัญญาณ</div><div class="v" id="ovOff">–</div><div class="s">ไม่มีจุดในช่วงนี้</div></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>จังหวัดที่รถอยู่นานสุด <span>ชั่วโมงรวม</span></h3>
+      <div class="bars" id="ovProv"></div>
+    </div>
+    <div class="sec">
+      <h3>คุณภาพข้อมูล</h3>
+      <div class="note" id="dq"></div>
+    </div>
+  </div>
+
+  <!-- นอกเขต -->
+  <div class="pane" id="p-viol">
+    <div class="sec">
+      <h3>เขตที่อนุญาต</h3>
+      <div class="ctl">
+        <select class="sel" id="zone" aria-label="เขตที่อนุญาต">
+          <option value="bkk">กรุงเทพฯ เท่านั้น</option>
+          <option value="bkk_air">กรุงเทพฯ + สุวรรณภูมิ (อ.บางพลี)</option>
+          <option value="metro">กรุงเทพฯ + ปริมณฑล</option>
+        </select>
+        <select class="sel" id="minDur" aria-label="นานอย่างน้อย">
+          <option value="0">ทุกครั้ง</option>
+          <option value="10" selected>≥ 10 นาที</option>
+          <option value="30">≥ 30 นาที</option>
+          <option value="60">≥ 1 ชม.</option>
+          <option value="180">≥ 3 ชม.</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card alert"><div class="k">รถที่ออกนอกเขต</div><div class="v" id="vCars">–</div><div class="s" id="vCarsS"></div></div>
+      <div class="card"><div class="k">จำนวนครั้ง · เวลารวม</div><div class="v" id="vTrips">–</div><div class="s" id="vHours"></div></div>
+    </div>
+    <div class="sec">
+      <h3>ไปจังหวัดไหน <span>จำนวนรถ</span></h3>
+      <div class="bars" id="vProv"></div>
+    </div>
+    <div class="sec">
+      <h3>รายคัน <span><button class="btn" id="csv">ดาวน์โหลด CSV</button></span></h3>
+      <div class="ctl" style="margin-bottom:8px">
+        <div class="seg" id="sevSeg">
+          <button aria-pressed="true" data-v="">ทั้งหมด</button>
+          <button aria-pressed="false" data-v="far">ต่างจังหวัด</button>
+          <button aria-pressed="false" data-v="near">ปริมณฑล</button>
+          <button aria-pressed="false" data-v="all">อยู่นอกตลอด</button>
+        </div>
+      </div>
+      <table class="t" id="vTable">
+        <thead><tr>
+          <th data-k="plate">ทะเบียน</th>
+          <th data-k="sev">ระดับ</th>
+          <th data-k="n" class="r">ครั้ง</th>
+          <th data-k="hrs" class="r" aria-sort="descending">ชม.รวม</th>
+          <th data-k="km" class="r">ไกลสุด</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="muted" id="vMore" style="padding:8px 0;font-size:11.5px"></div>
+    </div>
+  </div>
+
+  <!-- พื้นที่ -->
+  <div class="pane" id="p-area">
+    <div class="sec">
+      <h3>ระดับพื้นที่</h3>
+      <div class="ctl">
+        <div class="seg" id="lvSeg">
+          <button aria-pressed="true" data-v="prov">จังหวัด</button>
+          <button aria-pressed="false" data-v="dist">อำเภอ / เขต</button>
+        </div>
+        <div class="seg" id="mtSeg">
+          <button aria-pressed="true" data-v="veh">จำนวนรถ</button>
+          <button aria-pressed="false" data-v="hrs">ชั่วโมงรวม</button>
+          <button aria-pressed="false" data-v="hired">ชม.มีผู้โดยสาร</button>
+        </div>
+      </div>
+    </div>
+    <div class="note">คลิกชื่อพื้นที่หรือคลิกบนแผนที่ เพื่อกรองเฉพาะพื้นที่นั้น · เลือกได้หลายพื้นที่</div>
+    <div class="sec">
+      <h3>อันดับพื้นที่ <span id="areaTot"></span></h3>
+      <div class="bars" id="areaList"></div>
+    </div>
+  </div>
+
+  <!-- รถ -->
+  <div class="pane" id="p-veh">
+    <div id="vehCard"></div>
+    <div class="sec">
+      <h3>รถตามตัวกรอง <span id="vehCount"></span></h3>
+      <div class="ctl" style="margin-bottom:6px">
+        <select class="sel" id="vehSort" aria-label="เรียงตาม">
+          <option value="km">ระยะทางมากสุด</option>
+          <option value="hired">เวลามีผู้โดยสารมากสุด</option>
+          <option value="idle">จอดนานสุด</option>
+          <option value="off">ขาดสัญญาณนานสุด</option>
+        </select>
+      </div>
+      <div class="vlist" id="vehList"></div>
+    </div>
+  </div>
+</aside>
+
+<main>
+  <div id="map" role="application" aria-label="แผนที่ตำแหน่งรถ"></div>
+  <div class="mapctl">
+    <div class="mbox">
+      <span class="lbl">จุดบนแผนที่</span>
+      <div class="seg" id="ptSeg">
+        <button aria-pressed="true" data-v="now">ณ เวลา</button>
+        <button aria-pressed="false" data-v="range">ทุกจุดในช่วง</button>
+        <button aria-pressed="false" data-v="none">ซ่อน</button>
+      </div>
+      <label class="ctl" id="trailWrap" style="font-size:12px">ร่องรอยย้อนหลัง
+        <select class="sel" id="trail"><option value="0">ไม่แสดง</option><option value="15">15 นาที</option><option value="30" selected>30 นาที</option><option value="60">1 ชม.</option></select>
+      </label>
+    </div>
+    <div class="mbox">
+      <span class="lbl">สีพื้นที่</span>
+      <div class="seg" id="chSeg">
+        <button aria-pressed="true" data-v="none">ไม่แสดง</button>
+        <button aria-pressed="false" data-v="on">ตามแท็บพื้นที่</button>
+      </div>
+    </div>
+  </div>
+  <div class="zoomto">
+    <div class="seg"><button aria-pressed="true" data-z="bkk">กรุงเทพฯ</button><button aria-pressed="false" data-z="th">ทั้งประเทศ</button></div>
+    <div class="seg" id="bmSeg"><button aria-pressed="true" data-v="map">แผนที่</button><button aria-pressed="false" data-v="sat">ดาวเทียม</button></div>
+  </div>
+  <div class="mbox legend" id="legend"></div>
+  <div class="loading" id="loading"><div class="spin"></div><div id="loadMsg">กำลังโหลดข้อมูล…</div></div>
+</main>
+
+<footer>
+  <div class="tl">
+    <button class="play" id="play" aria-label="เล่น">▶</button>
+    <div class="clock"><span class="d" id="clkD">–</span><span class="h" id="clkH">--:--</span></div>
+    <div class="chartwrap"><canvas id="tlc" aria-label="ไทม์ไลน์ ลากเพื่อเลือกช่วง คลิกเพื่อเลื่อนเวลา"></canvas></div>
+    <div class="tlright">
+      <div class="ctl">
+        <span class="muted" style="font-size:11px">ความเร็ว</span>
+        <div class="seg" id="spdSeg">
+          <button aria-pressed="false" data-v="60">1 นาที/วิ</button>
+          <button aria-pressed="true" data-v="600">10 นาที/วิ</button>
+          <button aria-pressed="false" data-v="1800">30 นาที/วิ</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <div class="seg" id="rngSeg"></div>
+        <span class="rng" id="rngTxt"></span>
+      </div>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════
+   ค่าตั้ง
+   ══════════════════════════════════════════════════════════════════════ */
+const CFG = {
+  STALE_MIN: 15,          // จุดล่าสุดเก่ากว่านี้ = ไม่ออนไลน์ ณ เวลานั้น
+  GAP_MIN: 30,            // ช่องว่างระหว่างจุดเกินนี้ = ตัดเป็นคนละช่วง
+  MOVING_KMH: 5,          // เร็วกว่านี้ = กำลังวิ่ง
+  BKK_CENTER: [100.5018, 13.7563],
+  CENTER_NAMES: { '0a': 'ศูนย์ 0a', 'yF': 'ศูนย์ yF', 'ux': 'ศูนย์ ux' },  // ⚠️ ยังไม่ทราบชื่อจริง
+  ZONES: {
+    bkk:     { prov: ['TH10'], dist: [] },
+    bkk_air: { prov: ['TH10'], dist: ['TH1103'] },           // TH1103 อ.บางพลี = สุวรรณภูมิ (TH1102 คือบางบ่อ)
+    metro:   { prov: ['TH10', 'TH11', 'TH12', 'TH13', 'TH73', 'TH74'], dist: [] },
+  },
+  METRO: ['TH11', 'TH12', 'TH13', 'TH73', 'TH74'],           // ปริมณฑล
+  BASEMAP: 'https://tiles.openfreemap.org/styles/positron',
+};
+const COL = {
+  hired: [13, 147, 214], vacant: [0, 163, 50], park: [138, 151, 166], nosig: [194, 201, 209],
+  red: [217, 58, 64], blue: [13, 147, 214],
+};
+const RAMP = ['#e3f4e8', '#b9e3c5', '#86cf9b', '#4fb56f', '#1f9148', '#0b6e30', '#00491c'];
+
+/* ══════════════════════════════════════════════════════════════════════
+   แหล่งข้อมูล
+   ตอนนี้: ฝังในไฟล์ (สร้างโดย scripts/taxi/build_dashboard.py)
+   วันหน้า: ให้ API คืนโครงสร้างเดียวกัน แล้วสลับ DataSource.mode = 'api'
+     GET {base}/meta?from&to      -> { meta, vehicles, areas, dtype }
+     GET {base}/cols/{name}?from&to -> binary (gzip) ตาม dtype
+     GET {base}/geo/{prov|dist}   -> GeoJSON (gzip)
+   ══════════════════════════════════════════════════════════════════════ */
+const EMBEDDED = /*__EMBEDDED_DATA__*/null;
+
+const DataSource = {
+  mode: 'embedded',
+  base: '',
+  async load(progress) {
+    if (this.mode === 'embedded') return decodeEmbedded(EMBEDDED, progress);
+    throw new Error('ยังไม่ได้ต่อ API — ดูคอมเมนต์ที่ DataSource');
+  },
+};
+
+async function b64gunzip(b64) {
+  const blob = await (await fetch('data:application/octet-stream;base64,' + b64)).blob();
+  const ds = blob.stream().pipeThrough(new DecompressionStream('gzip'));
+  return await new Response(ds).arrayBuffer();
+}
+const TYPED = { u8: Uint8Array, u16: Uint16Array, f32: Float32Array };
+async function decodeEmbedded(E, progress) {
+  if (!E) throw new Error('ไม่มีข้อมูลฝังในไฟล์');
+  const cols = {};
+  const names = Object.keys(E.cols);
+  for (let i = 0; i < names.length; i++) {
+    progress(`ถอดข้อมูล ${names[i]} (${i + 1}/${names.length})`);
+    cols[names[i]] = new TYPED[E.dtype[names[i]]](await b64gunzip(E.cols[names[i]]));
+  }
+  progress('โหลดขอบเขตพื้นที่');
+  const dec = new TextDecoder();
+  const geo = {
+    prov: JSON.parse(dec.decode(await b64gunzip(E.geo.prov))),
+    dist: JSON.parse(dec.decode(await b64gunzip(E.geo.dist))),
+  };
+  return { meta: E.meta, vehicles: E.vehicles, areas: E.areas, cols, geo };
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   สถานะ
+   ══════════════════════════════════════════════════════════════════════ */
+const S = {
+  T: 0, a: 0, b: 0, playing: false, speed: 600,
+  pt: 'now', trail: 30, choro: false, level: 'prov', metric: 'veh',
+  centers: new Set(), status: new Set(['hired', 'vacant', 'park']),
+  areas: new Set(),            // คีย์ 'p:<idx>' หรือ 'd:<idx>'
+  sel: -1, zone: 'bkk', minDur: 10, sev: '', sortK: 'hrs', sortDir: -1, vehSort: 'km',
+};
+let D, N, NV, PROV, DIST, distProv, t0ms;
+let POS, TT, SPD, FLG, DI, VV, DUR;           // คอลัมน์จุด
+let MASK, maskVer = 0;                        // ผ่านตัวกรองไหม (ไม่รวมเวลา)
+let EXC = [], EXC_BY_V = new Map(), VSTAT = null;
+let deckOverlay, map;
+
+const $ = s => document.querySelector(s);
+const fmt = n => n == null || isNaN(n) ? '–' : Math.round(n).toLocaleString('th-TH');
+const fmt1 = n => n == null || isNaN(n) ? '–' : n.toLocaleString('th-TH', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
+const pct = x => isNaN(x) ? '–' : (x * 100).toFixed(0) + '%';
+const TH_MON = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+function tDate(t) { return new Date(t0ms + t * 1000); }
+function fDay(t) { const d = tDate(t); return `${d.getDate()} ${TH_MON[d.getMonth()]} ${d.getFullYear() + 543}`; }
+function fHM(t) { const d = tDate(t); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+function fDT(t) { const d = tDate(t); return `${d.getDate()} ${TH_MON[d.getMonth()]} ${fHM(t)}`; }
+function fDur(sec) { const m = Math.round(sec / 60); if (m < 60) return m + ' นาที'; const h = Math.floor(m / 60); return h + ' ชม.' + (m % 60 ? ' ' + (m % 60) + ' น.' : ''); }
+function hav(lon1, lat1, lon2, lat2) {
+  const r = Math.PI / 180, a = Math.sin((lat2 - lat1) * r / 2) ** 2 + Math.cos(lat1 * r) * Math.cos(lat2 * r) * Math.sin((lon2 - lon1) * r / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(a));
+}
+function status(i) {      // สถานะของจุด i
+  if (FLG[i] & 2) return 'nosig';
+  if (FLG[i] & 1) return 'hired';
+  return SPD[i] >= CFG.MOVING_KMH ? 'vacant' : 'park';
+}
+function areaName(key) {
+  const [k, i] = key.split(':'); const j = +i;
+  return k === 'p' ? PROV[j].th : DIST[j].th + ' · ' + PROV[distProv[j]].th;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   เตรียมข้อมูล
+   ══════════════════════════════════════════════════════════════════════ */
+function prepare(data) {
+  D = data;
+  const c = D.cols;
+  POS = c.pos; TT = c.t; SPD = c.spd; FLG = c.flg; DI = c.dist; VV = c.v;
+  N = TT.length; NV = D.vehicles.vin.length;
+  PROV = D.areas.prov; DIST = D.areas.dist;
+  distProv = new Uint8Array(DIST.length);
+  DIST.forEach((d, i) => distProv[i] = d.p);
+  t0ms = new Date(D.meta.t0).getTime();
+  // เวลาที่จุดแต่ละจุด "แทน" = ถึงจุดถัดไปของคันเดียวกัน (ไม่เกิน 10 นาที)
+  DUR = new Float32Array(N);
+  for (let v = 0; v < NV; v++) {
+    const s = D.vehicles.start[v], n = D.vehicles.count[v];
+    for (let k = 0; k < n; k++) {
+      const i = s + k;
+      DUR[i] = k + 1 < n ? Math.min(TT[i + 1] - TT[i], 600) : 300;
+    }
+  }
+  S.a = 0; S.b = D.meta.tmax; S.T = Math.min(S.b, 3600 * 3);
+}
+
+/* ตัวกรองที่ไม่เกี่ยวกับเวลา → MASK ต่อจุด */
+function areaMatchDist(dIdx) {
+  if (!S.areas.size) return true;
+  if (dIdx === 65535) return false;
+  return S.areas.has('d:' + dIdx) || S.areas.has('p:' + distProv[dIdx]);
+}
+function vehPass(v) {
+  if (S.centers.size && !S.centers.has(D.vehicles.center[v])) return false;
+  return true;
+}
+function rebuildMask() {
+  MASK = new Uint8Array(N);
+  const st = S.status;
+  for (let v = 0; v < NV; v++) {
+    if (!vehPass(v)) continue;
+    const s = D.vehicles.start[v], e = s + D.vehicles.count[v];
+    for (let i = s; i < e; i++) {
+      const sx = status(i);
+      if (sx !== 'nosig' && !st.has(sx)) continue;
+      if (!areaMatchDist(DI[i])) continue;
+      MASK[i] = 1;
+    }
+  }
+  maskVer++;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   วิเคราะห์ออกนอกเขต
+   ══════════════════════════════════════════════════════════════════════ */
+function zoneSets() {
+  const z = CFG.ZONES[S.zone];
+  const pIdx = new Set(z.prov.map(pc => PROV.findIndex(p => p.pc === pc)));
+  const dIdx = new Set(z.dist.map(pc => DIST.findIndex(d => d.pc === pc)));
+  return { pIdx, dIdx };
+}
+function computeExcursions() {
+  const { pIdx, dIdx } = zoneSets();
+  const metro = new Set(CFG.METRO.map(pc => PROV.findIndex(p => p.pc === pc)));
+  const allowed = new Uint8Array(DIST.length);
+  for (let j = 0; j < DIST.length; j++) allowed[j] = pIdx.has(distProv[j]) || dIdx.has(j) ? 1 : 0;
+  const GAP = CFG.GAP_MIN * 60, MIN = S.minDur * 60;
+  const [bx, by] = CFG.BKK_CENTER;
+  const out = [];
+  for (let v = 0; v < NV; v++) {
+    if (!vehPass(v)) continue;
+    const s = D.vehicles.start[v], e = s + D.vehicles.count[v];
+    let cur = null, lastT = -1e9, nIn = 0, nAll = 0;
+    const close = () => {
+      if (!cur) return;
+      cur.dur = cur.e - cur.s;
+      if (cur.dur >= MIN && (MIN > 0 || cur.n >= 1)) out.push(cur);
+      cur = null;
+    };
+    for (let i = s; i < e; i++) {
+      const t = TT[i];
+      if (t < S.a || t > S.b) continue;
+      if (FLG[i] & 2 || DI[i] === 65535) continue;          // ไม่มีสัญญาณ ไม่นับ
+      nAll++;
+      const isOut = !allowed[DI[i]];
+      if (!isOut) { nIn++; close(); lastT = t; continue; }
+      if (!cur || t - lastT > GAP) {
+        close();
+        cur = { v, s: t, e: t, n: 1, provs: new Map(), km: 0, i0: i };
+      } else {
+        cur.e = t; cur.n++;
+      }
+      const p = distProv[DI[i]];
+      cur.provs.set(p, (cur.provs.get(p) || 0) + Math.min(DUR[i], GAP));
+      const km = hav(POS[2 * i], POS[2 * i + 1], bx, by);
+      if (km > cur.km) { cur.km = km; cur.far = p; }
+      lastT = t;
+    }
+    close();
+    // ทั้งช่วงไม่เคยเข้าเขตเลย = "อยู่นอกตลอด"
+    if (nAll && !nIn) for (const x of out) if (x.v === v) x.allOut = true;
+  }
+  for (const x of out) {
+    let far = false;
+    for (const p of x.provs.keys()) if (!pIdx.has(p) && !metro.has(p)) { far = true; break; }
+    x.sev = far ? 'far' : 'near';
+  }
+  EXC = out;
+  EXC_BY_V = new Map();
+  for (const x of out) { if (!EXC_BY_V.has(x.v)) EXC_BY_V.set(x.v, []); EXC_BY_V.get(x.v).push(x); }
+}
+function violRows() {
+  const rows = [];
+  for (const [v, xs] of EXC_BY_V) {
+    const provs = new Map(); let hrs = 0, km = 0, far = false, allOut = false;
+    for (const x of xs) {
+      hrs += x.dur / 3600; km = Math.max(km, x.km); far = far || x.sev === 'far'; allOut = allOut || !!x.allOut;
+      for (const [p, s] of x.provs) provs.set(p, (provs.get(p) || 0) + s);
+    }
+    const top = [...provs.entries()].sort((a, b) => b[1] - a[1]).map(e => PROV[e[0]].th);
+    const sev = allOut ? 'all' : far ? 'far' : 'near';
+    rows.push({ v, plate: D.vehicles.plate[v], n: xs.length, hrs, km, provs: top, sev,
+                sevRank: sev === 'far' ? 3 : sev === 'all' ? 2 : 1 });
+  }
+  return rows;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ตำแหน่ง ณ เวลา T
+   ══════════════════════════════════════════════════════════════════════ */
+function lastIdxAt(v, T) {
+  const s = D.vehicles.start[v], n = D.vehicles.count[v];
+  if (!n || TT[s] > T) return -1;
+  let lo = s, hi = s + n - 1;
+  while (lo < hi) { const m = (lo + hi + 1) >> 1; if (TT[m] <= T) lo = m; else hi = m - 1; }
+  return lo;
+}
+let NOW = [];
+function computeNow() {
+  const { pIdx, dIdx } = zoneSets();
+  const stale = CFG.STALE_MIN * 60;
+  const res = []; let on = 0, hired = 0, mov = 0, park = 0, outz = 0;
+  for (let v = 0; v < NV; v++) {
+    if (!vehPass(v)) continue;
+    const i = lastIdxAt(v, S.T);
+    if (i < 0 || S.T - TT[i] > stale) continue;
+    if (!areaMatchDist(DI[i])) continue;
+    const st = status(i);
+    if (st !== 'nosig' && !S.status.has(st)) continue;
+    const dI = DI[i];
+    const isOut = dI !== 65535 && !(pIdx.has(distProv[dI]) || dIdx.has(dI)) && !(FLG[i] & 2);
+    on++; if (st === 'hired') hired++; else if (st === 'vacant') mov++; else if (st === 'park') park++;
+    if (isOut) outz++;
+    res.push({ v, i, st, out: isOut });
+  }
+  NOW = res;
+  $('#kOnline').textContent = fmt(on);
+  $('#kHired').textContent = fmt(hired);
+  $('#kMove').textContent = fmt(mov);
+  $('#kPark').textContent = fmt(park);
+  $('#kUtil').textContent = on ? pct(hired / on) : '–';
+  $('#kOut').textContent = fmt(outz);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   สรุปตามพื้นที่ / รายคัน ในช่วง [a,b]
+   ══════════════════════════════════════════════════════════════════════ */
+let AREA = null;
+function computeAreas() {
+  const nP = PROV.length, nD = DIST.length;
+  const vehP = new Uint32Array(nP), vehD = new Uint32Array(nD);
+  const lastP = new Int32Array(nP).fill(-1), lastD = new Int32Array(nD).fill(-1);
+  const hrsP = new Float64Array(nP), hrsD = new Float64Array(nD);
+  const hirP = new Float64Array(nP), hirD = new Float64Array(nD);
+  let active = 0, totOn = 0, totHire = 0;
+  const vs = new Float64Array(NV * 4);     // km, hired_s, idle_s, online_s
+  for (let v = 0; v < NV; v++) {
+    const s = D.vehicles.start[v], e = s + D.vehicles.count[v];
+    let any = false, px = 0, py = 0, pt = -1;
+    for (let i = s; i < e; i++) {
+      const t = TT[i];
+      if (t < S.a || t > S.b || !MASK[i]) continue;
+      any = true;
+      const dI = DI[i], du = DUR[i] / 3600, hired = FLG[i] & 1;
+      totOn += du; if (hired) totHire += du;
+      vs[v * 4 + 3] += DUR[i];
+      if (hired) vs[v * 4 + 1] += DUR[i];
+      if (SPD[i] < CFG.MOVING_KMH && !hired) vs[v * 4 + 2] += DUR[i];
+      if (!(FLG[i] & 2)) {
+        const x = POS[2 * i], y = POS[2 * i + 1];
+        if (pt >= 0 && t - pt <= 900) { const k = hav(px, py, x, y); if (k / ((t - pt) / 3600 || 1) < 160) vs[v * 4] += k; }
+        px = x; py = y; pt = t;
+      }
+      if (dI === 65535) continue;
+      const p = distProv[dI];
+      if (lastP[p] !== v) { lastP[p] = v; vehP[p]++; }
+      if (lastD[dI] !== v) { lastD[dI] = v; vehD[dI]++; }
+      hrsP[p] += du; hrsD[dI] += du;
+      if (hired) { hirP[p] += du; hirD[dI] += du; }
+    }
+    if (any) active++;
+  }
+  AREA = { vehP, vehD, hrsP, hrsD, hirP, hirD, active, util: totOn ? totHire / totOn : NaN };
+  VSTAT = vs;
+}
+function areaVal(level, idx) {
+  const A = AREA;
+  if (level === 'prov') return S.metric === 'veh' ? A.vehP[idx] : S.metric === 'hrs' ? A.hrsP[idx] : A.hirP[idx];
+  return S.metric === 'veh' ? A.vehD[idx] : S.metric === 'hrs' ? A.hrsD[idx] : A.hirD[idx];
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   แผนที่
+   ══════════════════════════════════════════════════════════════════════ */
+const SAT_STYLE = {
+  version: 8,
+  sources: { sat: { type: 'raster', tileSize: 256, attribution: 'Esri World Imagery',
+    tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'] } },
+  layers: [{ id: 'sat', type: 'raster', source: 'sat' }],
+};
+// ⚠️ ห้ามใช้ tile.openstreetmap.org ตรง ๆ — ไฟล์ที่เปิดจากเครื่อง (file://) ไม่มี Referer
+//    เซิร์ฟเวอร์ OSM จะส่งภาพ "403 Access blocked" มาแทนแผนที่ (นโยบาย osm.wiki/Blocked)
+const FALLBACK_STYLE = {
+  version: 8,
+  sources: { esri: { type: 'raster', tileSize: 256, attribution: 'Esri, HERE, Garmin, © OpenStreetMap contributors',
+    tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'] } },
+  layers: [{ id: 'esri', type: 'raster', source: 'esri', paint: { 'raster-saturation': -0.6 } }],
+};
+function initMap() {
+  map = new maplibregl.Map({
+    container: 'map', style: CFG.BASEMAP, center: [100.62, 13.78], zoom: 9.6,
+    attributionControl: { compact: true }, dragRotate: false, pitchWithRotate: false,
+  });
+  map.on('error', e => {
+    if (!initMap._fell && e && e.error && String(e.error.message || '').match(/style|fetch|Failed/i) && !map.isStyleLoaded()) {
+      initMap._fell = true; map.setStyle(FALLBACK_STYLE);
+    }
+  });
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
+  deckOverlay = new deck.MapboxOverlay({
+    interleaved: false, layers: [],
+    getTooltip: tooltip,
+    onClick: onMapClick,
+  });
+  map.addControl(deckOverlay);
+}
+function rgba(c, a) { return [c[0], c[1], c[2], a]; }
+function hexRgb(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
+const RAMP_RGB = RAMP.map(hexRgb);
+
+let RANGE_DATA = null, RANGE_VER = -1, COLORS = null;
+function rangeData() {
+  if (RANGE_VER === maskVer && RANGE_DATA) return RANGE_DATA;
+  if (!COLORS) {
+    COLORS = new Uint8Array(N * 4);
+    for (let i = 0; i < N; i++) {
+      const c = COL[status(i)];
+      COLORS[4 * i] = c[0]; COLORS[4 * i + 1] = c[1]; COLORS[4 * i + 2] = c[2]; COLORS[4 * i + 3] = 255;
+    }
+  }
+  const f = new Float32Array(N * 2);
+  for (let i = 0; i < N; i++) { f[2 * i] = TT[i]; f[2 * i + 1] = MASK[i]; }
+  RANGE_DATA = { length: N, attributes: {
+    getPosition: { value: POS, size: 2 },
+    getFillColor: { value: COLORS, size: 4, normalized: true },
+    getFilterValue: { value: f, size: 2 },
+  } };
+  RANGE_VER = maskVer;
+  return RANGE_DATA;
+}
+
+let choroScale = { max: 1 };
+function choroColor(level, idx) {
+  const val = areaVal(level, idx);
+  if (!val) return [0, 0, 0, 0];
+  const r = Math.min(1, Math.log1p(val) / Math.log1p(choroScale.max));
+  const k = Math.min(RAMP_RGB.length - 1, Math.floor(r * RAMP_RGB.length));
+  return rgba(RAMP_RGB[k], 120);
+}
+function updateChoroScale() {
+  const n = S.level === 'prov' ? PROV.length : DIST.length;
+  let mx = 1; for (let i = 0; i < n; i++) mx = Math.max(mx, areaVal(S.level, i));
+  choroScale.max = mx;
+}
+let pcToProv, pcToDist;
+let layerVer = 0;
+function render() {
+  if (!deckOverlay) return;
+  const layers = [];
+  const geo = S.level === 'prov' ? D.geo.prov : D.geo.dist;
+  const idxOf = S.level === 'prov' ? pcToProv : pcToDist;
+  const pre = S.level === 'prov' ? 'p:' : 'd:';
+  if (S.choro) {
+    layers.push(new deck.GeoJsonLayer({
+      id: 'areas', data: geo, pickable: true, stroked: true, filled: true,
+      getFillColor: f => choroColor(S.level, idxOf.get(f.properties.pc)),
+      getLineColor: f => S.areas.has(pre + idxOf.get(f.properties.pc)) ? [16, 35, 26, 255] : [255, 255, 255, 170],
+      getLineWidth: f => S.areas.has(pre + idxOf.get(f.properties.pc)) ? 2.5 : 0.6,
+      lineWidthUnits: 'pixels',
+      autoHighlight: true, highlightColor: [16, 35, 26, 40],
+      updateTriggers: { getFillColor: [layerVer, S.metric, S.level], getLineColor: [layerVer], getLineWidth: [layerVer] },
+    }));
+  }
+  // เส้นขอบเขตที่อนุญาต
+  layers.push(new deck.GeoJsonLayer({
+    id: 'zone', data: ZONE_GEO, stroked: true, filled: false, pickable: false,
+    getLineColor: [13, 147, 214, 230], getLineWidth: 2.2, lineWidthUnits: 'pixels',
+    updateTriggers: { getLineColor: [S.zone] },
+  }));
+  if (S.pt === 'range' || (S.pt === 'now' && S.trail > 0)) {
+    const lo = S.pt === 'range' ? S.a : Math.max(S.a, S.T - S.trail * 60);
+    const hi = S.pt === 'range' ? S.b : S.T;
+    layers.push(new deck.ScatterplotLayer({
+      id: 'range', data: rangeData(), radiusUnits: 'pixels', getRadius: S.pt === 'range' ? 1.4 : 1.6,
+      radiusMinPixels: 1, opacity: S.pt === 'range' ? 0.55 : 0.35, stroked: false,
+      extensions: [new deck.DataFilterExtension({ filterSize: 2 })],
+      filterRange: [[lo, hi], [0.5, 1.5]],
+      updateTriggers: { getFilterValue: RANGE_VER },
+    }));
+  }
+  if (S.sel >= 0) {
+    const v = S.sel, s = D.vehicles.start[v], n = D.vehicles.count[v];
+    const idx = [];
+    for (let i = s; i < s + n; i++) if (TT[i] >= S.a && TT[i] <= S.b && !(FLG[i] & 2)) idx.push(i);
+    const span = Math.max(1, S.b - S.a);
+    layers.push(new deck.ScatterplotLayer({
+      id: 'track', data: idx, radiusUnits: 'pixels', getRadius: 3.2, stroked: true, lineWidthUnits: 'pixels', getLineWidth: 0.6,
+      getPosition: i => [POS[2 * i], POS[2 * i + 1]],
+      getFillColor: i => { const r = (TT[i] - S.a) / span; return [Math.round(200 - 190 * r), Math.round(225 - 120 * r), Math.round(240 - 30 * r), 235]; },
+      getLineColor: [255, 255, 255, 200], pickable: true,
+      updateTriggers: { getFillColor: [S.a, S.b] },
+    }));
+  }
+  if (S.pt === 'now') {
+    layers.push(new deck.ScatterplotLayer({
+      id: 'now', data: NOW, pickable: true, radiusUnits: 'pixels',
+      getPosition: d => [POS[2 * d.i], POS[2 * d.i + 1]],
+      getRadius: d => d.v === S.sel ? 8 : 4.2,
+      getFillColor: d => rgba(COL[d.st], d.v === S.sel ? 255 : 235),
+      stroked: true, lineWidthUnits: 'pixels',
+      getLineColor: d => d.out ? [217, 58, 64, 255] : [255, 255, 255, 230],
+      getLineWidth: d => d.out ? 2.2 : 1,
+      updateTriggers: { getPosition: S.T, getFillColor: [S.T, S.sel], getRadius: S.sel, getLineColor: S.T, getLineWidth: S.T },
+    }));
+  }
+  deckOverlay.setProps({ layers });
+}
+let ZONE_GEO = { type: 'FeatureCollection', features: [] };
+function buildZoneGeo() {
+  const z = CFG.ZONES[S.zone];
+  ZONE_GEO = { type: 'FeatureCollection', features: [
+    ...D.geo.prov.features.filter(f => z.prov.includes(f.properties.pc)),
+    ...D.geo.dist.features.filter(f => z.dist.includes(f.properties.pc)),
+  ] };
+}
+
+function tooltip(info) {
+  const o = info.object; if (!o) return null;
+  if (info.layer.id === 'now') {
+    const i = o.i, v = o.v, dI = DI[i];
+    const st = { hired: 'มีผู้โดยสาร', vacant: 'ว่าง · กำลังวิ่ง', park: 'จอด', nosig: 'ไม่มีสัญญาณ GPS' }[o.st];
+    return { html: `<b>${D.vehicles.plate[v]}</b> <span class="tt-k">${CFG.CENTER_NAMES[D.vehicles.center[v]] || D.vehicles.center[v]}</span><br>
+      ${st} · ${SPD[i]} กม./ชม.<br><span class="tt-k">${dI === 65535 ? '–' : DIST[dI].th + ', ' + PROV[distProv[dI]].th}</span><br>
+      <span class="tt-k">เวลา GPS</span> ${fDT(TT[i])}${o.out ? '<br><b style="color:#ff9ea2">อยู่นอกเขตที่อนุญาต</b>' : ''}` };
+  }
+  if (info.layer.id === 'track') {
+    const i = o, dI = DI[i];
+    return { html: `<b>${D.vehicles.plate[VV[i]]}</b><br>${fDT(TT[i])} · ${SPD[i]} กม./ชม. · ${FLG[i] & 1 ? 'มีผู้โดยสาร' : 'ว่าง'}<br><span class="tt-k">${dI === 65535 ? '–' : DIST[dI].th + ', ' + PROV[distProv[dI]].th}</span>` };
+  }
+  if (info.layer.id === 'areas') {
+    const pc = o.properties.pc;
+    const isP = S.level === 'prov', idx = (isP ? pcToProv : pcToDist).get(pc);
+    const name = isP ? PROV[idx].th : DIST[idx].th + ' · ' + PROV[distProv[idx]].th;
+    const A = AREA;
+    const veh = isP ? A.vehP[idx] : A.vehD[idx], hrs = isP ? A.hrsP[idx] : A.hrsD[idx], hir = isP ? A.hirP[idx] : A.hirD[idx];
+    return { html: `<b style="font-family:var(--sans)">${name}</b><br>รถ ${fmt(veh)} คัน · ${fmt(hrs)} ชม.<br><span class="tt-k">มีผู้โดยสาร</span> ${fmt(hir)} ชม. (${hrs ? pct(hir / hrs) : '–'})<br><span class="tt-k">คลิกเพื่อกรองพื้นที่นี้</span>` };
+  }
+  return null;
+}
+function onMapClick(info) {
+  if (!info.object) return;
+  if (info.layer.id === 'now') { selectVehicle(info.object.v); return; }
+  if (info.layer.id === 'areas') {
+    const pc = info.object.properties.pc;
+    const key = (S.level === 'prov' ? 'p:' + pcToProv.get(pc) : 'd:' + pcToDist.get(pc));
+    toggleArea(key);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ไทม์ไลน์
+   ══════════════════════════════════════════════════════════════════════ */
+let TLBINS = null; const BIN = 600;
+function buildTimelineBins() {
+  const nb = Math.ceil((D.meta.tmax + 1) / BIN);
+  const on = new Uint16Array(nb), hi = new Uint16Array(nb);
+  for (let v = 0; v < NV; v++) {
+    if (!vehPass(v)) continue;
+    const s = D.vehicles.start[v], e = s + D.vehicles.count[v];
+    let lb = -1, lbh = -1;
+    for (let i = s; i < e; i++) {
+      if (!MASK[i]) continue;
+      const b = Math.floor(TT[i] / BIN);
+      if (b !== lb) { on[b]++; lb = b; }
+      if (FLG[i] & 1 && b !== lbh) { hi[b]++; lbh = b; }
+    }
+  }
+  TLBINS = { nb, on, hi };
+}
+const tl = { cv: null, ctx: null, w: 0, h: 0, pad: 6, drag: null };
+function tlX(t) { return tl.pad + (t / D.meta.tmax) * (tl.w - 2 * tl.pad); }
+function tlT(x) { return Math.max(0, Math.min(D.meta.tmax, (x - tl.pad) / (tl.w - 2 * tl.pad) * D.meta.tmax)); }
+function drawTimeline() {
+  const cv = tl.cv, dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== w * dpr || cv.height !== h * dpr) { cv.width = w * dpr; cv.height = h * dpr; }
+  tl.w = w; tl.h = h;
+  const c = tl.ctx; c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h);
+  const top = 4, bot = h - 16, ch = bot - top;
+  // ช่วงที่เลือก
+  c.fillStyle = 'rgba(0,163,50,.08)';
+  c.fillRect(tlX(S.a), top, tlX(S.b) - tlX(S.a), ch);
+  // เส้นแบ่งวัน + ป้ายเวลา
+  c.font = '10px "IBM Plex Mono", monospace'; c.fillStyle = '#7d8b84'; c.strokeStyle = '#dfe5e2'; c.lineWidth = 1;
+  const d0 = tDate(0); const firstH = new Date(d0); firstH.setMinutes(0, 0, 0); firstH.setHours(firstH.getHours() + 1);
+  const step = (tl.w < 700 ? 6 : 3) * 3600 * 1000;
+  for (let ms = firstH.getTime(); ms <= t0ms + D.meta.tmax * 1000; ms += 3600 * 1000) {
+    const t = (ms - t0ms) / 1000, x = tlX(t), dd = new Date(ms);
+    if (dd.getHours() === 0) {
+      c.beginPath(); c.moveTo(x + .5, top); c.lineTo(x + .5, bot); c.strokeStyle = '#b9c4be'; c.stroke();
+      c.fillStyle = '#4a5a52'; c.fillText(`${dd.getDate()} ${TH_MON[dd.getMonth()]}`, x + 3, h - 4); c.fillStyle = '#7d8b84';
+    } else if ((ms - firstH.getTime()) % step === 0) {
+      c.fillText(String(dd.getHours()).padStart(2, '0') + ':00', x - 14, h - 4);
+    }
+  }
+  // กราฟ: ออนไลน์ (เทาเขียว) · มีผู้โดยสาร (น้ำเงิน)
+  const B = TLBINS; let mx = 1; for (let i = 0; i < B.nb; i++) mx = Math.max(mx, B.on[i]);
+  const bw = (tl.w - 2 * tl.pad) / B.nb;
+  for (let i = 0; i < B.nb; i++) {
+    const x = tl.pad + i * bw, ho = B.on[i] / mx * ch, hh = B.hi[i] / mx * ch;
+    const inR = (i + 1) * BIN >= S.a && i * BIN <= S.b;
+    c.fillStyle = inR ? '#b9d8c3' : '#dde5e0'; c.fillRect(x, bot - ho, Math.max(1, bw - 0.6), ho);
+    c.fillStyle = inR ? '#0d93d6' : '#9cc9e2'; c.fillRect(x, bot - hh, Math.max(1, bw - 0.6), hh);
+  }
+  c.fillStyle = '#4a5a52'; c.font = '10px "IBM Plex Sans Thai", sans-serif';
+  c.fillText(`สูงสุด ${mx.toLocaleString()} คันออนไลน์ / 10 นาที`, tl.pad + 2, top + 10);
+  // ขอบช่วง
+  c.fillStyle = '#00a332';
+  for (const t of [S.a, S.b]) { const x = tlX(t); c.fillRect(x - 1, top, 2, ch); }
+  // หัวอ่าน
+  const x = tlX(S.T);
+  c.fillStyle = '#10231a'; c.fillRect(x - 1, 0, 2, bot);
+  c.beginPath(); c.moveTo(x - 6, 0); c.lineTo(x + 6, 0); c.lineTo(x, 7); c.closePath(); c.fill();
+}
+function initTimeline() {
+  tl.cv = $('#tlc'); tl.ctx = tl.cv.getContext('2d');
+  const pos = e => { const r = tl.cv.getBoundingClientRect(); return (e.touches ? e.touches[0].clientX : e.clientX) - r.left; };
+  tl.cv.addEventListener('pointerdown', e => {
+    const x = pos(e); tl.cv.setPointerCapture(e.pointerId);
+    if (Math.abs(x - tlX(S.T)) < 8) tl.drag = { k: 'head' };
+    else if (Math.abs(x - tlX(S.a)) < 6) tl.drag = { k: 'a' };
+    else if (Math.abs(x - tlX(S.b)) < 6) tl.drag = { k: 'b' };
+    else tl.drag = { k: 'brush', x0: x, moved: false };
+  });
+  tl.cv.addEventListener('pointermove', e => {
+    const x = pos(e);
+    if (!tl.drag) {
+      tl.cv.style.cursor = Math.abs(x - tlX(S.T)) < 8 ? 'ew-resize' : (Math.abs(x - tlX(S.a)) < 6 || Math.abs(x - tlX(S.b)) < 6) ? 'col-resize' : 'crosshair';
+      return;
+    }
+    const t = tlT(x);
+    if (tl.drag.k === 'head') setT(Math.max(S.a, Math.min(S.b, t)));
+    else if (tl.drag.k === 'a') { S.a = Math.min(t, S.b - 600); S.T = Math.max(S.T, S.a); drawTimeline(); }
+    else if (tl.drag.k === 'b') { S.b = Math.max(t, S.a + 600); S.T = Math.min(S.T, S.b); drawTimeline(); }
+    else if (Math.abs(x - tl.drag.x0) > 4) {
+      tl.drag.moved = true; const t0 = tlT(tl.drag.x0);
+      S.a = Math.min(t0, t); S.b = Math.max(t0, t); S.T = Math.max(S.a, Math.min(S.b, S.T)); drawTimeline();
+    }
+  });
+  const end = e => {
+    if (!tl.drag) return;
+    const k = tl.drag;
+    tl.drag = null;
+    if (k.k === 'brush' && !k.moved) {
+      const t = tlT(pos(e.changedTouches ? e.changedTouches[0] : e));
+      if (t < S.a || t > S.b) { S.a = 0; S.b = D.meta.tmax; }
+      setT(t); return;
+    }
+    if (k.k !== 'head') onRangeChange();
+  };
+  tl.cv.addEventListener('pointerup', end);
+  tl.cv.addEventListener('pointercancel', end);
+  window.addEventListener('resize', drawTimeline);
+}
+function setT(t) {
+  S.T = t;
+  $('#clkD').textContent = fDay(t);
+  $('#clkH').textContent = fHM(t);
+  computeNow(); drawTimeline(); render();
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   แผง
+   ══════════════════════════════════════════════════════════════════════ */
+function renderOverview() {
+  $('#ovRange').textContent = `${fDT(S.a)} – ${fDT(S.b)}`;
+  const tot = D.vehicles.vin.filter((_, v) => vehPass(v)).length;
+  $('#ovActive').textContent = fmt(AREA.active);
+  $('#ovActiveS').textContent = `จาก ${fmt(tot)} คันในระบบ`;
+  $('#ovUtil').textContent = pct(AREA.util);
+  const vc = EXC_BY_V.size;
+  $('#ovViol').textContent = fmt(vc);
+  $('#ovViolS').textContent = `${pct(vc / Math.max(1, AREA.active))} ของรถที่มีสัญญาณ · ${$('#zone').selectedOptions[0].text}`;
+  $('#ovOff').textContent = fmt(tot - AREA.active);
+  const arr = PROV.map((p, i) => [i, AREA.hrsP[i]]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  barsInto($('#ovProv'), arr.map(([i, h]) => ({ key: 'p:' + i, name: PROV[i].th, val: h, txt: fmt(h) })));
+  const m = D.meta, c = m.clean;
+  $('#dq').innerHTML = `ดึงจาก <b>${m.source}</b> รอบ ${m.pulled_from} – ${m.pulled_to}<br>
+    แถวดิบ <b class="num">${fmt(c.raw_rows)}</b> → จุดใช้งาน <b class="num">${fmt(c.clean_points)}</b><br>
+    ตัดจุดซ้ำ (API ส่งจุดเดิมซ้ำทุกรอบ) <span class="num">${fmt(c.repeated_rows)}</span> ·
+    จุดค้างเก่า <span class="num">${fmt(c.stale_points)}</span> · เวลาเครื่องผิด (อนาคต) <span class="num">${fmt(c.future_clock_rows)}</span><br>
+    จุดไม่มีสัญญาณ GPS (V) <span class="num">${fmt(c.signal_v_points)}</span> — แสดงได้แต่<b>ไม่นับ</b>ในการวิเคราะห์นอกเขต<br>
+    คีย์รถใช้ <b>VIN</b> เพราะ car_id ซ้ำกันข้ามศูนย์ · ทะเบียนซ้ำ ${D.vehicles.plate.filter(p => p.includes(' · ')).length} คันแสดงท้าย VIN 5 ตัว`;
+}
+function barsInto(el, items, red) {
+  const mx = Math.max(1, ...items.map(x => x.val));
+  el.innerHTML = items.map(x => `<div class="bar${red ? ' red' : ''}${S.areas.has(x.key) ? ' on' : ''}" data-key="${x.key}" title="คลิกเพื่อกรอง">
+      <i style="width:${(x.val / mx * 100).toFixed(1)}%"></i><span class="n">${x.name}${x.sub ? `<small>${x.sub}</small>` : ''}</span><span class="c">${x.txt}</span></div>`).join('')
+    || '<div class="muted">ไม่มีข้อมูล</div>';
+  el.querySelectorAll('.bar').forEach(b => b.onclick = () => toggleArea(b.dataset.key));
+}
+function renderViolations() {
+  const rows = violRows();
+  const trips = EXC.length, hrs = EXC.reduce((s, x) => s + x.dur, 0) / 3600;
+  $('#violBadge').textContent = fmt(rows.length);
+  $('#vCars').textContent = fmt(rows.length);
+  const far = rows.filter(r => r.sev === 'far').length, all = rows.filter(r => r.sev === 'all').length;
+  $('#vCarsS').textContent = `ต่างจังหวัด ${fmt(far)} · อยู่นอกตลอด ${fmt(all)} · ปริมณฑล ${fmt(rows.length - far - all)}`;
+  $('#vTrips').textContent = fmt(trips);
+  $('#vHours').textContent = `ครั้ง · รวม ${fmt(hrs)} ชม.`;
+  // จังหวัด: จำนวนรถ
+  const cnt = new Map();
+  for (const [v, xs] of EXC_BY_V) { const ps = new Set(); xs.forEach(x => x.provs.forEach((_, p) => ps.add(p))); ps.forEach(p => cnt.set(p, (cnt.get(p) || 0) + 1)); }
+  barsInto($('#vProv'), [...cnt.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12)
+    .map(([p, n]) => ({ key: 'p:' + p, name: PROV[p].th, val: n, txt: fmt(n) })), true);
+  // ตาราง
+  let list = S.sev ? rows.filter(r => r.sev === S.sev) : rows;
+  const k = S.sortK, dir = S.sortDir;
+  list.sort((a, b) => {
+    const x = k === 'sev' ? a.sevRank : a[k], y = k === 'sev' ? b.sevRank : b[k];
+    return (x > y ? 1 : x < y ? -1 : 0) * dir || b.hrs - a.hrs;
+  });
+  VROWS = list;
+  const show = list.slice(0, 300);
+  const lbl = { far: 'ต่างจังหวัด', near: 'ปริมณฑล', all: 'อยู่นอกตลอด' };
+  $('#vTable tbody').innerHTML = show.map(r => `<tr data-v="${r.v}" class="${r.v === S.sel ? 'on' : ''}">
+      <td><span class="plate">${r.plate}</span><div class="muted" style="font-size:11px">${r.provs.slice(0, 2).join(' · ')}${r.provs.length > 2 ? ` +${r.provs.length - 2}` : ''}</div></td>
+      <td><span class="sev ${r.sev}">${lbl[r.sev]}</span></td>
+      <td class="r">${r.n}</td><td class="r">${fmt1(r.hrs)}</td><td class="r">${fmt(r.km)}</td></tr>`).join('')
+    || '<tr><td colspan="5" class="muted" style="padding:14px 6px">ไม่มีรถออกนอกเขตในช่วงเวลา/ตัวกรองนี้</td></tr>';
+  $('#vMore').textContent = list.length > 300 ? `แสดง 300 จาก ${fmt(list.length)} คัน — ดาวน์โหลด CSV เพื่อดูทั้งหมด` : 'ไกลสุด = ระยะทางตรงจากใจกลางกรุงเทพฯ (กม.)';
+  $('#vTable tbody').querySelectorAll('tr[data-v]').forEach(tr => tr.onclick = () => selectVehicle(+tr.dataset.v, true));
+  document.querySelectorAll('#vTable th').forEach(th => {
+    th.removeAttribute('aria-sort');
+    if (th.dataset.k === S.sortK) th.setAttribute('aria-sort', S.sortDir < 0 ? 'descending' : 'ascending');
+  });
+}
+let VROWS = [];
+function renderAreas() {
+  const isP = S.level === 'prov', n = isP ? PROV.length : DIST.length;
+  const items = [];
+  for (let i = 0; i < n; i++) {
+    const val = areaVal(S.level, i); if (!val) continue;
+    items.push({ key: (isP ? 'p:' : 'd:') + i, name: isP ? PROV[i].th : DIST[i].th, sub: isP ? '' : PROV[distProv[i]].th, val,
+      txt: S.metric === 'veh' ? fmt(val) + ' คัน' : fmt(val) + ' ชม.' });
+  }
+  items.sort((a, b) => b.val - a.val);
+  $('#areaTot').textContent = `${fmt(items.length)} พื้นที่`;
+  barsInto($('#areaList'), items.slice(0, 60));
+}
+function renderVehCard() {
+  const el = $('#vehCard');
+  if (S.sel < 0) { el.innerHTML = '<div class="note">เลือกรถจากรายการ ตาราง "นอกเขต" ช่องค้นหา หรือคลิกจุดบนแผนที่ เพื่อดูเส้นทางเป็นจุดตามเวลา</div>'; return; }
+  const v = S.sel, V = D.vehicles;
+  const km = VSTAT[v * 4], hir = VSTAT[v * 4 + 1], idle = VSTAT[v * 4 + 2], onl = VSTAT[v * 4 + 3];
+  const s = V.start[v], n = V.count[v];
+  let mx = 0, provs = new Map();
+  for (let i = s; i < s + n; i++) {
+    if (TT[i] < S.a || TT[i] > S.b) continue;
+    mx = Math.max(mx, SPD[i]);
+    if (DI[i] !== 65535) { const p = distProv[DI[i]]; provs.set(p, (provs.get(p) || 0) + DUR[i]); }
+  }
+  const pv = [...provs.entries()].sort((a, b) => b[1] - a[1]);
+  const xs = (EXC_BY_V.get(v) || []).slice().sort((a, b) => a.s - b.s);
+  const ii = lastIdxAt(v, S.T);
+  el.innerHTML = `<div class="card" style="background:var(--panel)">
+    <div class="vhead"><div><div class="p">${V.plate[v]}</div><div class="m">VIN ${V.vin[v]} · ${CFG.CENTER_NAMES[V.center[v]] || V.center[v]} · car_id ${V.car[v]}</div></div>
+      <button class="btn" id="unsel" aria-label="ยกเลิกเลือก">✕</button></div>
+    <div class="kv" style="margin-top:10px">
+      <span>ระยะทางในช่วง</span><span>${fmt1(km)} กม.</span>
+      <span>ออนไลน์</span><span>${fDur(onl)}</span>
+      <span>มีผู้โดยสาร</span><span>${fDur(hir)} (${onl ? pct(hir / onl) : '–'})</span>
+      <span>จอดว่าง</span><span>${fDur(idle)}</span>
+      <span>เร็วสุด</span><span>${mx} กม./ชม.</span>
+      <span>จุด GPS ล่าสุดที่รู้</span><span>${V.last[v] || '–'}</span>
+      <span>ณ เวลาที่เลือก</span><span>${ii >= 0 && S.T - TT[ii] <= CFG.STALE_MIN * 60 ? (DI[ii] === 65535 ? '–' : DIST[DI[ii]].th) : 'ไม่มีสัญญาณ'}</span>
+    </div>
+    <div style="margin-top:10px"><div class="muted" style="font-size:11px;margin-bottom:2px">ความเร็วตามเวลา · <span style="color:var(--blue)">■</span> มีผู้โดยสาร</div><canvas class="spark" id="spark"></canvas></div>
+    <div style="margin-top:8px;font-size:12px"><span class="muted">จังหวัดที่ไป</span> ${pv.map(([p, s]) => `${PROV[p].th} <span class="muted num">${fDur(s)}</span>`).join(' · ') || '–'}</div>
+  </div>
+  <div class="sec"><h3>ออกนอกเขต <span>${xs.length} ครั้ง · คลิกเพื่อเลื่อนเวลาไปดู</span></h3>
+    <div class="exlist">${xs.map((x, k) => `<div class="ex" data-t="${x.s}"><span class="sev ${x.allOut ? 'all' : x.sev}">${k + 1}</span>
+      <span>${fDT(x.s)} – ${fDay(x.s) === fDay(x.e) ? fHM(x.e) : fDT(x.e)}<div class="muted" style="font-size:11px">${[...x.provs.keys()].map(p => PROV[p].th).join(' · ')}</div></span>
+      <span class="num">${fDur(x.dur)}</span></div>`).join('') || '<div class="muted">ไม่ออกนอกเขตในช่วงนี้</div>'}</div></div>`;
+  $('#unsel').onclick = () => selectVehicle(-1);
+  el.querySelectorAll('.ex').forEach(x => x.onclick = () => setT(+x.dataset.t));
+  drawSpark(v);
+}
+function drawSpark(v) {
+  const cv = $('#spark'); if (!cv) return;
+  const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = w * dpr; cv.height = h * dpr;
+  const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const s = D.vehicles.start[v], n = D.vehicles.count[v], span = Math.max(1, S.b - S.a);
+  c.fillStyle = '#f6f8f7'; c.fillRect(0, 0, w, h);
+  for (let i = s; i < s + n; i++) {
+    if (TT[i] < S.a || TT[i] > S.b) continue;
+    const x = (TT[i] - S.a) / span * w, y = h - Math.min(1, SPD[i] / 120) * (h - 4);
+    c.fillStyle = FLG[i] & 1 ? '#0d93d6' : '#86a596';
+    c.fillRect(x, y, Math.max(1, w / 400), h - y);
+  }
+  const x = (S.T - S.a) / span * w; c.fillStyle = '#10231a'; c.fillRect(x - .5, 0, 1, h);
+}
+function renderVehList() {
+  const rows = [];
+  for (let v = 0; v < NV; v++) {
+    if (!vehPass(v)) continue;
+    const onl = VSTAT[v * 4 + 3];
+    if (S.areas.size && !onl) continue;
+    rows.push({ v, km: VSTAT[v * 4], hired: VSTAT[v * 4 + 1], idle: VSTAT[v * 4 + 2], off: (S.b - S.a) - onl });
+  }
+  rows.sort((a, b) => b[S.vehSort] - a[S.vehSort]);
+  $('#vehCount').textContent = `${fmt(rows.length)} คัน`;
+  const now = new Map(NOW.map(x => [x.v, x]));
+  $('#vehList').innerHTML = rows.slice(0, 200).map(r => {
+    const nw = now.get(r.v), c = nw ? COL[nw.st] : [220, 226, 223];
+    const val = S.vehSort === 'km' ? fmt1(r.km) + ' กม.' : fDur(r[S.vehSort]);
+    return `<div class="vrow${r.v === S.sel ? ' on' : ''}" data-v="${r.v}"><i class="dot" style="background:rgb(${c})"></i>
+      <span><span class="plate">${D.vehicles.plate[r.v]}</span> <span class="muted" style="font-size:11px">${D.vehicles.center[r.v]}</span></span>
+      <span class="num muted" style="font-size:12px">${val}</span></div>`;
+  }).join('');
+  $('#vehList').querySelectorAll('.vrow').forEach(x => x.onclick = () => selectVehicle(+x.dataset.v, true));
+}
+function renderLegend() {
+  const ch = S.choro ? `<div style="margin-top:6px"><span class="lbl">${{ veh: 'จำนวนรถ (คัน)', hrs: 'ชั่วโมงรวม', hired: 'ชม. มีผู้โดยสาร' }[S.metric]} · ${S.level === 'prov' ? 'จังหวัด' : 'อำเภอ/เขต'}</span>
+    <div class="ramp">${RAMP.map(c => `<i style="background:${c}"></i>`).join('')}</div>
+    <div class="rampl"><span>1</span><span>${fmt(choroScale.max)}</span></div></div>` : '';
+  $('#legend').innerHTML = `<span class="lbl">สถานะรถ</span>
+    <div class="row"><i class="dot" style="background:var(--blue)"></i>มีผู้โดยสาร</div>
+    <div class="row"><i class="dot" style="background:var(--green)"></i>ว่าง · กำลังวิ่ง</div>
+    <div class="row"><i class="dot" style="background:var(--slate)"></i>จอด</div>
+    <div class="row"><i class="dot" style="background:#fff;box-shadow:0 0 0 2px var(--red)"></i>อยู่นอกเขตที่อนุญาต</div>
+    <div class="row"><i style="width:14px;border-top:2px solid var(--blue)"></i>ขอบเขตที่อนุญาต</div>${ch}`;
+}
+function renderAreaChips() {
+  $('#areaRow').style.display = S.areas.size ? 'flex' : 'none';
+  $('#fArea').innerHTML = [...S.areas].map(k => `<span class="chip area">${areaName(k)}<button data-k="${k}" aria-label="ลบ">×</button></span>`).join('')
+    + (S.areas.size > 1 ? '<button class="chip" id="clrArea">ล้างทั้งหมด</button>' : '');
+  $('#fArea').querySelectorAll('button[data-k]').forEach(b => b.onclick = () => toggleArea(b.dataset.k));
+  const c = $('#clrArea'); if (c) c.onclick = () => { S.areas.clear(); onFilterChange(); };
+}
+function renderRangeText() {
+  $('#rngTxt').textContent = `${fDT(S.a)} – ${fDT(S.b)}`;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   เหตุการณ์
+   ══════════════════════════════════════════════════════════════════════ */
+function refreshPanels() {
+  computeAreas(); updateChoroScale(); computeExcursions();
+  renderOverview(); renderViolations(); renderAreas(); renderVehCard(); renderVehList(); renderLegend(); renderAreaChips(); renderRangeText();
+  layerVer++; computeNow(); render(); drawTimeline();
+}
+function onFilterChange() { rebuildMask(); buildTimelineBins(); refreshPanels(); }
+function onRangeChange() { refreshPanels(); }
+function toggleArea(key) { S.areas.has(key) ? S.areas.delete(key) : S.areas.add(key); onFilterChange(); }
+function selectVehicle(v, fly) {
+  S.sel = v;
+  if (v >= 0) {
+    switchTab('veh');
+    if (fly) {
+      const s = D.vehicles.start[v], n = D.vehicles.count[v];
+      let x0 = 999, y0 = 999, x1 = -999, y1 = -999;
+      for (let i = s; i < s + n; i++) {
+        if (TT[i] < S.a || TT[i] > S.b || FLG[i] & 2) continue;
+        x0 = Math.min(x0, POS[2 * i]); x1 = Math.max(x1, POS[2 * i]); y0 = Math.min(y0, POS[2 * i + 1]); y1 = Math.max(y1, POS[2 * i + 1]);
+      }
+      if (x0 < 999) map.fitBounds([[x0, y0], [x1, y1]], { padding: 80, maxZoom: 14, duration: 700 });
+      else if (D.vehicles.llon[v] != null) map.flyTo({ center: [D.vehicles.llon[v], D.vehicles.llat[v]], zoom: 13 });
+    }
+  }
+  renderVehCard(); renderVehList(); renderViolations(); render();
+}
+function switchTab(id) {
+  document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === id));
+  document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === 'p-' + id));
+  if (id === 'veh' && S.sel >= 0) drawSpark(S.sel);
+  if (id === 'area' && !S.choro) {
+    S.choro = true;
+    $('#chSeg').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === 'on'));
+    renderLegend(); render();
+  }
+}
+function seg(el, fn) {
+  el.querySelectorAll('button').forEach(b => b.onclick = () => {
+    el.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    fn(b.dataset.v, b);
+  });
+}
+let raf = 0, lastTs = 0;
+function loop(ts) {
+  if (!S.playing) return;
+  const dt = lastTs ? (ts - lastTs) / 1000 : 0; lastTs = ts;
+  let t = S.T + dt * S.speed;
+  if (t > S.b) t = S.a;
+  setT(t);
+  if (S.sel >= 0 && $('#p-veh').classList.contains('on')) drawSpark(S.sel);
+  raf = requestAnimationFrame(loop);
+}
+function setPlaying(on) {
+  S.playing = on; $('#play').textContent = on ? '❚❚' : '▶'; $('#play').setAttribute('aria-label', on ? 'หยุด' : 'เล่น');
+  lastTs = 0; if (on) raf = requestAnimationFrame(loop); else cancelAnimationFrame(raf);
+}
+function initUI() {
+  // ศูนย์
+  const centers = [...new Set(D.vehicles.center)].sort();
+  $('#fCenter').innerHTML = centers.map(c => `<button class="chip" aria-pressed="false" data-c="${c}">${CFG.CENTER_NAMES[c] || c} <span class="num muted">${fmt(D.vehicles.center.filter(x => x === c).length)}</span></button>`).join('');
+  $('#fCenter').querySelectorAll('button').forEach(b => b.onclick = () => {
+    const c = b.dataset.c; S.centers.has(c) ? S.centers.delete(c) : S.centers.add(c);
+    b.setAttribute('aria-pressed', S.centers.has(c)); onFilterChange();
+  });
+  // สถานะ
+  const STS = [['hired', 'มีผู้โดยสาร', 'var(--blue)'], ['vacant', 'ว่าง·วิ่ง', 'var(--green)'], ['park', 'จอด', 'var(--slate)']];
+  $('#fStatus').innerHTML = STS.map(([k, n, c]) => `<button class="chip" aria-pressed="false" data-s="${k}"><i class="dot" style="background:${c}"></i>${n}</button>`).join('');
+  const syncSt = () => $('#fStatus').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', S.status.size < 3 && S.status.has(b.dataset.s)));
+  $('#fStatus').querySelectorAll('button').forEach(b => b.onclick = () => {
+    const k = b.dataset.s;
+    if (S.status.size === 3) S.status = new Set([k]);          // กดครั้งแรก = ดูเฉพาะสถานะนี้
+    else if (S.status.has(k)) { S.status.delete(k); if (!S.status.size) S.status = new Set(['hired', 'vacant', 'park']); }
+    else S.status.add(k);
+    syncSt(); onFilterChange();
+  });
+  // แท็บ
+  document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => switchTab(b.dataset.tab));
+  // นอกเขต
+  $('#zone').onchange = e => { S.zone = e.target.value; buildZoneGeo(); refreshPanels(); };
+  $('#minDur').onchange = e => { S.minDur = +e.target.value; refreshPanels(); };
+  seg($('#sevSeg'), v => { S.sev = v; renderViolations(); });
+  document.querySelectorAll('#vTable th').forEach(th => th.onclick = () => {
+    const k = th.dataset.k; if (S.sortK === k) S.sortDir *= -1; else { S.sortK = k; S.sortDir = k === 'plate' ? 1 : -1; }
+    renderViolations();
+  });
+  $('#csv').onclick = downloadCSV;
+  // พื้นที่
+  seg($('#lvSeg'), v => { S.level = v; updateChoroScale(); layerVer++; renderAreas(); renderLegend(); render(); });
+  seg($('#mtSeg'), v => { S.metric = v; updateChoroScale(); layerVer++; renderAreas(); renderLegend(); render(); });
+  // รถ
+  $('#vehSort').onchange = e => { S.vehSort = e.target.value; renderVehList(); };
+  // แผนที่
+  seg($('#ptSeg'), v => { S.pt = v; $('#trailWrap').style.display = v === 'now' ? '' : 'none'; render(); });
+  $('#trail').onchange = e => { S.trail = +e.target.value; render(); };
+  seg($('#chSeg'), v => { S.choro = v === 'on'; renderLegend(); render(); });
+  document.querySelectorAll('.zoomto [data-z]').forEach(b => b.onclick = () => {
+    b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    if (b.dataset.z === 'th') map.fitBounds([[97.3, 5.6], [105.7, 20.5]], { padding: 30, duration: 800 });
+    else map.flyTo({ center: [100.62, 13.78], zoom: 9.6, duration: 800 });
+  });
+  seg($('#bmSeg'), v => map.setStyle(v === 'sat' ? SAT_STYLE : CFG.BASEMAP));
+  // ไทม์ไลน์
+  $('#play').onclick = () => setPlaying(!S.playing);
+  seg($('#spdSeg'), v => { S.speed = +v; });
+  const days = []; for (let t = 0; t <= D.meta.tmax; t += 3600) { const k = fDay(t); if (!days.includes(k)) days.push(k); }
+  const presets = [['ทั้งหมด', 0, D.meta.tmax]];
+  days.forEach(k => {
+    let a = Infinity, b = -Infinity;
+    for (let t = 0; t <= D.meta.tmax; t += 300) if (fDay(t) === k) { a = Math.min(a, t); b = Math.max(b, t); }
+    const d = tDate(a); presets.push([`${d.getDate()} ${TH_MON[d.getMonth()]}`, a, Math.min(b, D.meta.tmax)]);
+  });
+  $('#rngSeg').innerHTML = presets.map((p, i) => `<button aria-pressed="${i === 0}" data-v="${i}">${p[0]}</button>`).join('');
+  seg($('#rngSeg'), v => { const p = presets[+v]; S.a = p[1]; S.b = p[2]; S.T = Math.max(S.a, Math.min(S.b, S.T)); onRangeChange(); setT(S.T); });
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+    if (e.code === 'Space') { e.preventDefault(); setPlaying(!S.playing); }
+    if (e.code === 'ArrowRight') setT(Math.min(S.b, S.T + 300));
+    if (e.code === 'ArrowLeft') setT(Math.max(S.a, S.T - 300));
+    if (e.code === 'Escape') selectVehicle(-1);
+  });
+  initSearch();
+}
+function initSearch() {
+  const q = $('#q'), dd = $('#qdd');
+  const V = D.vehicles;
+  const idxPlate = V.plate.map((p, v) => [p.replace(/[\s-]/g, '').toLowerCase(), V.vin[v].toLowerCase(), v]);
+  let items = [], hi = 0;
+  const draw = () => {
+    dd.innerHTML = items.map((x, i) => `<div class="${i === hi ? 'on' : ''}" data-i="${i}" role="option"><span>${x.label}</span><small>${x.sub}</small></div>`).join('');
+    dd.classList.toggle('open', items.length > 0);
+    dd.querySelectorAll('div').forEach(d => d.onmousedown = e => { e.preventDefault(); pick(items[+d.dataset.i]); });
+  };
+  const pick = x => {
+    if (!x) return; dd.classList.remove('open'); q.value = '';
+    if (x.kind === 'veh') selectVehicle(x.v, true);
+    else { if (!S.areas.has(x.key)) toggleArea(x.key); switchTab('area'); }
+  };
+  q.oninput = () => {
+    const s = q.value.trim().toLowerCase(), sk = s.replace(/[\s-]/g, '');
+    items = []; hi = 0;
+    if (!s) return draw();
+    for (const [p, vin, v] of idxPlate) { if (p.includes(sk) || vin.includes(sk)) { items.push({ kind: 'veh', v, label: V.plate[v], sub: 'รถ · ' + V.center[v] }); if (items.length >= 8) break; } }
+    PROV.forEach((p, i) => { if (p.th.includes(s) || p.en.toLowerCase().includes(s)) items.push({ kind: 'area', key: 'p:' + i, label: p.th, sub: 'จังหวัด' }); });
+    let k = 0; DIST.forEach((d, i) => { if (k < 10 && (d.th.includes(s) || d.en.toLowerCase().includes(s))) { k++; items.push({ kind: 'area', key: 'd:' + i, label: d.th, sub: 'อำเภอ/เขต · ' + PROV[d.p].th }); } });
+    items = items.slice(0, 16); draw();
+  };
+  q.onkeydown = e => {
+    if (e.key === 'ArrowDown') { hi = Math.min(items.length - 1, hi + 1); draw(); e.preventDefault(); }
+    if (e.key === 'ArrowUp') { hi = Math.max(0, hi - 1); draw(); e.preventDefault(); }
+    if (e.key === 'Enter') pick(items[hi]);
+    if (e.key === 'Escape') { dd.classList.remove('open'); }
+  };
+  q.onblur = () => setTimeout(() => dd.classList.remove('open'), 120);
+}
+function downloadCSV() {
+  const lbl = { far: 'ต่างจังหวัด', near: 'ปริมณฑล', all: 'อยู่นอกตลอด' };
+  const lines = [['ทะเบียน', 'VIN', 'ศูนย์', 'ระดับ', 'ครั้งที่', 'เริ่ม', 'สิ้นสุด', 'นาที', 'จังหวัด', 'ไกลสุด_กม'].join(',')];
+  for (const r of VROWS) {
+    const xs = EXC_BY_V.get(r.v).slice().sort((a, b) => a.s - b.s);
+    xs.forEach((x, k) => {
+      const d0 = tDate(x.s), d1 = tDate(x.e);
+      const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+      lines.push([r.plate, D.vehicles.vin[r.v], D.vehicles.center[r.v], lbl[r.sev], k + 1, iso(d0), iso(d1), Math.round(x.dur / 60),
+        '"' + [...x.provs.keys()].map(p => PROV[p].th).join(' / ') + '"', Math.round(x.km)].join(','));
+    });
+  }
+  const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `taxi_out_of_zone_${S.zone}_${fDay(S.a).replace(/\s/g, '')}.csv`; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   เริ่ม
+   ══════════════════════════════════════════════════════════════════════ */
+(async function main() {
+  const msg = $('#loadMsg');
+  try {
+    initMap();
+    const data = await DataSource.load(m => msg.textContent = m);
+    prepare(data);
+    pcToProv = new Map(PROV.map((p, i) => [p.pc, i]));
+    pcToDist = new Map(DIST.map((d, i) => [d.pc, i]));
+    // ลำดับ feature ใน geo ไม่จำเป็นต้องตรงกับลำดับใน areas — ใช้ pc เป็นคีย์
+    $('#subtitle').textContent = `${fmt(NV)} คัน · ${fmt(N)} จุด GPS · ${fDT(0)} – ${fDT(D.meta.tmax)}`;
+    msg.textContent = 'คำนวณ…';
+    rebuildMask(); buildTimelineBins(); buildZoneGeo();
+    initUI(); initTimeline();
+    refreshPanels(); setT(S.T);
+    $('#loading').classList.add('hide');
+    applyHash();
+    if (location.search.includes('selftest')) selftest();
+  } catch (e) {
+    console.error(e);
+    msg.innerHTML = `<b style="color:var(--red)">โหลดไม่สำเร็จ</b><br>${e.message}<br><span class="muted">ต้องเปิดด้วย Chrome / Edge รุ่นใหม่ และต่ออินเทอร์เน็ต (โหลดแผนที่)</span>`;
+    document.querySelector('.spin').style.display = 'none';
+  }
+})();
+
+/* ลิงก์ตรง เช่น  Taxi_dashboard.html#tab=viol&zone=metro&plate=ทอ-9094 */
+function applyHash() {
+  const h = new URLSearchParams(decodeURIComponent(location.hash.slice(1)));
+  if (h.get('zone') && CFG.ZONES[h.get('zone')]) { S.zone = h.get('zone'); $('#zone').value = S.zone; buildZoneGeo(); refreshPanels(); }
+  if (h.get('plate')) {
+    const k = h.get('plate').replace(/[\s-]/g, '');
+    const v = D.vehicles.plate.findIndex(p => p.replace(/[\s-]/g, '').includes(k));
+    if (v >= 0) { selectVehicle(v, true); S.pt = 'now'; }
+  }
+  if (h.get('tab')) switchTab(h.get('tab'));
+}
+
+function selftest() {   // ใช้ตอนทดสอบอัตโนมัติ (?selftest) — เขียนผลลง <pre id=st>
+  const out = { N, NV, active: AREA.active };
+  for (const z of ['bkk', 'bkk_air', 'metro']) {
+    S.zone = z; S.minDur = 10; computeExcursions();
+    const rows = violRows();
+    out[z] = { cars: rows.length, trips: EXC.length, hrs: Math.round(EXC.reduce((s, x) => s + x.dur, 0) / 3600),
+               far: rows.filter(r => r.sev === 'far').length, all: rows.filter(r => r.sev === 'all').length };
+  }
+  S.zone = 'bkk'; computeExcursions();
+  const pre = document.createElement('pre'); pre.id = 'st'; pre.textContent = JSON.stringify(out); document.body.appendChild(pre);
+}
+</script>
+</body>
+</html>

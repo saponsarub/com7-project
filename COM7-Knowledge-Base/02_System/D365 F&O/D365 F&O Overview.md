@@ -433,6 +433,6 @@ com7 ถือคลังมากที่สุด 3,021 จาก 3,690
 
 ## เชื่อมโยง
 
-[[ITEC Overview]] · [[ITEC - Data Dictionary]] · [[ITEC - Query Cookbook]]
+[[D365 F&O - Sales Invoice & Product Mapping]] · [[D365 F&O - Storage Sizing]] · [[ITEC Overview]] · [[ITEC - Data Dictionary]] · [[ITEC - Query Cookbook]]
 [[System Inventory]] · [[Environment Setup]] · [[Data Standardization & Quality]]
 [[Open Questions & Risks]]

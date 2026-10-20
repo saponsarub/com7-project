@@ -336,12 +336,12 @@
 5 แถวตัวอย่าง · 6 คอลัมน์
 
 | CATEGORY_ID | CATEGORY_CODE | CATEGORY_NAME | GROUP_CATE_ID | BUNDLE_WARRANTY_STATUS | ACTIVE_STATUS |
-|---|---|---|---|---|---|
-| 2 | 01 | Smart Phone | 1 | F | T |
-| 3 | 02 | Tablet | 1 | F | T |
-| 4 | 03 | Laptop | 1 | F | T |
-| 5 | 05 | Smart Phone | 2 | F | F |
-| 6 | 06 | Tablet | 2 | F | F |
+| ----------- | ------------- | ------------- | ------------- | ---------------------- | ------------- |
+| 2           | 01            | Smart Phone   | 1             | F                      | T             |
+| 3           | 02            | Tablet        | 1             | F                      | T             |
+| 4           | 03            | Laptop        | 1             | F                      | T             |
+| 5           | 05            | Smart Phone   | 2             | F                      | F             |
+| 6           | 06            | Tablet        | 2             | F                      | F             |
 
 ## MT_SERIES
 
@@ -419,13 +419,13 @@
 
 5 แถวตัวอย่าง · 4 คอลัมน์
 
-| INSTALL_ID | INSTALL | ACTIVE_UFUND | ACTIVE_PFUND |
-|---|---|---|---|
-| 1 | 3 | False | False |
-| 2 | 6 | False | False |
-| 3 | 9 | True | True |
-| 4 | 12 | True | True |
-| 5 | 18 | True | True |
+| INSTALL_ID | INSTALL | ACTIVE_UFUND | ACTIVE_PFUND |     |
+| ---------- | ------- | ------------ | ------------ | --- |
+| 1          | 3       | False        | False        |     |
+| 2          | 6       | False        | False        |     |
+| 3          | 9       | True         | True         |     |
+| 4          | 12      | True         | True         |     |
+| 5          | 18      | True         | True         |     |
 
 ## MT_COLLECTION
 

@@ -247,18 +247,18 @@ JOIN syndpdev001.dbo.tm_Warehouse w WITH (NOLOCK)
 
 ### คลังที่มีรายการมากที่สุด
 
-| BU | คลัง | ชื่อ | แถว |
-|---|---|---|--:|
-| com7 | `4` | ID4 : คลังสินค้า (สำนักงานใหญ่) | **68,083,333** |
-| com7 | `77` | ID77 : E-Commerce Warehouse | 6,373,565 |
-| dou7 | `79998` | **Intransit** | 4,266,662 |
-| dou7 | `79001` | Warehouse (กลาง) | 3,928,714 |
-| bnn | `Realme` | Realme | 3,177,355 |
-| bnn | `72008` | ADEPT YAS | 1,692,681 |
-| com7 | `49` | ID49 : สินค้าโยกเข้าคลัง (01/10/2008) | 1,461,468 |
-| com7 | `115` | ID115 : Studio 7-Future Park-Rangsit | 1,139,786 |
-| com7 | `114` | ID114 : Studio 7-Central-Ladprao | 1,132,618 |
-| com7 | `787` | ID787 : Online-Clearance | 1,066,442 |
+| BU   | คลัง     | ชื่อ                                  |            แถว |
+| ---- | -------- | ------------------------------------- | -------------: |
+| com7 | `4`      | ID4 : คลังสินค้า (สำนักงานใหญ่)       | **68,083,333** |
+| com7 | `77`     | ID77 : E-Commerce Warehouse           |      6,373,565 |
+| dou7 | `79998`  | **Intransit**                         |      4,266,662 |
+| dou7 | `79001`  | Warehouse (กลาง)                      |      3,928,714 |
+| bnn  | `Realme` | Realme                                |      3,177,355 |
+| bnn  | `72008`  | ADEPT YAS                             |      1,692,681 |
+| com7 | `49`     | ID49 : สินค้าโยกเข้าคลัง (01/10/2008) |      1,461,468 |
+| com7 | `115`    | ID115 : Studio 7-Future Park-Rangsit  |      1,139,786 |
+| com7 | `114`    | ID114 : Studio 7-Central-Ladprao      |      1,132,618 |
+| com7 | `787`    | ID787 : Online-Clearance              |      1,066,442 |
 
 **คลัง `4` ของ com7 คนเดียวกินไป 24.7% ของทั้งตาราง** — คลังกลางสำนักงานใหญ่
 
@@ -485,6 +485,8 @@ QTY > 0  =  เข้าคลัง   (inbound)
 
 ## 12–15. คอลัมน์ต้นทุน 4 ตัว
 
+> ⚠️ ตารางนี้**ไม่มีราคาขาย** — ยอดขายเป็นเงินใช้ `syndpdev001.dbo.tb_SalesInvoice.LineAmount` (ไม่รวม VAT) + `LineAmountTax` → [[D365 F&O - Sales Invoice & Product Mapping]]
+
 ทั้ง 4 เป็น `decimal(38,6)` · **ไม่มีค่าว่างเลยสักตัว**
 
 ### สูตรที่พิสูจน์แล้ว
@@ -502,12 +504,12 @@ RealCost = COSTAMOUNTPOSTED + COSTAMOUNTADJUSTMENT
 | `COSTAMOUNTADJUSTMENT` | -932,775,700 | 139,916,345 | -885.90 | **-244,613,700,000** |
 | **`RealCost`** | -779,532,800 | 932,785,007 | 22.14 | **6,112,487,000** |
 
-| คอลัมน์ | ใช้ยังไง |
-|---|---|
-| `costamountstd` | ต้นทุนมาตรฐาน — เกือบเท่า `POSTED` เสมอ |
-| `COSTAMOUNTPOSTED` | ต้นทุนที่ลงบัญชีตอนทำรายการ |
+| คอลัมน์                | ใช้ยังไง                                                       |
+| ---------------------- | -------------------------------------------------------------- |
+| `costamountstd`        | ต้นทุนมาตรฐาน — เกือบเท่า `POSTED` เสมอ                        |
+| `COSTAMOUNTPOSTED`     | ต้นทุนที่ลงบัญชีตอนทำรายการ                                    |
 | `COSTAMOUNTADJUSTMENT` | ปรับทีหลัง — **97–99% เป็น 0** แต่ตัวที่ไม่ศูนย์มีมูลค่าสูงมาก |
-| **`RealCost`** | ✅ **ใช้ตัวนี้** ต้นทุนสุดท้ายหลังปรับ |
+| **`RealCost`**         | ✅ **ใช้ตัวนี้** ต้นทุนสุดท้ายหลังปรับ                          |
 
 ### จำนวนแถวที่ต้นทุน = 0 แยกตามประเภท
 
@@ -736,6 +738,6 @@ LEFT JOIN syndpdev001.dbo.tm_Warehouse w WITH (NOLOCK)
 
 ## เชื่อมโยง
 
-[[D365 F&O Overview]] · [[ITEC - Data Dictionary]] · [[ITEC - Query Cookbook]]
+[[D365 F&O Overview]] · [[D365 F&O - Sales Invoice & Product Mapping]] · [[ITEC - Data Dictionary]] · [[ITEC - Query Cookbook]]
 [[System Inventory]] · [[Environment Setup]] · [[Data Standardization & Quality]]
 [[Open Questions & Risks]]

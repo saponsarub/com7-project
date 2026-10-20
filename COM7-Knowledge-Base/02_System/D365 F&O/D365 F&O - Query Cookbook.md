@@ -188,17 +188,17 @@ ItemId 0000153922   NR@ Premium Xiaomi Smart Air Purifier 4 Compact
 
 **345 จาก 487 หมวด (71%) ชี้ไปมากกว่า 1 กลุ่ม**
 
-| หมวด | อยู่ใต้กี่กลุ่ม | dim |
-|---|--:|--:|
-| `Common` | **67** | 11,056 |
-| `iPhone` | 39 | 28,165 |
-| `Service` | 35 | 3,961 |
-| `Apple Watch` | 32 | 14,978 |
-| `Apple Case & Protection` | 29 | 9,711 |
-| `Smartphone` | 26 | 25,477 |
-| `AION` | 23 | 2,343 |
-| `IT Accessories` | 18 | 13,271 |
-| `Adapter` | 16 | 14,137 |
+| หมวด                      | อยู่ใต้กี่กลุ่ม |    dim |
+| ------------------------- | --------------: | -----: |
+| `Common`                  |          **67** | 11,056 |
+| `iPhone`                  |              39 | 28,165 |
+| `Service`                 |              35 |  3,961 |
+| `Apple Watch`             |              32 | 14,978 |
+| `Apple Case & Protection` |              29 |  9,711 |
+| `Smartphone`              |              26 | 25,477 |
+| `AION`                    |              23 |  2,343 |
+| `IT Accessories`          |              18 | 13,271 |
+| `Adapter`                 |              16 | 14,137 |
 
 > **ห้าม `GROUP BY CategoryName` เดี่ยว ๆ** ต้องจับคู่กับ `GroupCategoryName` เสมอ
 > แม้จับคู่แล้วก็ยังต้องระวัง ดูข้อ ③
@@ -229,11 +229,11 @@ XIAOMI ACCESSORIESESSORIES ← ต่อท้ายซ้ำ แยกเป็
 
 **com7 ยัดของ demo ทุกชนิดลงกลุ่ม `iPhone`**
 
-| ItemId | สินค้า | com7 จัดเป็น | bnn จัดเป็น |
-|---|---|---|---|
-| `0000159549` | Mijia Air Conditioner 18000 BTU | **iPhone** ▸ BTB Demo | Appliance ▸ Demo Xiaomi Eco |
-| `0000159615` | Xiaomi Redmi Buds 8 Pro | **iPhone** ▸ BTB Demo | Accessories ▸ Demo Xiaomi Eco |
-| `0000162044` | Redmi Watch 6 | **iPhone** ▸ BTB Demo | Smartwatch ▸ Demo Xiaomi Eco |
+| ItemId       | สินค้า                          | com7 จัดเป็น          | bnn จัดเป็น                   |
+| ------------ | ------------------------------- | --------------------- | ----------------------------- |
+| `0000159549` | Mijia Air Conditioner 18000 BTU | **iPhone** ▸ BTB Demo | Appliance ▸ Demo Xiaomi Eco   |
+| `0000159615` | Xiaomi Redmi Buds 8 Pro         | **iPhone** ▸ BTB Demo | Accessories ▸ Demo Xiaomi Eco |
+| `0000162044` | Redmi Watch 6                   | **iPhone** ▸ BTB Demo | Smartwatch ▸ Demo Xiaomi Eco  |
 
 ทั้ง 14 รหัสเป็นรูปแบบเดียวกัน — **รายงานยอดกลุ่ม `iPhone` ของ com7 จะเฟ้อด้วยของที่ไม่ใช่ iPhone**
 
@@ -656,6 +656,6 @@ WHERE CompanyCode IN ('com7','dou7','bnn') GROUP BY CompanyCode;
 
 ## เชื่อมโยง
 
-[[D365 F&O Overview]] · [[D365 F&O - Transaction_FO Dictionary]]
+[[D365 F&O Overview]] · [[D365 F&O - Transaction_FO Dictionary]] · [[D365 F&O - Sales Invoice & Product Mapping]]
 [[ITEC - Query Cookbook]] · [[ITEC - Data Dictionary]] · [[ITEC Product Dimension]]
 [[System Inventory]] · [[Environment Setup]] · [[Open Questions & Risks]]

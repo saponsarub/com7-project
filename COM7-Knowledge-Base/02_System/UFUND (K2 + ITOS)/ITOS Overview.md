@@ -2,13 +2,14 @@
 
 ระบบสินเชื่อ/ติดตามหนี้ของ **UFUND (Thunder FinFin)** — ระบบที่ K2 กำลังย้ายไปหา
 
-| | |
-|---|---|
-| Survey | **Done** · schema wiki สร้าง 2026-05-04 |
-| เจ้าของงาน | K.Ton |
-| Physical | MSSQL ฐาน **`ILOAN_COLLECTION`** |
-| ชั้น extract | `ILOAN_DATASOURCE.dbo.ITOS_COLLECTION_DETAIL` · `ITOS_COLLECTION_PORTFOLIO` |
-| ขนาด | **55 ตารางที่ใช้จริง** (ตัดออก 167 ตารางที่ว่างเปล่าหรือชื่อเป็น `BK_*`, `*_BK`, ลงท้ายด้วยตัวเลข) |
+|              |                                                                                                    |     |
+| ------------ | -------------------------------------------------------------------------------------------------- | --- |
+| Survey       | **Done** · schema wiki สร้าง 2026-05-04                                                            |     |
+| เจ้าของงาน   | K.Ton                                                                                              |     |
+| Physical     | MSSQL ฐาน **`ILOAN_COLLECTION`**                                                                   |     |
+| ชั้น extract | `ILOAN_DATASOURCE.dbo.ITOS_COLLECTION_DETAIL` · `ITOS_COLLECTION_PORTFOLIO`                        |     |
+| ขนาด         | **55 ตารางที่ใช้จริง** (ตัดออก 167 ตารางที่ว่างเปล่าหรือชื่อเป็น `BK_*`, `*_BK`, ลงท้ายด้วยตัวเลข) |     |
+|              |                                                                                                    |     |
 
 ธุรกิจที่ระบบนี้รองรับ → [[UFUND]] · ระบบคู่แฝด → [[K2 Overview]]
 
@@ -54,8 +55,44 @@
 
 **ตาราง master:** `M_AREA` (7,488) · `M_DISTRICT` (7,460) · `M_COMPANYBRANCH` (1,741) · `M_BUCKETAREA` (1,737) · `M_AMPHUR` (929) · `M_ROAD` (745) · `M_HOLIDAY` (730) · `M_PROVINCE` (80) · `M_COMPANY` (18) · `M_PRODUCT` (16) · `M_CHANNEL` (7)
 
+### วิธี query ตารางหลัก (ตรวจจริง 2026-10-09)
+
+**ตัวอย่าง query ครบทุกเรื่อง + ตารางที่ข้อมูลเหมือนกัน → [[ITOS - Query Cookbook]]**
+
+เข้า `ILOAN_COLLECTION` ตรงไม่ได้ แต่ฐาน `ILOAN_DATASOURCE` (linked server ของ k2 · profile `k2`) มี **external table ใน schema `ext_collection`** ที่ชี้ไปตารางชุดนี้ (จำนวนคอลัมน์ตรงกัน)
+
+```
+ILOAN_DATASOURCE.ILOAN_DATASOURCE.ext_collection.<ตาราง>
+```
+
+| ตาราง                                         |    แถว 2026-10-09 | คีย์ join                                               |
+| --------------------------------------------- | ----------------: | ------------------------------------------------------- |
+| `S_CONTRACT`                                  |           343,322 | `CONTRACT_NO` · ลูกค้า `CONTRACT_CUSTCODE`              |
+| `S_CUSTOMER`                                  |           343,317 | `CUST_CODE`                                             |
+| `S_ASSET`                                     |           343,322 | `ASSET_CONTRACTNO` (มี `ASSET_IMEI` · `ASSET_SERIALNO`) |
+| `S_OUTSTANDING`                               |           337,333 | `OUTS_CONTRACTNO`                                       |
+| `S_PMTSCHDLE`                                 |         6,074,043 | `SCHEDULE_CONTRACTNO` + `SCHEDULE_TERMNO`               |
+| `S_CUSTTEL`                                   |           951,893 | `TEL_CUSTCODE`                                          |
+| `T_JOBTRANS` · `M_COLLECTOR` · `M_MASTERINFO` | 23,241 · 77 · 400 |                                                         |
+|                                               |                   |                                                         |
+
+**ไม่มีใน `ext_collection`:** `S_CUSTADDR` · `S_ADDRESS` (ใช้ `dbo.COLLECTION_S_ADDRESS` แทน) · `S_CUSTEMAIL` · `S_CONTRACTCUST` · `S_FINANCE` · `S_INSURANCE` · `T_NOTE` (มี `dbo.COLLECTION_ORCL_T_NOTE`) · `S_COLLECTRESP` · `R_SNAP` · ตาราง `M_*` ส่วนใหญ่
+
+**เทียบกับ `dbo.ITOS_COLLECTION_DETAIL` (2026-10-09 · 11,413 สัญญา):** สัญญาชุดเดียวกัน (เจอครบ 100% ด้วยเลขสัญญา) แต่ **`ext_collection` เป็นข้อมูลสด** ส่วน DETAIL เป็น snapshot ที่โหลดตอน 23:10 ของคืนก่อน
+- ตรงกัน ≥99.5%: งวดที่จ่ายแล้ว (`OUTS_PAIDTERM`) · งวดค้าง (`OUTS_OVDTERM`) · ยอดค้าง (`OUTS_OVDAMTTOTAL`) · วันครบกำหนด · วันจ่ายล่าสุด · model 100% · serial (`ASSET_SERIALNO`) 97%
+- 30 สัญญาที่ไม่ตรงคือลูกค้าที่**จ่ายเงินวันที่ 10-09** ฝั่ง ext จึงเห็นแล้ว (งวดค้าง 1 → 0) แต่ DETAIL ยังไม่เห็น
+- **ใช้แทนกันไม่ได้:**
+  - `CONTRACT_ID` เป็นคนละชุดเลข → ต้อง join ด้วยเลขสัญญา
+  - `OUTS_TERM` ไม่ใช่จำนวนงวดทั้งหมด `[อนุมาน: เป็นงวดปัจจุบัน]`
+  - `OUTS_PENALTY` เป็น null ทุกแถว (DETAIL มี `PENALTY_AMT`)
+  - `OUTS_PRINCIPLE` / `OUTS_PRINCIPLETOTAL` ไม่ใช่เงินต้นคงเหลือ `[อนุมาน: เป็นยอดตั้งต้น รวม VAT / ไม่รวม VAT]`
+  - `OUTS_ASOFDATE` เป็น null ทุกแถว
+  - `REMAINING_OUTSTANDING` เท่ากับ `OUTS_AMTTOTAL` 96.8% · อีก 369 สัญญายังไม่รู้ว่าต่างเพราะอะไร
+
+แถวเพิ่มจาก ~165k (ตอนทำ wiki 2026-05) เป็น ~343k · ห้ามใส่ `WITH (NOLOCK)` · ทุกตารางมี `*_ASOFDATE` / `*_BATCHROUND`
+
 > **การตั้งชื่อ:** `S_` = ข้อมูลสัญญา/ลูกค้า · `M_` = master · `T_` = transaction · `R_` = report/snapshot
-> สะอาดกว่า K2 มาก และมี **1 แถวต่อ 1 ลูกค้า** ไม่ใช่ 1 แถวต่อ 1 ใบคำขอแบบ K2
+> สะอาดกว่า K2 มาก · ⚠️ แก้ 2026-10-09: wiki บอกว่า 1 แถวต่อ 1 ลูกค้า แต่ของจริง `CUST_CODE` มี 343,312 รหัส ≈ จำนวนสัญญา (343,322) · เลขบัตรไม่ซ้ำ 342,486 → **ได้ `CUST_CODE` ใหม่ทุกสัญญา** ต้องรวมคนด้วย `CUST_CARDNO`
 
 ---
 
@@ -86,6 +123,8 @@
 
 > **รหัส ธปท. ยืนยันว่ามีภาระรายงานต่อธนาคารแห่งประเทศไทย** นอกเหนือจาก PDPA
 > → มีผลต่อการเก็บรักษาและการเข้าถึงข้อมูลใน lake ดู [[Consent & PDPA]]
+>
+> ⚠️ **ตรวจค่าจริง 2026-10-09:** คอลัมน์ `CUST_BOT*` · `CUST_SP_*` (คู่สมรส) · `CUST_OCCUPATION` **ว่างทุกแถว** · `CUST_GENDER` ว่างเกือบทุกแถว → มีคอลัมน์แต่ไม่ได้กรอก ข้อสรุปเรื่องภาระรายงาน ธปท. ข้างบนจึงยังไม่มีหลักฐานจากข้อมูล · ตัวอย่าง query → [[ITOS - Query Cookbook#S_CUSTOMER — ตัวอย่าง query]]
 
 ---
 
@@ -139,4 +178,4 @@
 
 ## เชื่อมกับโน้ตอื่น
 
-[[UFUND]] · [[K2 Overview]] · [[Collection Union (K2 + ITOS)]] · [[K2 + ITOS Integration]] · [[System Inventory]] · [[Customer Identity]] · [[Data Standardization & Quality]]
+[[UFUND]] · [[K2 Overview]] · [[ITOS - Query Cookbook]] · [[Collection Union (K2 + ITOS)]] · [[K2 + ITOS Integration]] · [[System Inventory]] · [[Customer Identity]] · [[Data Standardization & Quality]] · [[K2 + ITOS - Storage Sizing]]

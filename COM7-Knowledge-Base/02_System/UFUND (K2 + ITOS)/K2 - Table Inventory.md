@@ -13,27 +13,28 @@
 
 ## 1 · Customer — 20 tables
 
-| ตาราง | แถว | คอลัมน์ | แก้ล่าสุด |
-|---|---:|---:|---|
-| `CONTACT_DEBT_COLLECTION` | 3,458,409 | 14 | 2025-07-02 |
-| `ADDRESS_PROSPECT_CUSTOMER` | 987,518 | 80 | 2025-05-13 |
-| `PROSPECT_CUSTOMER` | 800,282 | 132 | 2025-07-02 |
-| `CONTACT` | 490,498 | 9 | 2022-03-17 |
-| **`PERSON`** | **404,745** | **190** | 2025-07-02 |
-| **`ADDRESS`** | **403,282** | **101** | 2025-07-02 |
-| `CHECKER` | 402,965 | 44 | 2025-05-12 |
-| `CHECKER_GUARANTOR` | 361,169 | 58 | 2024-05-07 |
-| `RESERVER_REPAYMENT_TempNCB` | 298,374 | 16 | 2025-01-06 |
-| `NCB_testFormat` | 230,556 | 33 | 2023-06-19 |
-| `PROSPECT_GUARANTOR` | 16,804 | 39 | 2025-05-12 |
-| `ADDRESS_GUARANTOR` | 12,623 | 79 | 2024-11-06 |
-| `ADDRESS_PROSPECT_GUARANTOR` | 5,250 | 79 | 2025-05-13 |
-| `PERSON_Dept` | 3,273 | 109 | 2022-03-17 |
-| `ADDRESS_Dept` | 3,273 | 81 | 2022-03-17 |
-| `PERSON_PHONE_DUP` | 1,175 | 5 | 2022-03-17 |
-| `NationalCreditBureau` | 136 | 66 | 2025-07-02 |
-| `CIF_PERSON` | 134 | 48 | 2022-03-17 |
-
+| ตาราง                        |         แถว | คอลัมน์ | แก้ล่าสุด  |
+| ---------------------------- | ----------: | ------: | ---------- |
+| `CONTACT_DEBT_COLLECTION`    |   3,458,409 |      14 | 2025-07-02 |
+| `ADDRESS_PROSPECT_CUSTOMER`  |     987,518 |      80 | 2025-05-13 |
+| `PROSPECT_CUSTOMER`          |     800,282 |     132 | 2025-07-02 |
+| `CONTACT`                    |     490,498 |       9 | 2022-03-17 |
+| **`PERSON`**                 | **404,745** | **190** | 2025-07-02 |
+| **`ADDRESS`**                | **403,282** | **101** | 2025-07-02 |
+| `CHECKER`                    |     402,965 |      44 | 2025-05-12 |
+| `CHECKER_GUARANTOR`          |     361,169 |      58 | 2024-05-07 |
+| `RESERVER_REPAYMENT_TempNCB` |     298,374 |      16 | 2025-01-06 |
+| `NCB_testFormat`             |     230,556 |      33 | 2023-06-19 |
+| `PROSPECT_GUARANTOR`         |      16,804 |      39 | 2025-05-12 |
+| `ADDRESS_GUARANTOR`          |      12,623 |      79 | 2024-11-06 |
+| `ADDRESS_PROSPECT_GUARANTOR` |       5,250 |      79 | 2025-05-13 |
+| `PERSON_Dept`                |       3,273 |     109 | 2022-03-17 |
+| `ADDRESS_Dept`               |       3,273 |      81 | 2022-03-17 |
+| `PERSON_PHONE_DUP`           |       1,175 |       5 | 2022-03-17 |
+| `NationalCreditBureau`       |         136 |      66 | 2025-07-02 |
+| `CIF_PERSON`                 |         134 |      48 | 2022-03-17 |
+|                              |             |         |            |
+	
 **ผู้ค้ำมีชุดตารางของตัวเองครบ** — `GUARANTOR` (12,629) · `ADDRESS_GUARANTOR` (12,623) · `PROSPECT_GUARANTOR` (16,804) · `CHECKER_GUARANTOR` (361,169) · `GUARANTOR_ATTACHMENT` (23,843)
 `CHECKER_GUARANTOR` 361,169 แถวมากกว่า `GUARANTOR` 12,629 มาก — น่าจะเป็นผลตรวจสอบทุกใบคำขอ ไม่ใช่ผู้ค้ำจริง `[อนุมาน]`
 **`GUARANTOR` คือผู้ค้ำตัวจริง 12,629 คน แต่มี `CONTRACT_ID` แค่ 1,121 สัญญา** ที่เหลือผูกกับ `APP_ID` → [[K2 - Business Rules]] ข้อ 6
@@ -48,20 +49,20 @@
 
 ## 2 · Quotation / application — 12 tables
 
-| ตาราง | แถว | คอลัมน์ | แก้ล่าสุด |
-|---|---:|---:|---|
-| `APPLICATION_SCORING_DETAIL` | 3,108,379 | 8 | 2025-05-12 |
-| `APPROVAL_HISTORY` | 2,111,963 | 9 | **2026-05-08** |
-| **`QUOTATION`** | **801,188** | **107** | 2025-10-16 |
-| `APPLICATION_SCORING` | 621,676 | 7 | 2025-05-12 |
-| `APPROVAL_HISTORY_STATUS_DESC` | 506,322 | 13 | 2025-05-20 |
-| **`APPLICATION`** | **410,306** | **27** | **2026-04-23** |
-| `PRODUCT` | 403,758 | 95 | 2025-10-16 |
-| `PURCHASE_ORDER` | 290,213 | 18 | 2025-05-20 |
-| `Outsource_Credit_Scoring` | 141,488 | 31 | 2025-09-24 |
-| `PRODUCT_Dept` | 3,273 | 62 | 2022-03-17 |
-| **`ZZ_PRODUCT_K2_ITOS_mapping`** | **593** | 12 | **2025-09-14** |
-| `PURCHASE_ORDER_REGEN` | 32 | 16 | 2022-02-08 |
+| ตาราง                            |         แถว | คอลัมน์ | แก้ล่าสุด      |
+| -------------------------------- | ----------: | ------: | -------------- |
+| `APPLICATION_SCORING_DETAIL`     |   3,108,379 |       8 | 2025-05-12     |
+| `APPROVAL_HISTORY`               |   2,111,963 |       9 | **2026-05-08** |
+| **`QUOTATION`**                  | **801,188** | **107** | 2025-10-16     |
+| `APPLICATION_SCORING`            |     621,676 |       7 | 2025-05-12     |
+| `APPROVAL_HISTORY_STATUS_DESC`   |     506,322 |      13 | 2025-05-20     |
+| **`APPLICATION`**                | **410,306** |  **27** | **2026-04-23** |
+| `PRODUCT`                        |     403,758 |      95 | 2025-10-16     |
+| `PURCHASE_ORDER`                 |     290,213 |      18 | 2025-05-20     |
+| `Outsource_Credit_Scoring`       |     141,488 |      31 | 2025-09-24     |
+| `PRODUCT_Dept`                   |       3,273 |      62 | 2022-03-17     |
+| **`ZZ_PRODUCT_K2_ITOS_mapping`** |     **593** |      12 | **2025-09-14** |
+| `PURCHASE_ORDER_REGEN`           |          32 |      16 | 2022-02-08     |
 
 > **`ZZ_PRODUCT_K2_ITOS_mapping` คือของจริงจากโปรเจกต์รวม K2 กับ ITOS** — มีคนทำ mapping สินค้าระหว่างสองระบบไว้แล้ว 593 แถว เมื่อ ก.ย. 2025
 > **ต้องไปดูตารางนี้ก่อนเริ่ม mapping ใหม่** เชื่อมกับ [[K2 + ITOS Integration]]

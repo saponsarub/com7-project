@@ -217,4 +217,4 @@ NULL คือสัญญาเก่าก่อนที่จะมีฟิ
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITOS Overview]] · [[System Inventory]] · [[UFUND]] · [[Customer Identity]] · [[K2 + ITOS Integration]] · [[SQL & Source Schemas]] · [[K2 Issues]]
+[[ITOS Overview]] · [[System Inventory]] · [[UFUND]] · [[Customer Identity]] · [[K2 + ITOS Integration]] · [[SQL & Source Schemas]] · [[K2 Issues]] · [[K2 + ITOS - Storage Sizing]]

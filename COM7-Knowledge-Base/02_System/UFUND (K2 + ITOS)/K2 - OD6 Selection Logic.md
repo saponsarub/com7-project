@@ -16,13 +16,13 @@
 
 ## ของจริงที่ใช้ตอนนี้
 
-| | |
-|---|---|
-| SQL | `sql\k2_termination_list_v4.sql` |
-| สคริปต์ | `scripts\k2\k2_termination.py` |
-| รันรอบถัดไป | `python scripts/k2/k2_termination.py 2026-09-01` |
-| ผลรอบ 8/2026 | **547 สัญญา · 5,235,095.98 บาท** |
-| วิธีทำทีละขั้น | [[K2 - Termination Letter How-To]] |
+|                |                                                  |
+| -------------- | ------------------------------------------------ |
+| SQL            | `sql\k2_termination_list_v4.sql`                 |
+| สคริปต์        | `scripts\k2\k2_termination.py`                   |
+| รันรอบถัดไป    | `python scripts/k2/k2_termination.py 2026-09-01` |
+| ผลรอบ 8/2026   | **547 สัญญา · 5,235,095.98 บาท**                 |
+| วิธีทำทีละขั้น | [[K2 - Termination Letter How-To]]               |
 
 โน้ตนี้อธิบาย **"ทำไม"** ส่วน [[K2 - Termination Letter Mapping]] อธิบาย **"ดึงอะไรจากไหน"**
 

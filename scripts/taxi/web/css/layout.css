@@ -1,0 +1,43 @@
+/* css/layout.css — โครงหน้า (header · sidebar · แผนที่ · ไทม์ไลน์) + responsive */
+/* ── shell ───────────────────────────────────────────────────────────── */
+.app{display:grid;grid-template-rows:56px 1fr auto;grid-template-columns:372px 1fr;height:100vh}
+header{grid-column:1/3;display:flex;align-items:center;gap:16px;padding:0 16px;background:var(--panel);border-bottom:1px solid var(--line);z-index:5}
+header .brand{display:flex;align-items:center;gap:12px;min-width:0}
+header .brand img{height:30px;width:auto;display:block}
+header .brand .t{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+header .brand b{font-size:15px;font-weight:700;letter-spacing:.01em;white-space:nowrap}
+header .brand small{font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpis{display:flex;gap:6px;margin-left:auto;flex-wrap:nowrap;overflow-x:auto}
+.kpi{display:flex;flex-direction:column;align-items:flex-start;padding:4px 12px;border-left:1px solid var(--line);min-width:84px}
+.kpi:first-child{border-left:0}
+.kpi .k{font-size:10.5px;color:var(--ink-3);letter-spacing:.02em;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.kpi .v{font-family:var(--mono);font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+
+aside{grid-row:2/3;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;z-index:4}
+main{position:relative;min-width:0;min-height:0}
+#map{position:absolute;inset:0}
+footer{grid-column:1/3;background:var(--panel);border-top:1px solid var(--line);z-index:5}
+/* ── timeline ────────────────────────────────────────────────────────── */
+.tl{display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:8px 16px 10px}
+.play{width:38px;height:38px;border-radius:50%;border:0;background:var(--green);color:#fff;display:grid;place-items:center;font-size:15px}
+.play:hover{background:var(--green-d)}
+.clock{display:flex;flex-direction:column;line-height:1.15;min-width:150px}
+.clock .d{font-size:11px;color:var(--ink-3)}
+.clock .h{font-family:var(--mono);font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.chartwrap{position:relative;height:64px;min-width:0}
+#tlc{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;touch-action:none}
+.tlright{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.tlright .ctl{justify-content:flex-end}
+.rng{font-size:11px;color:var(--ink-2);font-family:var(--mono);white-space:nowrap}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr;grid-template-rows:56px 46vh 1fr auto}
+  aside{grid-row:3/4;border-right:0;border-top:1px solid var(--line)}
+  main{grid-row:2/3}
+  header,footer{grid-column:1/2}
+  .kpis .kpi:nth-child(n+4){display:none}
+  .tl{grid-template-columns:auto 1fr;gap:10px}
+  .tl .clock{min-width:0}
+  .tl .chartwrap{grid-column:1/3}
+  .tlright{grid-column:1/3;align-items:stretch}
+}

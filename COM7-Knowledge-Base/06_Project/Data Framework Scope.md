@@ -58,12 +58,12 @@
 
 > "Every business has some data in common. However, each business type has specific data of its own."
 
-| ประเภท | โฟกัส |
-|---|---|
-| **Retail** | Inventory Management · Product Shelf Life · Transportation Schedule · Sale Channel Planning · Promotion · Product Dimension · Product Variety |
-| **Service Provider** | Scope of Services · Progress Planning · License Management · Software Maintenance · Labor Efficiency |
-| **Manufacturing** | Inventory (raw mat, WIP, finished good) · Production Capacity · Production Planning · Logistic System · Machine Maintenance · Supplier Management |
-| **Finance** | Portfolio Management · Customer Credit Score · Approval Process · Collection · Loss Prevention · Loss Reserve · **BOT Compliance** |
+| ประเภท               | โฟกัส                                                                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Retail**           | Inventory Management · Product Shelf Life · Transportation Schedule · Sale Channel Planning · Promotion · Product Dimension · Product Variety     |
+| **Service Provider** | Scope of Services · Progress Planning · License Management · Software Maintenance · Labor Efficiency                                              |
+| **Manufacturing**    | Inventory (raw mat, WIP, finished good) · Production Capacity · Production Planning · Logistic System · Machine Maintenance · Supplier Management |
+| **Finance**          | Portfolio Management · Customer Credit Score · Approval Process · Collection · Loss Prevention · Loss Reserve · **BOT Compliance**                |
 
 ทุกประเภทมีร่วมกัน: **User Role & Permission** · **Activity Log** · feed เข้า **Consolidated Customer Environment & Leads**
 

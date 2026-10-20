@@ -5,7 +5,7 @@
     python scripts/itec/category/export_items.py --bucket com7-ml-itec
 
 ไม่ใส่ --bucket = เขียนไฟล์อย่างเดียว ไม่อัป
-เอกสาร: COM7-Knowledge-Base/05_ETL/ITEC Model - Run on EC2 Guide.md
+เอกสาร: COM7-Knowledge-Base/10_AI-ML/ITEC Model - Run on EC2 Guide.md
 """
 import argparse
 import os

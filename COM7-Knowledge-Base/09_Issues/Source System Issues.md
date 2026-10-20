@@ -65,9 +65,18 @@ COM7 ดูเหมือนมี ERP สองระบบ (D365 F&O แล�
 
 ## Azure Synapse + ADLS — คำถามที่ยังไม่มีคำตอบ
 
-เนื้อหา → [[Other Systems]]
+เนื้อหา → [[Other Systems]] · วิธีย้าย → [[ADLS Gen2 to S3]]
 
-ADLS Gen1 หรือ Gen2 · BU ไหนที่ข้อมูลผ่าน Synapse · ใช้ service/function ไหนบ้าง · มี Azure Data Factory ไหม · data format อะไร · RPA ทำอะไร · `syndpdev001` เป็น dev environment ไหม (ชื่อมี `dev`) มี production แยกไหม · Alphametrics ยังทำงานด้วยกันอยู่ไหม
+**ปิดแล้ว 2026-10-08 (จากคู่มือ Alphametrics):** ADLS เป็น **Gen2** · ใช้ **Synapse pipeline** (ไม่ใช่ ADF แยก) · `syndpdev001` คือ **dedicated SQL pool** ใน workspace `synw-com7dw-dev` · ข้อมูลที่ผ่าน Synapse มาจาก D365 F&O (Synapse Link) · BC LS Retail (Double7) · ITEC · Excel บน SharePoint
+
+**ยังค้าง:** ชื่อ storage account / container จริง (`stcom7dw001` ใช่ไหม) · Synapse Link เขียนเป็น **Delta หรือ CSV** · ไฟล์จาก pipeline BCLS/ITEC เป็น CSV หรือ Parquet และเป็น snapshot หรือส่วนต่าง · ขนาดข้อมูลรวม · storage ปิด public network ไหม · Azure region · มี workspace production แยกไหม (ชื่อมี `dev`) · RPA ทำอะไร · Alphametrics ยังดูแลอยู่ไหม
+
+### 🔴 รหัสผ่านในเอกสาร training
+
+`D:\Azure\COM7-02 Training material - Azure Synapse.pdf` หน้า "ตั้งค่า Row-Level security" มีคำสั่ง `create login ... with password = '...'` **พร้อมรหัสจริงของ login ทุก BU** (`sqluser_all` และรายบริษัท) เป็นข้อความธรรมดา
+- แจ้งเจ้าของ Synapse ให้ **เปลี่ยนรหัสทุก login** และตรวจว่าใครได้ไฟล์นี้ไปบ้าง
+- จำกัดการเข้าถึงไฟล์ · ไม่ส่งต่อ · ไม่คัดลอกรหัสลงที่ใด (vault นี้ไม่ได้เก็บรหัส)
+- ระยะยาวใช้ Entra ID แทน SQL login
 
 ---
 

@@ -122,9 +122,9 @@ Proposal บอก Bronze = raw ที่ scan แล้ว · ทีมร่�
 | **DATALAKE มีมากกว่า `Transaction_FO` 13.7 ล้านแถว** — น่าจะเป็นรายการสถานะเปิด ยังไม่ได้พิสูจน์ | MIS-ERP |
 | **`bnn ▸ NOTHING SMARTPHONE` ต้นทุนรวม 46.7 พันล้านบาท** จาก 145 SKU — ตัวเลขเป็นไปไม่ได้ | MIS-ERP |
 | **บริษัทใน `tm_FinDimValueSet` ที่ไม่มีใน `Transaction_FO`** — `PRIME` `TFF` `ITEC` `C7H` `NOVUS` `SKH` `GIH` `ICI` คืออะไร | MIS-ERP |
-| ADLS Gen1 หรือ Gen2 · มี Azure Data Factory ไหม | Data Team |
+| ~~ADLS Gen1 หรือ Gen2 · มี Azure Data Factory ไหม~~ **ปิดแล้ว 2026-10-08** — Gen2 · ใช้ Synapse pipeline → [[ADLS Gen2 to S3]] | Data Team |
 | AION DMS / EV7CORE / EVTRACKING คืออะไร · RPA ย้ายอะไร | Punt, Nut |
-| **Double7 / Co-Ture Shop / Dtac Shop ใช้ระบบอะไร** — ไม่พบชื่อเหล่านี้ในเอกสารต้นฉบับไฟล์ไหนเลย | — |
+| **Double7 / Co-Ture Shop / Dtac Shop ใช้ระบบอะไร** — **Double7 ปิดแล้ว 2026-10-08: Business Central LS Retail** (`raws.BC_D7_*` ในคู่มือ Synapse) · Co-Ture / Dtac Shop ยังไม่พบ | — |
 | ITEC schema documentation อยู่ไหน — survey Done แล้วแต่ไม่พบเอกสาร | Data Team |
 | ~~CRM data dictionary (`crm_fied_description.html`) อยู่ไหน~~ **ปิดแล้ว 2026-09-11** — ได้ไฟล์และแตกเป็น [[CRM - Data Dictionary]] | P.Por |
 | CRM เป็น platform อะไร | P.Por |

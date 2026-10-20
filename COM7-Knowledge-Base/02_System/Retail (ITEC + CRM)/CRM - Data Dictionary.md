@@ -105,24 +105,25 @@ WHERE cm.citizen_no = ?;
 
 ## 2. `customer_master` — ลูกค้าทั้งหมด · 16 ฟิลด์
 
-| # | ฟิลด์ | ชนิด | คำอธิบาย |
-|--:|---|---|---|
-| 1 | `id` 🔑 | bigint unsigned | Primary Key — ปลายทางของ `members.customer_master_id` |
-| 2 | `first_name` | varchar(100) | ชื่อ |
-| 3 | `last_name` | varchar(100) | นามสกุล |
-| 4 | `email` | varchar(100) | อีเมล |
-| 5 | `phone` | varchar(50) | เบอร์โทรศัพท์ |
-| 6 | `citizen_no` 🔗 | varchar(255) | **เลขบัตรประชาชน** |
-| 7 | `birth_date` | datetime | วันเกิด |
-| 8 | `age` | int | อายุ |
-| 9 | `consent_personal` | int | การยินยอมข้อมูลส่วนบุคคล |
-| 10 | `consent_product` | int | การยินยอมข้อมูลสินค้า |
-| 11 | `consent_promotion` | int | การยินยอมข้อมูลโปรโมชัน |
-| 12 | `is_member` | int | เป็นสมาชิกหรือไม่ (0/1) |
-| 13 | `is_active` | int | บัญชียังใช้งานอยู่ |
-| 14 | `is_staff` | int | เป็นพนักงาน |
-| 15 | `created_at` | timestamp | วันที่สร้างเรคอร์ด |
-| 16 | `updated_at` | timestamp | วันที่แก้ไขล่าสุด |
+|   # | ฟิลด์               | ชนิด            | คำอธิบาย                                              |
+| --: | ------------------- | --------------- | ----------------------------------------------------- |
+|   1 | `id` 🔑             | bigint unsigned | Primary Key — ปลายทางของ `members.customer_master_id` |
+|   2 | `first_name`        | varchar(100)    | ชื่อ                                                  |
+|   3 | `last_name`         | varchar(100)    | นามสกุล                                               |
+|   4 | `email`             | varchar(100)    | อีเมล                                                 |
+|   5 | `phone`             | varchar(50)     | เบอร์โทรศัพท์                                         |
+|   6 | `citizen_no` 🔗     | varchar(255)    | **เลขบัตรประชาชน**                                    |
+|   7 | `birth_date`        | datetime        | วันเกิด                                               |
+|   8 | `age`               | int             | อายุ                                                  |
+|   9 | `consent_personal`  | int             | การยินยอมข้อมูลส่วนบุคคล                              |
+|  10 | `consent_product`   | int             | การยินยอมข้อมูลสินค้า                                 |
+|  11 | `consent_promotion` | int             | การยินยอมข้อมูลโปรโมชัน                               |
+|  12 | `is_member`         | int             | เป็นสมาชิกหรือไม่ (0/1)                               |
+|  13 | `is_active`         | int             | บัญชียังใช้งานอยู่                                    |
+|  14 | `is_staff`          | int             | เป็นพนักงาน                                           |
+|  15 | `created_at`        | timestamp       | วันที่สร้างเรคอร์ด                                    |
+|  16 | `updated_at`        | timestamp       | วันที่แก้ไขล่าสุด                                     |
+|     |                     |                 |                                                       |
 
 ### จุดที่ใช้งานได้ทันที
 

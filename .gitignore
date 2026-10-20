@@ -86,3 +86,6 @@ Untitled.ipynb
 
 # JupyterLab สร้างสำเนาไฟล์ที่เปิดอยู่ไว้ที่นี่ — ไม่ใช่ต้นฉบับ
 .virtual_documents/
+
+# ข้อมูลรถที่ build สร้าง (ทะเบียน · VIN · ตำแหน่ง) — ห้าม commit
+scripts/taxi/web/data/

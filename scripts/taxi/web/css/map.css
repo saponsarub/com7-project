@@ -1,0 +1,38 @@
+/* css/map.css — สิ่งที่ลอยบนแผนที่ — กล่องควบคุม · ตำนาน · tooltip · การ์ดสถานที่ · กล่อง error */
+/* ── map overlays ────────────────────────────────────────────────────── */
+.mapctl{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:8px;z-index:3}
+.mbox{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.mbox .lbl{font-size:10.5px;color:var(--ink-3);font-weight:600;letter-spacing:.05em}
+.legend{position:absolute;left:12px;bottom:28px;z-index:3;min-width:200px}
+.legend .row{display:flex;align-items:center;gap:8px;font-size:12px}
+.ramp{display:flex;height:8px;border-radius:3px;overflow:hidden;margin-top:4px}
+.ramp i{flex:1}
+.rampl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);font-family:var(--mono)}
+.zoomto{position:absolute;right:12px;top:12px;z-index:3;display:flex;gap:6px}
+.loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(238,242,240,.9);z-index:30;flex-direction:column;gap:10px;font-size:13px;color:var(--ink-2)}
+.loading.hide{display:none}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--green);border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+.deck-tooltip{font-family:var(--sans)!important;font-size:12px!important;background:#10231a!important;color:#fff!important;border-radius:8px!important;padding:8px 10px!important;box-shadow:var(--shadow)!important;max-width:280px}
+.deck-tooltip b{font-family:var(--mono)}
+.deck-tooltip .tt-k{color:#9fb3a8}
+/* ── v2: สถานที่ · จุดจอด · ตั้งค่า ──────────────────────────────────── */
+.place{position:absolute;right:12px;bottom:96px;width:340px;max-width:calc(100% - 24px);z-index:4;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);display:none;overflow:hidden}
+.place.on{display:block}
+.place .ph{display:flex;justify-content:space-between;gap:8px;padding:10px 12px 6px}
+.place .ph b{font-size:13.5px}
+.place .ph small{display:block;color:var(--ink-3);font-size:11px;font-family:var(--mono)}
+.place .addr{padding:0 12px 8px;font-size:12px;line-height:1.5;color:var(--ink-2);min-height:20px}
+.place .addr b{color:var(--ink);font-weight:600}
+.place .img{position:relative;background:var(--panel-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.place .img img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.place .img .cap{position:absolute;left:8px;bottom:6px;font-size:10.5px;background:rgba(16,35,26,.75);color:#fff;border-radius:4px;padding:1px 6px}
+.place .img .none{padding:10px 12px;font-size:11.5px;color:var(--ink-3)}
+.place .links{display:flex;gap:6px;padding:8px 12px 10px;flex-wrap:wrap}
+.place .links a{font-size:12px;text-decoration:none;color:var(--ink);border:1px solid var(--line-2);border-radius:8px;padding:4px 9px;background:var(--panel)}
+.place .links a:hover{background:var(--panel-2)}
+.place .links a.sv{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* กล่องแจ้ง error บนจอ (core/errors.js) */
+#errbox{display:none;position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:50;max-width:560px;background:var(--red-l);border:1px solid #f3c9cb;color:#7a1d21;border-radius:10px;padding:8px 12px;font-size:12px;box-shadow:var(--shadow);white-space:pre-wrap}

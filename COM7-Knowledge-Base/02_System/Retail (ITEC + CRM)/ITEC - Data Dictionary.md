@@ -210,19 +210,19 @@ Smartphone 5,844 · Headphone 5,482 · Mac 5,407
 
 **Master สาขา** · 3,205 แถว
 
-| ฟิลด์ | ชนิด | คำอธิบาย |
-|---|---|---|
-| `Branch` 🔑 | int | รหัสสาขา |
-| `BranchName` | varchar | ชื่อสาขา |
-| `BranchType` | varchar | แบรนด์ร้าน — BaNANA 891 · Franchise 715 · Studio7 236 · NULL 170 · BeBe Phone 148 · Consign 133 · KingKong 125 · **BaNANA IT 100** · BKK 85 · True 70 |
-| `Province` | varchar | จังหวัด (อังกฤษ) |
-| `Region` | varchar | ภูมิภาค (อังกฤษ) |
-| `Latitude` · `Longitude` | decimal | **พิกัดสาขา — ใช้ทำ geo analytics ได้** |
-| `BuildingCompetitor` | varchar | คู่แข่งในอาคารเดียวกัน |
-| `Address` | varchar | ที่อยู่ |
-| `OpenedDate` · `ClosedDate` | datetime2 | วันเปิด/ปิดสาขา |
-| `Status` | varchar | สถานะ |
-| `UpdateDatetime` | datetime2 | เวลาแก้ไขล่าสุด |
+| ฟิลด์                       | ชนิด      | คำอธิบาย                                                                                                                                              |
+| --------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Branch` 🔑                 | int       | รหัสสาขา                                                                                                                                              |
+| `BranchName`                | varchar   | ชื่อสาขา                                                                                                                                              |
+| `BranchType`                | varchar   | แบรนด์ร้าน — BaNANA 891 · Franchise 715 · Studio7 236 · NULL 170 · BeBe Phone 148 · Consign 133 · KingKong 125 · **BaNANA IT 100** · BKK 85 · True 70 |
+| `Province`                  | varchar   | จังหวัด (อังกฤษ)                                                                                                                                      |
+| `Region`                    | varchar   | ภูมิภาค (อังกฤษ)                                                                                                                                      |
+| `Latitude` · `Longitude`    | decimal   | **พิกัดสาขา — ใช้ทำ geo analytics ได้**                                                                                                               |
+| `BuildingCompetitor`        | varchar   | คู่แข่งในอาคารเดียวกัน                                                                                                                                |
+| `Address`                   | varchar   | ที่อยู่                                                                                                                                               |
+| `OpenedDate` · `ClosedDate` | datetime2 | วันเปิด/ปิดสาขา                                                                                                                                       |
+| `Status`                    | varchar   | สถานะ                                                                                                                                                 |
+| `UpdateDatetime`            | datetime2 | เวลาแก้ไขล่าสุด                                                                                                                                       |
 
 > `BranchType` มีค่าที่ `ci.clean_branch.SHOP_BRAND` ไม่มี เช่น **BaNANA IT (100)** และ **BNN Index (31)**
 > — ชั้น clean ยุบรวมเข้ากับ BaNANA `[อนุมาน]`

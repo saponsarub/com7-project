@@ -1,0 +1,22 @@
+/* css/tokens.css — สี · ฟอนต์ · ค่าพื้นฐาน (แก้ธีมที่นี่ที่เดียว) */
+/* ── tokens ──────────────────────────────────────────────────────────── */
+:root{
+  --bg:#eef2f0; --panel:#ffffff; --panel-2:#f6f8f7; --line:#dfe5e2; --line-2:#cbd4cf;
+  --ink:#10231a; --ink-2:#4a5a52; --ink-3:#7d8b84;
+  --green:#00a332; --green-d:#00601c; --green-l:#e3f4e8;
+  --blue:#0d93d6;  --blue-d:#0a5f8c;  --blue-l:#e1f2fb;
+  --red:#d93a40;   --red-l:#fbe7e8;
+  --amber:#c98a00; --amber-l:#fbf1d9;
+  --slate:#8a97a6;
+  --shadow:0 1px 2px rgba(16,35,26,.06),0 4px 16px rgba(16,35,26,.06);
+  --r:10px;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  --sans:'IBM Plex Sans Thai','Sarabun',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:13px;overflow:hidden}
+button,select,input{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}

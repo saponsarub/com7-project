@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EV7 Smart Taxi Monitor</title>
+<link rel="icon" href="assets/images/ev7logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <img src="assets/images/ev7logo.png" alt="EV7">
+    <div class="t"><b>Smart Taxi Monitor</b><small id="subtitle">กำลังโหลดข้อมูล…</small></div>
+  </div>
+  <div class="kpis" aria-label="สถานะ ณ เวลาที่เลือก">
+    <div class="kpi"><span class="k">ออนไลน์</span><span class="v" id="kOnline">–</span></div>
+    <div class="kpi"><span class="k"><i class="dot" style="background:var(--blue)"></i>มีผู้โดยสาร</span><span class="v" id="kHired">–</span></div>
+    <div class="kpi"><span class="k"><i class="dot" style="background:var(--green)"></i>ว่าง · วิ่ง</span><span class="v" id="kMove">–</span></div>
+    <div class="kpi"><span class="k"><i class="dot" style="background:var(--slate)"></i>จอด</span><span class="v" id="kPark">–</span></div>
+    <div class="kpi"><span class="k">อัตรามีผู้โดยสาร</span><span class="v" id="kUtil">–</span></div>
+    <div class="kpi"><span class="k"><i class="dot" style="background:var(--red)"></i>อยู่นอกเขต</span><span class="v" id="kOut" style="color:var(--red)">–</span></div>
+  </div>
+  <button class="gear" id="gear" aria-label="ตั้งค่า" title="ตั้งค่า">⚙</button>
+  <div class="pop" id="pop" role="dialog" aria-label="ตั้งค่า">
+    <h4>ภาพถนน Mapillary <span class="muted" style="font-weight:400">(ไม่บังคับ)</span></h4>
+    <div class="muted" style="font-size:12px;line-height:1.5">ใส่ token เพื่อแสดงภาพถนนจริงของจุดที่รถจอดในหน้านี้เลย ถ้าไม่ใส่ ยังกดลิงก์ไปดู Street View / Mapillary ได้ตามปกติ</div>
+    <ol>
+      <li>สมัครฟรีที่ mapillary.com</li>
+      <li>ไปที่ Dashboard → Developers → Register application</li>
+      <li>คัดลอก <b>Client Token</b> (ขึ้นต้นด้วย <span class="num">MLY|</span>) มาวางด้านล่าง</li>
+    </ol>
+    <input id="mlyTok" type="password" placeholder="MLY|..." autocomplete="off" aria-label="Mapillary token">
+    <div class="ctl"><button class="btn pri" id="mlySave">บันทึก</button><button class="btn" id="mlyClear">ลบ</button><span id="mlyMsg"></span></div>
+    <div class="muted" style="font-size:11px">token เก็บในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่ติดไปกับไฟล์เวลาส่งต่อ</div>
+    <hr style="border:0;border-top:1px solid var(--line)">
+    <h4>ที่อยู่จาก OpenStreetMap</h4>
+    <div class="muted" style="font-size:12px;line-height:1.5">แปลงพิกัดเป็นที่อยู่ด้วย Nominatim ฟรี จำกัด 1 ครั้ง/วินาที · จำผลไว้ในเครื่อง <span class="num" id="geoCache">0</span> จุด</div>
+    <div class="ctl"><button class="btn" id="geoClear">ล้างที่อยู่ที่จำไว้</button></div>
+  </div>
+</header>
+
+<aside>
+  <div class="filters">
+    <div class="frow">
+      <div class="search" id="qbox">
+        <input id="q" type="search" placeholder="ค้นหาทะเบียน · VIN · จังหวัด · เขต" autocomplete="off" aria-label="ค้นหา">
+        <div class="dd" id="qdd" role="listbox"></div>
+      </div>
+    </div>
+    <div class="frow"><label>ศูนย์</label><div class="chips" id="fCenter"></div></div>
+    <div class="frow"><label>สถานะ</label><div class="chips" id="fStatus"></div></div>
+    <div class="frow" id="areaRow" style="display:none"><label>พื้นที่</label><div class="chips" id="fArea"></div></div>
+  </div>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="ov">ภาพรวม</button>
+    <button role="tab" aria-selected="false" data-tab="viol">นอกเขต <span class="badge" id="violBadge">–</span></button>
+    <button role="tab" aria-selected="false" data-tab="stay">จุดจอด</button>
+    <button role="tab" aria-selected="false" data-tab="area">พื้นที่</button>
+    <button role="tab" aria-selected="false" data-tab="veh">รถ</button>
+  </div>
+
+  <!-- ภาพรวม -->
+  <div class="pane on" id="p-ov">
+    <div class="sec">
+      <h3>ในช่วงเวลาที่เลือก <span id="ovRange" class="num"></span></h3>
+      <div class="grid2">
+        <div class="card"><div class="k">รถที่มีสัญญาณ</div><div class="v" id="ovActive">–</div><div class="s" id="ovActiveS"></div></div>
+        <div class="card"><div class="k">อัตรามีผู้โดยสาร</div><div class="v" id="ovUtil">–</div><div class="s">สัดส่วนเวลาที่ออนไลน์</div></div>
+        <div class="card alert"><div class="k">ออกนอกเขต</div><div class="v" id="ovViol">–</div><div class="s" id="ovViolS"></div></div>
+        <div class="card"><div class="k">ขาดสัญญาณ</div><div class="v" id="ovOff">–</div><div class="s">ไม่มีจุดในช่วงนี้</div></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>จังหวัดที่รถอยู่นานสุด <span>ชั่วโมงรวม</span></h3>
+      <div class="bars" id="ovProv"></div>
+    </div>
+    <div class="sec">
+      <h3>คุณภาพข้อมูล</h3>
+      <div class="note" id="dq"></div>
+    </div>
+  </div>
+
+  <!-- นอกเขต -->
+  <div class="pane" id="p-viol">
+    <div class="sec">
+      <h3>เขตที่อนุญาต</h3>
+      <div class="ctl">
+        <select class="sel" id="zone" aria-label="เขตที่อนุญาต">
+          <option value="bkk">กรุงเทพฯ เท่านั้น</option>
+          <option value="bkk_air">กรุงเทพฯ + สุวรรณภูมิ (อ.บางพลี)</option>
+          <option value="metro">กรุงเทพฯ + ปริมณฑล</option>
+        </select>
+        <select class="sel" id="minDur" aria-label="นานอย่างน้อย">
+          <option value="0">ทุกครั้ง</option>
+          <option value="10" selected>≥ 10 นาที</option>
+          <option value="30">≥ 30 นาที</option>
+          <option value="60">≥ 1 ชม.</option>
+          <option value="180">≥ 3 ชม.</option>
+        </select>
+      </div>
+      <label class="chk" style="margin-top:8px"><input type="checkbox" id="exDepot">
+        <span>ไม่นับเวลาที่อยู่ใน<b>ลานจอด</b> (ภายใน 300 ม.)<br><span class="muted" style="font-size:11px">ลานจอด = จุดที่รถ ≥ 5 คันจอดค้างคืนรวมกัน ตรวจจากข้อมูล [อนุมาน] · ดูรายการในแท็บจุดจอด</span></span></label>
+    </div>
+    <div class="grid2">
+      <div class="card alert"><div class="k">รถที่ออกนอกเขต</div><div class="v" id="vCars">–</div><div class="s" id="vCarsS"></div></div>
+      <div class="card"><div class="k">จำนวนครั้ง · เวลารวม</div><div class="v" id="vTrips">–</div><div class="s" id="vHours"></div></div>
+    </div>
+    <div class="sec">
+      <h3>ไปจังหวัดไหน <span>จำนวนรถ</span></h3>
+      <div class="bars" id="vProv"></div>
+    </div>
+    <div class="sec">
+      <h3>รายคัน <span><button class="btn" id="csv">ดาวน์โหลด CSV</button></span></h3>
+      <div class="ctl" style="margin-bottom:8px">
+        <div class="seg" id="sevSeg">
+          <button aria-pressed="true" data-v="">ทั้งหมด</button>
+          <button aria-pressed="false" data-v="far">ต่างจังหวัด</button>
+          <button aria-pressed="false" data-v="near">ปริมณฑล</button>
+          <button aria-pressed="false" data-v="all">อยู่นอกตลอด</button>
+        </div>
+      </div>
+      <table class="t" id="vTable">
+        <thead><tr>
+          <th data-k="plate">ทะเบียน</th>
+          <th data-k="sev">ระดับ</th>
+          <th data-k="n" class="r">ครั้ง</th>
+          <th data-k="hrs" class="r" aria-sort="descending">ชม.รวม</th>
+          <th data-k="km" class="r">ไกลสุด</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="muted" id="vMore" style="padding:8px 0;font-size:11.5px"></div>
+    </div>
+  </div>
+
+  <!-- จุดจอด -->
+  <div class="pane" id="p-stay">
+    <div class="note">จุดจอด = รถอยู่ภายในรัศมี 200 ม. ต่อเนื่อง ≥ 30 นาที · <b>ค้างคืน</b> = จอดทับช่วง 00:00–05:00 อย่างน้อย 1 ชม. — บอกได้ว่ารถ "นอน" ที่ไหน (บ้านคนขับ · อู่ · ลานจอด)</div>
+    <div class="grid2">
+      <div class="card"><div class="k">รถที่มีจุดจอดค้างคืน</div><div class="v" id="sOn">–</div><div class="s" id="sOnS"></div></div>
+      <div class="card alert"><div class="k">ค้างคืนนอกเขต</div><div class="v" id="sOut">–</div><div class="s" id="sOutS"></div></div>
+    </div>
+    <div class="sec">
+      <h3>ลานจอด / อู่ ที่ตรวจพบ <span id="depN"></span></h3>
+      <div id="depList"></div>
+      <div class="geoq" id="geoQ"></div>
+    </div>
+    <div class="sec">
+      <h3>รถที่ค้างคืนนอกเขต <span id="sTblN"></span></h3>
+      <div class="ctl" style="margin-bottom:8px">
+        <div class="seg" id="sSeg">
+          <button aria-pressed="true" data-v="">ทั้งหมด</button>
+          <button aria-pressed="false" data-v="far">ต่างจังหวัด</button>
+          <button aria-pressed="false" data-v="near">ปริมณฑล</button>
+          <button aria-pressed="false" data-v="nodep">ไม่ใช่ลานจอด</button>
+        </div>
+      </div>
+      <div class="vlist" id="sList"></div>
+    </div>
+  </div>
+
+  <!-- พื้นที่ -->
+  <div class="pane" id="p-area">
+    <div class="sec">
+      <h3>ระดับพื้นที่</h3>
+      <div class="ctl">
+        <div class="seg" id="lvSeg">
+          <button aria-pressed="true" data-v="prov">จังหวัด</button>
+          <button aria-pressed="false" data-v="dist">อำเภอ / เขต</button>
+        </div>
+        <div class="seg" id="mtSeg">
+          <button aria-pressed="true" data-v="veh">จำนวนรถ</button>
+          <button aria-pressed="false" data-v="hrs">ชั่วโมงรวม</button>
+          <button aria-pressed="false" data-v="hired">ชม.มีผู้โดยสาร</button>
+        </div>
+      </div>
+    </div>
+    <div class="note">คลิกชื่อพื้นที่หรือคลิกบนแผนที่ เพื่อกรองเฉพาะพื้นที่นั้น · เลือกได้หลายพื้นที่</div>
+    <div class="sec">
+      <h3>อันดับพื้นที่ <span id="areaTot"></span></h3>
+      <div class="bars" id="areaList"></div>
+    </div>
+  </div>
+
+  <!-- รถ -->
+  <div class="pane" id="p-veh">
+    <div id="vehCard"></div>
+    <div class="sec">
+      <h3>รถตามตัวกรอง <span id="vehCount"></span></h3>
+      <div class="ctl" style="margin-bottom:6px">
+        <select class="sel" id="vehSort" aria-label="เรียงตาม">
+          <option value="km">ระยะทางมากสุด</option>
+          <option value="hired">เวลามีผู้โดยสารมากสุด</option>
+          <option value="idle">จอดนานสุด</option>
+          <option value="off">ขาดสัญญาณนานสุด</option>
+        </select>
+      </div>
+      <div class="vlist" id="vehList"></div>
+    </div>
+  </div>
+</aside>
+
+<main>
+  <div id="map" role="application" aria-label="แผนที่ตำแหน่งรถ"></div>
+  <div class="mapctl">
+    <div class="mbox">
+      <span class="lbl">จุดบนแผนที่</span>
+      <div class="seg" id="ptSeg">
+        <button aria-pressed="true" data-v="now">ณ เวลา</button>
+        <button aria-pressed="false" data-v="range">ทุกจุดในช่วง</button>
+        <button aria-pressed="false" data-v="none">ซ่อน</button>
+      </div>
+      <label class="ctl" id="trailWrap" style="font-size:12px">ร่องรอยย้อนหลัง
+        <select class="sel" id="trail"><option value="0">ไม่แสดง</option><option value="15">15 นาที</option><option value="30" selected>30 นาที</option><option value="60">1 ชม.</option></select>
+      </label>
+      <span class="muted" id="iconWrap" style="font-size:11px">🚕 เอียงแผนที่ (3D) เพื่อแสดงเป็นรูปรถ</span>
+    </div>
+    <div class="mbox">
+      <span class="lbl">ภาพถนน (Mapillary)</span>
+      <div class="seg" id="mlySeg">
+        <button aria-pressed="true" data-v="off">ซ่อน</button>
+        <button aria-pressed="false" data-v="on">แสดงเส้นที่มีภาพ</button>
+      </div>
+      <span class="muted" id="mlyHint" style="font-size:11px;max-width:220px"></span>
+    </div>
+    <div class="mbox">
+      <span class="lbl">สีพื้นที่</span>
+      <div class="seg" id="chSeg">
+        <button aria-pressed="true" data-v="none">ไม่แสดง</button>
+        <button aria-pressed="false" data-v="on">ตามแท็บพื้นที่</button>
+      </div>
+    </div>
+    <div class="mbox" id="evBox">
+      <span class="lbl" title="ข้อมูลจาก OpenStreetMap มีแค่บางส่วนของจุดชาร์จจริง">สถานีชาร์จ EV <span style="color:#7c3aed">●</span></span>
+      <div class="seg" id="evSeg">
+        <button aria-pressed="true" data-v="none">ไม่แสดง</button>
+        <button aria-pressed="false" data-v="on">แสดง (OSM)</button>
+      </div>
+    </div>
+  </div>
+  <div class="zoomto">
+    <div class="seg"><button aria-pressed="true" data-z="bkk">กรุงเทพฯ</button><button aria-pressed="false" data-z="th">ทั้งประเทศ</button></div>
+    <div class="seg" id="viewSeg" title="คลิกขวาค้างแล้วลาก หรือ Ctrl+ลาก เพื่อหมุนและเอียงเองได้"><button aria-pressed="true" data-v="2d">มุมตรง</button><button aria-pressed="false" data-v="3d">เอียง 3D</button></div>
+    <div class="seg" id="bmSeg"><button aria-pressed="true" data-v="map">แผนที่</button><button aria-pressed="false" data-v="osm">OSM</button><button aria-pressed="false" data-v="sat">ดาวเทียม</button></div>
+  </div>
+  <div class="place" id="place" aria-live="polite"></div>
+  <div id="errbox" role="alert"></div>
+  <div class="mbox legend" id="legend"></div>
+  <div class="loading" id="loading"><div class="spin"></div><div id="loadMsg">กำลังโหลดข้อมูล…</div></div>
+</main>
+
+<footer>
+  <div class="tl">
+    <button class="play" id="play" aria-label="เล่น">▶</button>
+    <div class="clock"><span class="d" id="clkD">–</span><span class="h" id="clkH">--:--</span></div>
+    <div class="chartwrap"><canvas id="tlc" aria-label="ไทม์ไลน์ ลากเพื่อเลือกช่วง คลิกเพื่อเลื่อนเวลา"></canvas></div>
+    <div class="tlright">
+      <div class="ctl">
+        <span class="muted" style="font-size:11px">ความเร็ว</span>
+        <div class="seg" id="spdSeg">
+          <button aria-pressed="false" data-v="60">1 นาที/วิ</button>
+          <button aria-pressed="true" data-v="600">10 นาที/วิ</button>
+          <button aria-pressed="false" data-v="1800">30 นาที/วิ</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <div class="seg" id="rngSeg"></div>
+        <span class="rng" id="rngTxt"></span>
+      </div>
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- ── ไลบรารีภายนอก ─────────────────────────────────────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/deck.gl@9.0.38/dist.min.js"></script>
+
+<!-- ── ข้อมูล (สร้างโดย build_dashboard.py · ตั้ง window.TAXI_DATA) ───────── -->
+<script src="data/taxi-data.js"></script>
+
+<!-- ── แอป · ลำดับสำคัญ: ไฟล์ที่ประกาศของก่อนต้องโหลดก่อน ─────────────── -->
+<script src="js/config.js"></script>
+<script src="js/core/errors.js"></script>
+<script src="js/core/utils.js"></script>
+<script src="js/core/state.js"></script>
+<script src="js/data/source.js"></script>
+<script src="js/data/model.js"></script>
+<script src="js/analysis/filters.js"></script>
+<script src="js/analysis/excursions.js"></script>
+<script src="js/analysis/fleet.js"></script>
+<script src="js/analysis/stays.js"></script>
+<script src="js/services/geocode.js"></script>
+<script src="js/services/mapillary.js"></script>
+<script src="js/map/map.js"></script>
+<script src="js/map/layers.js"></script>
+<script src="js/map/cars.js"></script>
+<script src="js/map/interaction.js"></script>
+<script src="js/ui/timeline.js"></script>
+<script src="js/ui/panels.js"></script>
+<script src="js/ui/place.js"></script>
+<script src="js/ui/controls.js"></script>
+<script src="js/dev/selftest.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
