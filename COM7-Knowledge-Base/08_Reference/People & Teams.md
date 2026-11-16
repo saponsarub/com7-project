@@ -30,9 +30,9 @@
 | **MIS** | Data Framework ระบุว่า MIS เป็นผู้กำหนดมาตรฐานข้อมูลของกลุ่ม |
 | **MIS-Fintech** | ผู้รับผิดชอบ K2 |
 | **MIS-ERP** | ผู้รับผิดชอบ D365 |
-| **AWS Team** | Timeline ระบุว่ารับผิดชอบ Setup User, Demo/Workshop |
+| **AWS Team** | Timeline ระบุว่ารับผิดชอบ Setup User, Demo/Workshop · **จบบทบาท 2026-11** (เลิกใช้ AWS · D-21) |
 | **CRM Team** | Data Framework ระบุว่าเป็นผู้รับข้อมูลไปทำ promotion/loyalty ผ่าน Braze · บันทึกประชุมระบุว่าเป็น end user |
-| **Innovation** | Gap Review ระบุเป็น Owner ของ field ฝั่ง CRM/7Club |
+| **Innovation (Inno)** | Gap Review ระบุเป็น Owner ของ field ฝั่ง CRM/7Club · **ดูแลฐาน CRM** (Aurora MySQL) — สร้าง user read-only + ส่ง Outline VPN ให้ MIS 2026-11-04 (ผู้ติดต่อ: Tanapol.T) |
 | **Thunder** | Gap Review ระบุเป็น Owner ของ field ฝั่ง K2/ITOS |
 | **Oper Standard** | บันทึกประชุมระบุว่าจะเข้ามาช่วยเตรียม migrate ข้อมูล GI/EV7 |
 | **Dev team / Data Admin** | Gap Review `BHV-01` ระบุว่าน่าจะเป็นผู้ดู log ของ website |

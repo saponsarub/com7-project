@@ -1,6 +1,8 @@
-#  ITEC Overview
+# ITEC-MIS Overview
 
-ระบบค้าปลีกของ COM7 — เข้าถึงผ่าน **ฐาน MIS** ที่เปิดให้เฉพาะ **view** ไม่ให้แตะตารางจริง
+> 🟦 **ITEC-MIS** — ฐาน MIS (เครื่อง 250) · view `rpt` / `ci` ที่ทีมทำไว้ · profile `itec_mis` (env `MIS_USER` / `MIS_PWD`) · ใช้งานได้ แต่**ไม่ใช่ตัวหลัก** — ตัวหลักคือ [[ITEC-Rep Overview|ITEC-Rep]] (ตารางดิบ) · เปรียบเทียบ 2 ฐาน → [[ITEC Overview]]
+
+ระบบค้าปลีกของ COM7 — เข้าถึงผ่าน **ITEC-MIS (ITEC-MIS)** ที่เปิดให้เฉพาะ **view** ไม่ให้แตะตารางจริง
 
 |                 |                                                                           |
 | --------------- | ------------------------------------------------------------------------- |
@@ -12,7 +14,7 @@
 | ธุรกิจที่รองรับ | [[Retail]] — BaNANA · Studio7 · KingKong · BKK · iCare · TRUE by COM7 ฯลฯ |
 
 **สำรวจจากฐานจริงเมื่อ 2026-08-28 ด้วยสิทธิ์ read-only**
-พจนานุกรมรายฟิลด์ → [[ITEC - Data Dictionary]] · SQL ที่รันผ่านแล้ว → [[ITEC - Query Cookbook]]
+พจนานุกรมรายฟิลด์ → [[ITEC-MIS - Data Dictionary]] · SQL ที่รันผ่านแล้ว → [[ITEC-MIS - Query Cookbook]]
 
 ---
 
@@ -20,8 +22,8 @@
 
 | อยากรู้                                      | เปิด                                                              |
 | -------------------------------------------- | ----------------------------------------------------------------- |
-| แต่ละ view มีคอลัมน์อะไร ความหมายว่าอะไร     | [[ITEC - Data Dictionary]]                                        |
-| ดึงยอดขาย · หาสินค้า · หาสาขา · เชื่อมลูกค้า | [[ITEC - Query Cookbook]]                                         |
+| แต่ละ view มีคอลัมน์อะไร ความหมายว่าอะไร     | [[ITEC-MIS - Data Dictionary]]                                        |
+| ดึงยอดขาย · หาสินค้า · หาสาขา · เชื่อมลูกค้า | [[ITEC-MIS - Query Cookbook]]                                         |
 | ITEC เชื่อมกับ CRM ยังไง                     | [[CRM - Data Dictionary]] · หัวข้อ "เส้นทางเชื่อมลูกค้า" ด้านล่าง |
 | คำถามที่ยังไม่มีคำตอบ                        | [[Source System Issues]]                                          |
 
@@ -290,9 +292,9 @@ Counting 43,087 · Inventory adjustment 32,133 · Fixed assets 28,736
 
 ## เทียบกับ K2
 
-| | ITEC (MIS) | K2 (`HPCOM7`) |
+| | ITEC-MIS | K2 (`HPCOM7`) |
 |---|---|---|
-| สิ่งที่เข้าถึงได้ | **view เท่านั้น 23 ตัว** | ตารางจริง 542 ตัว |
+| สิ่งที่เข้าถึงได้ | **view เท่านั้น 23 ตัว** | ตารางจริง 545 ตัว |
 | โครงสร้าง | **star schema สะอาด** dim/fact ชัดเจน | ตารางดิบ · ไม่มี FK · มีตารางขยะ 178 ตัว |
 | ชั้นทำความสะอาด | **มีอยู่แล้ว** (schema `ci`) | ไม่มี ต้องทำเอง |
 | ขนาดใหญ่สุด | 269M (`fact_trans_fo`) | 239M (`CreditScrolling_Logs_Contract`) |
@@ -324,4 +326,4 @@ Counting 43,087 · Inventory adjustment 32,133 · Fixed assets 28,736
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC - Data Dictionary]] · [[ITEC - Query Cookbook]] · [[Retail]] · [[CRM - Data Dictionary]] · [[Customer Identity]] · [[System Inventory]] · [[K2 Overview]] · [[Source System Issues]]
+[[ITEC-MIS - Data Dictionary]] · [[ITEC-MIS - Query Cookbook]] · [[Retail]] · [[CRM - Data Dictionary]] · [[Customer Identity]] · [[System Inventory]] · [[K2 Overview]] · [[Source System Issues]]

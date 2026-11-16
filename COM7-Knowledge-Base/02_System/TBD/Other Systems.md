@@ -106,7 +106,7 @@ Data Framework slide 7 ระบุ historical transaction ที่ CRM ต้�
 GI Core มี model `buyback_iphone` ด้วย — กิจกรรมรับซื้อคืนเกิดอย่างน้อย 2 ที่
 # Azure Synapse + ADLS
 
-กำลังย้ายมา AWS · PoC issue ข้อ 8
+PoC issue ข้อ 8 · ถ้าจะดึงข้อมูล Synapse/ADLS ปลายทางคือ MySQL บนเครื่อง SSOT ([[Decisions|D-21]])
 
 ## What we know
 

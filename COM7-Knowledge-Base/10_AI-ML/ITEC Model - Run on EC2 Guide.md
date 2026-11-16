@@ -1,5 +1,7 @@
 # ITEC Model — Run on EC2 Guide
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · account AWS ของโครงการปิดแล้ว · ถ้าจะรันโมเดลต้องใช้ GPU ที่อื่น (เครื่อง PC / Kaggle / Colab) `[อนุมาน]`
+
 > คู่มือรันโมเดลจัดหมวดสินค้าบน EC2 GPU
 > บันทึก 2026-09-14 · **แก้ 2026-09-15** · คู่กับ `scripts/itec/category/itec_recategorization.ipynb`
 > เกี่ยวข้อง → [[ITEC Category Toolkit]] · [[ITEC Category Model (ML)]] · [[Network & VPN]]

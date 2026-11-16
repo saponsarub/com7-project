@@ -92,7 +92,7 @@ policy ──< claim ──< claim_payment
 
 | เรื่อง | ทำไมสำคัญ |
 |---|---|
-| **IMEI = กุญแจเชื่อมกับ ITEC** | ถ้า ITEC เก็บ IMEI ตอนขายเครื่อง จะ join กรมธรรม์กับใบขายได้ → ตอบได้ว่า**ลูกค้าที่ซื้อเครื่องรุ่นไหนซื้อประกันมากที่สุด** · ต้องเช็คก่อนว่า ITEC มีฟิลด์ IMEI จริงไหม → [[ITEC - Data Dictionary]] |
+| **IMEI = กุญแจเชื่อมกับ ITEC** | ถ้า ITEC เก็บ IMEI ตอนขายเครื่อง จะ join กรมธรรม์กับใบขายได้ → ตอบได้ว่า**ลูกค้าที่ซื้อเครื่องรุ่นไหนซื้อประกันมากที่สุด** · ต้องเช็คก่อนว่า ITEC มีฟิลด์ IMEI จริงไหม → [[ITEC-MIS - Data Dictionary]] |
 | **ข้อมูลสุขภาพ = ข้อมูลอ่อนไหวตาม PDPA** | ประกันสุขภาพกลุ่มและประกันอุบัติเหตุมีข้อมูลการรักษา **ต้องขอความยินยอมแยก ไม่ใช่ consent ทั่วไป** → [[Consent & PDPA]] |
 | **เลขทะเบียนรถ · เลขตัวถัง · IMEI = ระบุตัวบุคคลได้** | อยู่ในกลุ่มเดียวกับ PII ตามกฎ vault **ห้าม commit ตัวอย่างจริง** |
 | **ธุรกิจไม่เหมือน retail เลย** | ITEC เป็น star schema ขาย-สินค้า · ประกันเป็น policy-claim ที่มีอายุและสถานะเปลี่ยนตามเวลา **โมเดล Customer 360 ต้องรองรับทั้งสองแบบ** → [[Customer Identity]] |
@@ -173,7 +173,7 @@ policy ──< claim ──< claim_payment
 
 `log การเปลี่ยนสถานะเคลม` — ถ้าตอบว่าเก็บแค่สถานะปัจจุบัน **วิเคราะห์ระยะเวลาและคอขวดของกระบวนการเคลมไม่ได้เลย**
 
-`เลขที่ใบขาย/ใบเสร็จที่ผูกกับกรมธรรม์` — ถ้ามี จะต่อกับ [[ITEC - Data Dictionary|ใบขาย ITEC]] ได้โดยไม่ต้องพึ่ง IMEI
+`เลขที่ใบขาย/ใบเสร็จที่ผูกกับกรมธรรม์` — ถ้ามี จะต่อกับ [[ITEC-MIS - Data Dictionary|ใบขาย ITEC]] ได้โดยไม่ต้องพึ่ง IMEI
 
 ### หมวดที่น่าจะไม่เกี่ยวกับ ICI
 
@@ -200,4 +200,4 @@ policy ──< claim ──< claim_payment
 
 ## เชื่อมกับโน้ตอื่น
 
-[[Other Systems]] · [[Group Structure]] · [[Retail]] · [[System Inventory]] · [[Consent & PDPA]] · [[Customer Identity]] · [[ITEC - Data Dictionary]] · [[Source System Issues]] · [[SSOT Roadmap]] · [[ITEC Data Requirement Survey]]
+[[Other Systems]] · [[Group Structure]] · [[Retail]] · [[System Inventory]] · [[Consent & PDPA]] · [[Customer Identity]] · [[ITEC-MIS - Data Dictionary]] · [[Source System Issues]] · [[SSOT Roadmap]] · [[ITEC Data Requirement Survey]]

@@ -84,7 +84,7 @@ JN21A002483741  Transfer  คลัง   4  QTY -1  2008-05-04  com7
 `varchar(160)` · ว่าง **190,705 แถว (0.07%)** · **110,245 รหัสไม่ซ้ำ**
 
 **นี่คือสะพานเชื่อมไปฝั่ง ITEC** → `rpt.dim_item_itec.ItemId` (= `PRODUCT_ID` ในชั้น `ci`)
-รายละเอียด → [[ITEC - Data Dictionary]]
+รายละเอียด → [[ITEC-MIS - Data Dictionary]]
 
 | วัดแบบ (com7 ปี 2026 · 35,418 คู่รหัส) | ผล |
 |---|---|
@@ -738,6 +738,6 @@ LEFT JOIN syndpdev001.dbo.tm_Warehouse w WITH (NOLOCK)
 
 ## เชื่อมโยง
 
-[[D365 F&O Overview]] · [[D365 F&O - Sales Invoice & Product Mapping]] · [[ITEC - Data Dictionary]] · [[ITEC - Query Cookbook]]
+[[D365 F&O Overview]] · [[D365 F&O - Sales Invoice & Product Mapping]] · [[ITEC-MIS - Data Dictionary]] · [[ITEC-MIS - Query Cookbook]]
 [[System Inventory]] · [[Environment Setup]] · [[Data Standardization & Quality]]
 [[Open Questions & Risks]]

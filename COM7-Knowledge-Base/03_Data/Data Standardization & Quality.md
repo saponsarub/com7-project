@@ -38,7 +38,7 @@
 |---|---|
 | `ItemId` | `PRODUCT_ID` · `PRODUCT_ID_MAIN` · `_SALE` · `_STOCK` |
 
-join ตรงได้ ไม่ต้องแปลง · ทดสอบแล้ว 99.2% ของรหัสไม่ซ้ำ → [[ITEC - Data Dictionary]]
+join ตรงได้ ไม่ต้องแปลง · ทดสอบแล้ว 99.2% ของรหัสไม่ซ้ำ → [[ITEC-MIS - Data Dictionary]]
 
 ⚠️ `PRODUCT_ID` ของ ITEC (รหัสสินค้า varchar) **ไม่ใช่** `PRODUCT_ID` ของ K2 (รหัสผลิตภัณฑ์สินเชื่อ int)
 ชื่อชนกันข้ามระบบ — ต้องระบุ schema ทุกครั้งที่พูดถึง
@@ -96,7 +96,7 @@ CAST(NULL as date) as CREATE_DATE
 ### ITOS
 
 - คอลัมน์ข้อความเกือบทั้งหมดเป็น `nvarchar(500)` หรือ `(800)`
-- มีชื่อไทยและอังกฤษคู่ขนาน (`CUST_NAMETH` / `CUST_NAMEEN`)
+- มีคอลัมน์ชื่อไทยและอังกฤษ (`CUST_NAMETH` / `CUST_NAMEEN`) แต่ช่องอังกฤษเก็บชื่อไทยซ้ำ (ตรวจ 2026-11-16) → ไม่มีชื่ออังกฤษจริง
 - `MS_Description: not defined` ทุก table ทุก column
 - 167 tables ถูกตัดจาก wiki เพราะ zero-row หรือชื่อเป็น backup
 

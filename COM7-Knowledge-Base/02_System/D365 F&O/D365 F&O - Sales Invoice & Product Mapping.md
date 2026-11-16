@@ -114,4 +114,4 @@ tb_SalesInvoice.ItemId = tm_Item.ItemId (+ SysCompanyId)  →  tm_Item.Reference
 
 ## เชื่อมโยง
 
-[[D365 F&O Overview]] · [[D365 F&O - Transaction_FO Dictionary]] · [[D365 F&O - Query Cookbook]] · [[ITEC - Data Dictionary]] · [[ITEC Product Dimension]] · [[Open Questions & Risks]]
+[[D365 F&O Overview]] · [[D365 F&O - Transaction_FO Dictionary]] · [[D365 F&O - Query Cookbook]] · [[ITEC-MIS - Data Dictionary]] · [[ITEC Product Dimension]] · [[Open Questions & Risks]]

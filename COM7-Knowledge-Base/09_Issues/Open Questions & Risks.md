@@ -4,6 +4,24 @@
 
 ---
 
+# 🆕 คำถามของแพลตฟอร์มใหม่ (PC + MySQL) — 2026-11-10
+
+AWS ยกเลิกแล้ว ([[Decisions|D-21]]) — ลบคำถามเรื่อง S3 · Glue · QuickSight/Macie · VPN ไป AWS ออกแล้ว
+
+| คำถาม | ทำไมสำคัญ |
+|---|---|
+| เครื่อง PC สั่งแล้ว → [[SSOT PC Server Spec]] · เหลือ: ไม่มี RAID/สำเนาข้อมูล · ไม่มี UPS | เครื่องเดียว = จุดเสียจุดเดียว |
+| backup ไปที่ไหน · กู้คืนได้เร็วแค่ไหน · ไฟดับ/ดิสก์เสียแล้วใครดูแล | เครื่องเดียว = จุดเสียจุดเดียว |
+| MySQL เวอร์ชันไหน · engine (InnoDB) · partition ตารางใหญ่ | ตาราง fact หลายสิบล้านแถว |
+| ดึงข้อมูลจาก SQL Server / CRM (Aurora MySQL) / Google Sheets / ADLS เข้า MySQL ด้วยอะไร · ตั้งเวลายังไง | แทน DMS + Glue + Step Functions เดิม |
+| สิทธิ์เข้าถึงและการเข้ารหัสข้อมูลส่วนบุคคลบนเครื่อง (PDPA) · ใครเข้าเครื่องได้ | เดิมพึ่ง IAM / KMS ของ AWS → [[Consent & PDPA]] |
+| BI ต่อ MySQL ด้วยอะไร (Power BI ผ่าน MySQL connector?) | ยังไม่ได้เลือกเครื่องมือ |
+| RPO / RTO ของข้อมูลแต่ละประเภท | กำหนดรอบ backup และเวลากู้คืนของเครื่อง |
+| ระยะเวลาเก็บ (retention) ต่อ dataset | เป็นข้อกำหนด PDPA ด้วย |
+| partition key ของตารางใหญ่ใน MySQL | ตาราง fact หลายสิบล้านแถว |
+
+---
+
 # Questions for legal
 
 **ห้ามตอบเองด้วยดุลพินิจทีมข้อมูล**
@@ -13,8 +31,6 @@
 | รวมข้อมูลลูกค้าข้ามบริษัทในเครือได้ตามกฎหมายไหม ภายใต้ consent ที่มีอยู่ | ทุกอย่างหลัง identity resolution |
 | ถ้าไม่ได้ ต้องขอ consent ใหม่ระดับกลุ่ม หรือใช้ฐานทางกฎหมายอื่น | Customer 360 |
 | การรวม record ลูกค้าข้ามบริษัท ถือเป็นการเปิดเผยข้อมูลที่ต้องขอ consent เองไหม | Identity resolution |
-| Replicate ข้อมูลไป Singapore เพื่อใช้ Macie ได้ไหม | การตรวจหา PII |
-| QuickSight / Amazon Q ประมวลผลใน us-east-1 ถือเป็นการส่งข้อมูลข้ามพรมแดนไหม | การใช้ QuickSight |
 | Braze ประมวลผลและเก็บข้อมูลที่ประเทศไหน | สัญญากับ processor |
 | VPN Client โดย Vanguard — ข้อมูลวิ่งผ่าน third party ไหม มีนัยด้าน PDPA ไหม | แนวทางเชื่อมต่อใหม่ |
 
@@ -35,23 +51,12 @@ Proposal บอก Bronze = raw ที่ scan แล้ว · ทีมร่�
 
 **Dataset ไหนต้องผ่านทุก layer ไหนข้ามได้**
 
-**Glue job เดียวใหญ่ หรือแยกตาม layer** — ยังไม่ทดลอง
 
 **CDP / Customer 360 layer อยู่ตรงไหน** — Gap Review `ARC-01` ระบุว่าขาด และจัดเป็นอันดับ 3 ของโปรแกรม
 
 **COM7 ต้องใช้ Lake Formation ไหม** — ไม่มีใน proposal เดิม
 
 **Streaming หรือ batch อย่างเดียว** — Gap Review `ARC-03` ระบุว่า cart abandonment ต้องยิงใน 30 นาที ไม่ใช่ T+1
-
----
-
-# S3 questions
-
-- Dataset ไหนต้องทำ Multi-Region (CRR)
-- Storage class ที่เหมาะกับแต่ละ dataset
-- RPO/RTO ของข้อมูลแต่ละประเภท
-- Retention period ต่อ dataset (เป็นข้อกำหนด PDPA ด้วย)
-- Partition key ของแต่ละ dataset
 
 ---
 
@@ -68,11 +73,11 @@ Proposal บอก Bronze = raw ที่ scan แล้ว · ทีมร่�
 
 **7Club เป็น source, target, หรือทั้งคู่** — ไม่มีเอกสารไหนบอก อย่าเดาว่าเป็น master customer system
 
-**CRM มี `identity_no` จริงหรือไม่** — แบบสำรวจตอบ `3 (ไม่มี)` แต่กลับเขียนชื่อฟิลด์ `identity_no` มาด้วย
+**CRM มีเลขบัตรไหม — ตอบแล้ว 2026-11-10:** `member_auth.identity_no` มีค่า 154,889 แถว (13 หลัก 150,241) · `customer_master.citizen_no` มีตามเอกสารแต่บัญชีเรามองไม่เห็น → [[CRM - Data Dictionary]]
 เป็นแถวเดียวในไฟล์ที่ขัดกันเอง · ถ้ามีจริงจะเปลี่ยนภาพความพร้อมของ CRM ทั้งหมด → [[CRM Customer Field Survey]]
 
 **`subdistrict` ใน CRM เก็บอำเภอหรือตำบล** — แบบสำรวจ map `อำเภอ/เขต` ไปที่ `subdistrict`
-ซึ่งแปลว่าตำบล · ต้องเปิดดูค่าจริง ไม่ใช่เชื่อชื่อคอลัมน์
+ซึ่งแปลว่าตำบล · ต้องเปิดดูค่าจริง ไม่ใช่เชื่อชื่อคอลัมน์ (ต่อฐานได้แล้ว 2026-11 · `subdistrict` มีค่า 7.97M จาก 8.96M — ยังไม่ได้ดูค่า)
 
 **ชื่อลูกค้าใน CRM ไม่แยกภาษา** — ผู้ตอบระบุว่า *"แล้วแต่ลูกค้ากรอกมา ไม่ได้ฟิล ภาษาไทย ภาษาอังกฤษ"*
 คนเดียวกันอาจเป็น `สมชาย` ใน CRM แต่ `Somchai` ใน K2 → จับคู่ข้ามระบบพลาด
@@ -105,8 +110,6 @@ Proposal บอก Bronze = raw ที่ scan แล้ว · ทีมร่�
 | D365 ยังเขียนอยู่ หรือ read-only แล้ว | MIS-ERP |
 | K2 table ไหนยัง update อยู่ | MIS-Fintech |
 | **Vanguard คือใคร/อะไร** — vendor, product, หรือทีม | Data Team / AWS Team |
-| **VPN Client รองรับ DMS CDC ที่ต้องเชื่อมต่อเนื่องยังไง** | AWS Team |
-| **แผน Site-to-Site VPN 30 tunnels เดิม ยกเลิกหรือเลื่อน** | AWS Team |
 | K2 กับ ITOS มีข้อมูลสัญญาซ้ำกันไหม | K.Ton |
 | ~~`PROJECT_1` / `TAN_MIS` อยู่ใน scope ingest ไหม~~ **สำรวจ `PROJECT_1` แล้ว 2026-09-23** → [[D365 F&O Overview]] · `TAN_MIS` ยังไม่ได้เปิดดู | Data Team |
 | **ชื่อเต็มของ BU ใน D365** — `drph` `lor` `drl` `pss` `nov` `skh` `gih` `gi01`–`gi12` · รู้แค่ com7=COMSEVEN · bnn=Adept · dou7=Double7 | MIS-ERP |
@@ -129,7 +132,7 @@ Proposal บอก Bronze = raw ที่ scan แล้ว · ทีมร่�
 | ~~CRM data dictionary (`crm_fied_description.html`) อยู่ไหน~~ **ปิดแล้ว 2026-09-11** — ได้ไฟล์และแตกเป็น [[CRM - Data Dictionary]] | P.Por |
 | CRM เป็น platform อะไร | P.Por |
 | **ขอ connection เข้า S3 ของ ICS** — ข้อมูล iCare Service อยู่บน S3 ของแผนก Innovation · **ต้องขอสิทธิ์ระดับส่วนกลาง ไม่ใช่ระดับสาขา** → [[ICS (iCare Service)]] | Innovation |
-| `PHYID` คือฟิลด์ไหนใน ITEC — ใช้เปิดเคสต่อจาก iCare แต่ไม่มีใน [[ITEC - Data Dictionary]] | ITEC |
+| `PHYID` คือฟิลด์ไหนใน ITEC — ใช้เปิดเคสต่อจาก iCare แต่ไม่มีใน [[ITEC-MIS - Data Dictionary]] | ITEC |
 | serial ฝั่ง ITEC ที่มี `S` นำหน้า (เลขหน้ากล่อง) เป็นเลขเดียวกับ serial ในเครื่องของ iCare หรือไม่ | iCare + ITEC |
 
 ---

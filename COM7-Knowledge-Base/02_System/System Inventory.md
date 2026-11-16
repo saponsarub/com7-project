@@ -21,7 +21,7 @@
 | 1.1.6.1 | [[iCare Insurance (ICI)\|iCare]] — Insurance | Todo | P.Pui |
 | 1.1.6.2 | [[ICS (iCare Service)]] — Mobile Service | **ประชุมภาพรวมแล้ว 2026-09-11** · data field survey กำลังตามมา | P.Pui |
 | 1.1.7 | [[Other Systems\|SAP B1]] | Todo | K.Benz |
-| 1.2.1 | [[CRM Overview\|7Club+/CRM]] | **มี data dictionary แล้ว 2026-08-28** (3 ตาราง 61 ฟิลด์) · เหลือ coverage | P.Por |
+| 1.2.1 | [[CRM Overview\|7Club+/CRM]] | **มี data dictionary แล้ว 2026-08-28** (3 ตาราง 61 ฟิลด์) · **ต่อฐานได้แล้ว 2026-11** (Aurora MySQL 8.0 read-only ผ่าน Outline VPN) · เหลือ coverage | P.Por |
 | 1.2.2 | [[Other Systems\|Tech Trade]] | Todo | K.Koj, K.Poj |
 
 **เสร็จ 3 จาก 11** — งานนี้เป็นคอขวดของทุกอย่าง
@@ -29,7 +29,7 @@
 > D365 เลื่อนเป็น Done เพราะสำรวจ `PROJECT_1` + `syndpdev001` โดยตรงเมื่อ 2026-09-23
 > ผลอยู่ที่ [[D365 F&O Overview]] — **ยังไม่มีเอกสารจาก MIS-ERP ยืนยัน** สถานะนี้อ้างจากการสำรวจของทีมเราเอง
 
-> K2 เลื่อนจาก In-Progress เป็น Done เพราะสำรวจฐาน `HPCOM7` โดยตรงครบ 542 tables เมื่อ 2026-08-26 ผลอยู่ที่ [[K2 Overview]] — **ยังไม่มีเอกสารจาก MIS-Fintech ยืนยัน** สถานะนี้อ้างจากการสำรวจของทีมเราเอง
+> K2 เลื่อนจาก In-Progress เป็น Done เพราะสำรวจฐาน `HPCOM7` โดยตรงครบ (545 tables ณ 2026-11-10) เมื่อ 2026-08-26 ผลอยู่ที่ [[K2 Overview]] — **ยังไม่มีเอกสารจาก MIS-Fintech ยืนยัน** สถานะนี้อ้างจากการสำรวจของทีมเราเอง
 
 ---
 
@@ -37,8 +37,8 @@
 
 | ระบบ | ธุรกิจ | ทำอะไร | สถานะ | ที่มา |
 |---|---|---|---|---|
-| [[ITEC Overview]] | ค้าปลีก IT | ฐาน MIS บน **SQL Server 2025** · เปิดให้เห็นเฉพาะ **23 view · 297 คอลัมน์ ไม่มี table** · star schema พร้อมชั้น clean · บรรทัดขาย 79.8M · สาขา 3,205 · สินค้า 216,009 | **Confirmed** | survey ฐานจริง 2026-08-28 · ความพร้อมฟิลด์ **39/77 มี · 4 ทดแทน · 21 ไม่มี · 13 ไม่ตอบ** |
-| [[K2 Overview\|K2]] | สินเชื่อเช่าซื้อ IT **(legacy — ปิดสิ้นปี 2026)** | ฐาน `HPCOM7` · **542 tables · 288,205 สัญญา · 343,249 เลขบัตรไม่ซ้ำ** · กลุ่มหลักคือนักศึกษา | **Confirmed** | survey ฐานจริง 2026-08-26 |
+| [[ITEC-Rep Overview\|ITEC]] | ค้าปลีก IT | **2026-11: ตัวหลัก = ITEC-Rep `SSSynced50`** (SQL Server 2017 · 472 ตาราง · เกือบ real-time) · เดิม: [[ITEC-MIS Overview\|ITEC-MIS]] บน **SQL Server 2025** · เปิดให้เห็นเฉพาะ **23 view · 297 คอลัมน์ ไม่มี table** · star schema พร้อมชั้น clean · บรรทัดขาย 79.8M · สาขา 3,205 · สินค้า 216,009 | **Confirmed** | survey ฐานจริง 2026-08-28 · ความพร้อมฟิลด์ **39/77 มี · 4 ทดแทน · 21 ไม่มี · 13 ไม่ตอบ** |
+| [[K2 Overview\|K2]] | สินเชื่อเช่าซื้อ IT **(legacy — ปิดสิ้นปี 2026)** | ฐาน `HPCOM7` · **545 tables · 288,205 สัญญา · 343,249 เลขบัตรไม่ซ้ำ** · กลุ่มหลักคือนักศึกษา | **Confirmed** | survey ฐานจริง 2026-08-26 |
 | [[ITOS Overview\|ITOS]] | สินเชื่อ (collection) | `ILOAN_COLLECTION` 55 tables · ลูกค้า 165,722 ราย | Confirmed | schema wiki |
 | [[EV Business\|GI Core]] | EV / AION | ระบบหลักปัจจุบันฝั่ง GI · MySQL 166 Prisma models | Confirmed | schema.prisma · ClickUp |
 | [[D365 F&O Overview\|D365 F&O]] | ERP ทุก BU | สต็อกเคลื่อนไหวรวมศูนย์ · `Transaction_FO` **276.1M แถว · 21 CompanyCode** · 2005 ถึงปัจจุบัน · เชื่อมรหัสสินค้ากับ ITEC ได้ 100% ของแถว | **Confirmed** | survey ฐานจริง 2026-09-23 |
@@ -50,9 +50,9 @@
 | [[ICS (iCare Service)]] | บริการหลังการขาย | ระบบงานซ่อม/เคลมของ iCare · **ข้อมูลอยู่บน S3 ของแผนก Innovation** · คีย์เคสคือ Document Number | To Verify | ประชุม 2026-09-11 |
 | [[Other Systems\|SAP B1]] | ERP | ไม่รู้ว่า BU ไหนใช้ | To Verify | Timeline |
 | [[CRM Overview\|7Club]] | membership | โปรแกรมสมาชิก · survey รวมกับ CRM | To Verify | Timeline · Data Framework |
-| [[CRM Overview\|CRM]] | ลูกค้า / แคมเปญ | ครอบคลุมแค่ ITEC · ส่งต่อให้ทีม CRM ใช้ Braze | Partially Confirmed | Data Framework |
+| [[CRM Overview\|CRM]] | ลูกค้า / แคมเปญ | ครอบคลุมแค่ ITEC · ส่งต่อให้ทีม CRM ใช้ Braze · ฐานเป็น **Aurora MySQL 8.0** (ทีม Inno ดูแล) | Partially Confirmed | Data Framework |
 | [[Other Systems\|Tech Trade]] | เทิร์นเครื่อง | ถือประวัติและสิทธิ์เทิร์น · **ไม่อยู่ใน brief เดิม** | To Verify | Timeline · Gap Review |
-| [[Other Systems\|Azure Synapse]] | analytics เดิม | `syndpdev001` · รับจาก SharePoint 365 + ADLS · กำลังย้ายมา AWS | Confirmed (เป็น source ของ migration) | PDF ของ Alphametrics · PoC |
+| [[Other Systems\|Azure Synapse]] | analytics เดิม | `syndpdev001` · รับจาก SharePoint 365 + ADLS · แผนย้ายมา AWS ยกเลิก (2026-11 · D-21) — ปลายทางใหม่คือ PC + MySQL | Confirmed (เป็น source ของ migration) | PDF ของ Alphametrics · PoC |
 | [[CRM Overview\|Braze]] | ส่งข้อความ/แคมเปญ | ทีม CRM ใช้ทำ promotion และ loyalty | Confirmed | Data Framework |
 
 ---
@@ -93,7 +93,7 @@ Invoice Reversal · Traffic Violation · Cash Flow & Profit Analysis (ร่ว�
 | CRM `members` | **ITEC** | `itec_cuscode` | `crm_fied_description.html` |
 | CRM `members` | CRM `customer_master` | `customer_master_id → id` | เอกสาร CRM |
 | CRM `member_auth` (7Club+) | CRM `members` | `member_id → id` | เอกสาร CRM |
-| CRM `customer_master` | **K2** `PERSON` | เลขบัตรประชาชน (`citizen_no` ↔ `TAX_ID`) | `[อนุมาน]` — ยังไม่ได้ทดสอบ join จริง |
+| CRM `customer_master` 🔒 / `member_auth` | **K2** `PERSON` | เลขบัตรประชาชน (`citizen_no` / `identity_no` ↔ `TAX_ID`) | `[อนุมาน]` — ยังไม่ได้ทดสอบ join จริง · citizen_no บัญชีเรามองไม่เห็น |
 | K2 `COLLECTION_OD_ASSIGNMENT` | ITOS `ITOS_COLLECTION_DETAIL` | union ด้วย `SOURCE_SYSTEM` ไม่ใช่ join | [[Collection Union (K2 + ITOS)]] |
 
 > **คำถามเดิมที่ว่า "CRM ผูกกับ ITEC ด้วยอะไร" — ปิดแล้ว** คำตอบคือ `members.itec_cuscode`

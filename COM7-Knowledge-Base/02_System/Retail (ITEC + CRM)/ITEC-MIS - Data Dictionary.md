@@ -1,7 +1,9 @@
-# ITEC - Data Dictionary
+# ITEC-MIS - Data Dictionary
+
+> 🟦 **ITEC-MIS** — ฐาน MIS (เครื่อง 250) · view `rpt` / `ci` ที่ทีมทำไว้ · profile `itec_mis` (env `MIS_USER` / `MIS_PWD`) · ใช้งานได้ แต่**ไม่ใช่ตัวหลัก** — ตัวหลักคือ [[ITEC-Rep Overview|ITEC-Rep]] (ตารางดิบ) · เปรียบเทียบ 2 ฐาน → [[ITEC Overview]]
 
 พจนานุกรมข้อมูลของ **23 view · 297 คอลัมน์** ในฐาน MIS
-ภาพรวมระบบ → [[ITEC Overview]] · SQL ที่ใช้ได้จริง → [[ITEC - Query Cookbook]]
+ภาพรวมระบบ → [[ITEC-MIS Overview]] · SQL ที่ใช้ได้จริง → [[ITEC-MIS - Query Cookbook]]
 
 ชนิดข้อมูลและจำนวนแถวมาจากการ query ฐานจริงเมื่อ 2026-08-28
 ไฟล์ดิบ: `_raw/itec-views.csv` · `_raw/itec-columns.csv`
@@ -797,4 +799,4 @@ JOIN   rpt.dim_item_itec i ON i.ItemId = s.PRODUCT_ID
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC Overview]] · [[ITEC - Query Cookbook]] · [[CRM - Data Dictionary]] · [[Customer Identity]] · [[Data Standardization & Quality]] · [[Consent & PDPA]] · [[K2 - Data Dictionary]] · [[ITEC Item Category Mapping (SQL to Python)]]
+[[ITEC-MIS Overview]] · [[ITEC-MIS - Query Cookbook]] · [[CRM - Data Dictionary]] · [[Customer Identity]] · [[Data Standardization & Quality]] · [[Consent & PDPA]] · [[K2 - Data Dictionary]] · [[ITEC Item Category Mapping (SQL to Python)]]

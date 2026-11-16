@@ -9,6 +9,8 @@
 
 ## ข้อมูลอยู่บน S3 ของแผนก Innovation แล้ว
 
+> **2026-11-10:** Data Lake ของเราไม่อยู่บน AWS แล้ว ([[Decisions|D-21]]) — ผัง "→ Bronze S3" ด้านล่างเปลี่ยนเป็น "ดึงไฟล์จาก S3 ของ Innovation → MySQL บนเครื่อง PC" · คำถามเรื่อง account เดียวกันไหมจึงไม่สำคัญแล้ว แต่ยังต้องขอสิทธิ์อ่าน bucket `[อนุมาน]`
+
 **นี่คือข้อค้นพบที่สำคัญที่สุดของการประชุม**
 
 |                  |                                                    |
@@ -109,7 +111,7 @@ Document Number
 | เปิดเคสแล้ว **cancel แล้วเปิดใหม่** | เครื่องเดียวกัน 2 เคส |
 | **เคลมมา 2 รอบ** | เครื่องเดียวกัน 2 เคส คนละเวลา |
 
-**ตรงกับที่เราเจอเองฝั่ง ITEC** — [[ITEC - Query Cookbook]] R7 วัดได้ว่า ส.ค. 2026 มี 600,122 บรรทัดที่มี serial แต่ serial ไม่ซ้ำแค่ 136,077 → **ซ้ำ 4.4 เท่า**
+**ตรงกับที่เราเจอเองฝั่ง ITEC** — [[ITEC-MIS - Query Cookbook]] R7 วัดได้ว่า ส.ค. 2026 มี 600,122 บรรทัดที่มี serial แต่ serial ไม่ซ้ำแค่ 136,077 → **ซ้ำ 4.4 เท่า**
 
 > **สองฝั่งยืนยันตรงกันว่า serial ไม่ unique** — ใช้เป็นตัวเชื่อมได้ แต่ต้องเป็น **one-to-many เสมอ** และต้องมีเวลาเข้ามาช่วยตัด
 
@@ -146,7 +148,7 @@ iCare เปิดเคส ──(คนพิมพ์ซ้ำ)──► ITEC
 
 **ผลต่อคุณภาพข้อมูล** — สะพานที่คนทำมือย่อมมี**เคสที่ลืมเปิดฝั่ง ITEC · พิมพ์ PHYID ผิด · เปิดช้ากว่าจริง** จึงต้องคาดไว้ว่า **การจับคู่ ICS ↔ ITEC จะไม่ครบ 100% แน่นอน** และตัวเลขที่ขาดคือความผิดพลาดของกระบวนการ ไม่ใช่ของข้อมูล
 
-> `PHYID` ยังไม่ปรากฏใน [[ITEC - Data Dictionary]] — **ต้องถามว่าตรงกับฟิลด์ไหน**
+> `PHYID` ยังไม่ปรากฏใน [[ITEC-MIS - Data Dictionary]] — **ต้องถามว่าตรงกับฟิลด์ไหน**
 
 ---
 
@@ -237,4 +239,4 @@ iCare เปิดเคส ──(คนพิมพ์ซ้ำ)──► ITEC
 
 ## เชื่อมกับโน้ตอื่น
 
-[[Smart Care Service]] · [[iCare Insurance (ICI)]] · [[ITEC Overview]] · [[ITEC - Data Dictionary]] · [[ITEC - Query Cookbook]] · [[System Inventory]] · [[Customer Identity]] · [[Consent & PDPA]] · [[SSOT Roadmap]] · [[People & Teams]]
+[[Smart Care Service]] · [[iCare Insurance (ICI)]] · [[ITEC Overview]] · [[ITEC-MIS - Data Dictionary]] · [[ITEC-MIS - Query Cookbook]] · [[System Inventory]] · [[Customer Identity]] · [[Consent & PDPA]] · [[SSOT Roadmap]] · [[People & Teams]]

@@ -1,5 +1,7 @@
 # Reconcile Pipeline - Runbook
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · runbook นี้ใช้ไม่ได้แล้ว (ทรัพยากร AWS ไม่มีแล้ว) — เก็บเป็นประวัติ
+
 > ขั้นตอน deploy → ทดสอบ → ลบ ทีละคำสั่ง (ย่อจาก `CROSS_ACCOUNT_DEPLOY.md`) + **ปัญหาที่เจอจริงในรอบ workshop 2026-10-05**
 > ค่าแต่ละตัวมาจากไหน → [[Reconcile Pipeline - Arguments & Variables]]
 

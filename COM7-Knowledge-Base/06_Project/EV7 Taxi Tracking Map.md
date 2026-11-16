@@ -1,7 +1,7 @@
 # EV7 Taxi Tracking Map
 
 แผนต่อยอด dashboard แท็กซี่ EV ไปเป็นระบบ **ติดตามรถรายคัน** สำหรับ production — ตามที่ตกลงใน [[2026-10-12 Manager แนวทางทีม]]
-ธุรกิจ → [[EV Business]]
+ธุรกิจ → [[EV Business]] · ตัวเว็บที่ทำแล้ว (ทุกฟังก์ชัน · คำนวณยังไง · ML/AI · deploy) → [[EV7 Taxi Monitor - App Guide]]
 
 **ลำดับที่ตกลง:** ทำวิเคราะห์ด้วยข้อมูลที่มีก่อน (Phase 1–5) · **ออกแบบ realtime ไว้แต่ยังไม่สร้าง** (Phase 6) · พร้อมแล้วค่อยต่อข้อมูลจริง
 
@@ -190,4 +190,4 @@
 
 ## เชื่อมกับโน้ตอื่น
 
-[[2026-10-12 Manager แนวทางทีม]] · [[EV7 Taxi - Q&A Assistant Design]] · [[EV7 Taxi - Q&A Notebook (Kaggle)]] · [[EV7 Taxi - Spec Requirements & Gap]] · [[EV Business]] · [[Consent & PDPA]] · [[Glue Jobs (ap-southeast-7)]] · [[Medallion Layer Definition]]
+[[EV7 Taxi - Out-of-Zone Alert]] · [[2026-10-12 Manager แนวทางทีม]] · [[EV7 Taxi - Q&A Assistant Design]] · [[EV7 Taxi - Q&A Notebook (Kaggle)]] · [[EV7 Taxi - Spec Requirements & Gap]] · [[EV Business]] · [[Consent & PDPA]] · [[Glue Jobs (ap-southeast-7)]] · [[Medallion Layer Definition]]

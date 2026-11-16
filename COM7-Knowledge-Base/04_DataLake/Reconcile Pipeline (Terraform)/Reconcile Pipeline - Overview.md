@@ -1,5 +1,7 @@
 # Reconcile Pipeline - Overview
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · **ตรรกะ reconcile ยังใช้ได้** (ต้นทางไม่มี CDC → นับแถว · diff ตาม PK · INSERT/UPDATE/DELETE · audit ก่อนลบ) — ย้ายมาเป็น Python + MySQL ได้ · Terraform / Glue / Step Functions ไม่ใช้แล้ว · โค้ดเดิม: backup `ap-southeast-7/glue/jobs/com7-reconcile-generic/`
+
 > **เริ่มอ่านที่นี่** — pipeline ที่ทำให้ตาราง Iceberg บน S3 **ตรงกับ SQL Server ต้นทางเสมอ** โดยไม่ต้องมี CDC
 > ทำเป็น Terraform module พกไปลงบัญชีไหนก็ได้ · ทดลองครบวงจรใน sandbox เมื่อ 2026-10-05 แล้ว destroy หมด
 

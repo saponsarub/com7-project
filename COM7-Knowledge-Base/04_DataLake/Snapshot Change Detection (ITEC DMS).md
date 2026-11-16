@@ -1,5 +1,7 @@
 # Snapshot Change Detection (ITEC DMS)
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · **แนวคิด diff snapshot ยังใช้ได้** กับ MySQL (เทียบ snapshot สองรอบตาม key / แบบ multiset) · ส่วน DMS / S3 / Lambda ไม่มีแล้ว
+
 > ผังจากทีม **Data Engineering (AWS)** — `Screenshot 2026-09-08 at 15.34.33.png`
 > **TARGET ARCHITECTURE · Observer ยังไม่เปิดใช้จริง (not yet production-enabled)**
 
@@ -155,11 +157,11 @@ Replay / rollback รองรับ · สังเกตการณ์ผ่�
 | 3 | Bronze เปิด versioning แล้ว **มี lifecycle policy หรือยัง** | version เก่าคิดเงินเต็มราคาเหมือน object ปกติ ไม่มี policy = โตไปเรื่อย ๆ `[อนุมาน — ผังไม่ได้ระบุ]` |
 | 4 | snapshot ที่ผูกกับ run เก็บไว้กี่รอบ | copy เต็มทุกรอบ · 30 TB lake จะโตเร็วมาก `[อนุมาน]` |
 | 5 | schema เปลี่ยน (12 → 13 คอลัมน์) แล้วเทียบกับรอบก่อนยังไง | SHA-256 คำนวณจาก 12 คอลัมน์ **เพิ่มคอลัมน์ = hash เปลี่ยนทั้งตาราง** จะกลายเป็น delete ทั้งชุด insert ทั้งชุด · น่าจะถูกดักที่ schema gate แต่ควรยืนยันว่าดักจริงและ recover ยังไง |
-| 6 | Item / Branch **พิสูจน์ candidate key จากอะไร** | ITEC เปิดให้เห็นแค่ 23 view ไม่มี table → ไม่มี PK ประกาศไว้ให้ใช้ → [[ITEC Overview]] |
+| 6 | Item / Branch **พิสูจน์ candidate key จากอะไร** | ITEC เปิดให้เห็นแค่ 23 view ไม่มี table → ไม่มี PK ประกาศไว้ให้ใช้ → [[ITEC-MIS Overview]] |
 | 7 | Fact 12 คอลัมน์ คือคอลัมน์ไหน | ITEC มีบรรทัดขาย **79.8M** · ต้องรู้ว่า 12 คอลัมน์นี้พอระบุความเป็นแถวได้จริงไหม |
 
 ---
 
 ## เชื่อมกับโน้ตอื่น
 
-[[DMS Full Load Validation (Lambda)]] · [[Architecture]] · [[AWS Services]] · [[ITEC Overview]] · [[ETL & Spark]] · [[Decisions]] · [[Network & VPN]]
+[[DMS Full Load Validation (Lambda)]] · [[Architecture]] · [[AWS Services]] · [[ITEC-MIS Overview]] · [[ETL & Spark]] · [[Decisions]] · [[Network & VPN]]

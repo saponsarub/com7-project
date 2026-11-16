@@ -22,6 +22,7 @@ date: 2026-10-16
 | [[EV7 Taxi - Q&A Notebook (Kaggle)]] | notebook ถามตอบรถแท็กซี่ ทุก cell (rule-based → agent → fine-tune) |
 | [[Text-to-SQL Fine-tune (EV7 Taxi)]] | สร้างชุดสอน 1,600+ ข้อ · เทรน Qwen 7B · ผลก่อนเทรน 6% · error ที่เจอและวิธีแก้ |
 | [[EV7 Taxi - Q&A Assistant Design]] | แบบร่างตอนออกแบบ (2026-10-14) |
+| [[EV7 Taxi Monitor - App Guide]] | เว็บที่ทำแล้ว: ทุกฟังก์ชันคำนวณยังไง · ผู้ช่วย offline/AI · ML ใช้ตรงไหน (และไม่ได้ใช้) · Chronos · GraphHopper · deploy (2026-10-22) |
 | [[ITEC Model - Run on EC2 Guide]] | รันโมเดลจัดหมวดสินค้า ITEC บน EC2 |
 
 ## ดูของทีมอื่น

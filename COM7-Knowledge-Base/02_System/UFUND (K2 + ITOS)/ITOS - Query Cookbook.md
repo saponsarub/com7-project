@@ -49,6 +49,7 @@ df = db.query("k2", f"SELECT TOP 10 * FROM {B}.ext_collection.S_CONTRACT", timeo
 |---|---|---|---|
 | สถานะสัญญาตอนนี้ (Active / ปิด / ยกเลิก) | `ext_collection.S_CONTRACT` (`CONTRACT_STATUS` + `CONTRACT_SUBSTATUS`) | `dbo.ITOS_STAGE_CONTRACT_BASE.CONTRACT_STATUS_RAW` (เมื่อคืน) | [[#1 · ภาพรวมพอร์ตตามสถานะ]] |
 | ลิสต์ลูกหนี้ค้างชำระ OD1–OD6 / WO | `dbo.ITOS_COLLECTION_DETAIL` | — (สถานะ OD มีแค่ที่นี่) | [[#2 · ลิสต์ลูกหนี้ค้างชำระ]] |
+| **รายการจ่ายรายเดือน รายคน** · สถานะ OD ย้อนหลังรายเดือน | `dbo.ITOS_COLLECTION_DETAIL_EOM` | — | [[#16 · snapshot สิ้นเดือนรายสัญญา (EOM)]] |
 | ยอดค้าง งวดค้าง วันครบกำหนด **ล่าสุด** | `ext_collection.S_OUTSTANDING` | DETAIL / `ITOS_STAGE_CONTRACT_BASE` (เมื่อคืน) | [[#3 · ดูสัญญาเดียวแบบสด]] |
 | ตารางงวดผ่อน | `ext_collection.S_PMTSCHDLE` | — | [[#4 · ตารางงวดผ่อน]] |
 | ข้อมูลลูกค้า (ชื่อ อายุ อาชีพ รายได้) | `ext_collection.S_CUSTOMER` | `ITOS_COLLECTION_PORTFOLIO` (เพศ อายุ รายได้ เฉพาะลูกหนี้ค้าง) | [[#5 · ข้อมูลลูกค้าของสัญญา]] |
@@ -133,6 +134,8 @@ ITOS_STAGE_ADDRESS         (343,322)             ─┘──► ITOS_COLLECTION
 ### snapshot รายเดือน vs ข้อมูลสด
 
 `T_SnapShort_Report_OutStanding_Hp` เดือน 2026-09 มี 324,470 สัญญา (ขึ้นต้น `TFF` ทั้งหมด) · เจอใน `S_OUTSTANDING` ครบ 100% → ชุดสัญญาเดียวกัน แต่เป็น**ค่า ณ สิ้นเดือน** ไม่ใช่วันนี้
+
+`ITOS_COLLECTION_DETAIL_EOM` = DETAIL ที่เก็บไว้ทุกสิ้นเดือน (DETAIL ปกติโหลดทับทุกคืน ย้อนไม่ได้) · เฉพาะสัญญาในงานติดตามหนี้ ~15,000 สัญญา/เดือน ไม่ใช่ทั้งพอร์ต → [[#16 · snapshot สิ้นเดือนรายสัญญา (EOM)]]
 
 ---
 
@@ -343,6 +346,52 @@ GROUP BY p.GENDER;
 ```
 3 วินาที · join ต้องใช้ **ทั้ง `EXTRACT_DATE` และ `CONTRACT_ID`** · ถ้าต้องทั้งพอร์ตใช้ `ITOS_STAGE_CONTRACT_BASE` (มี `GENDER` `AGE` `INCOME` `CREDIT_SCORING` ทุกสัญญา)
 
+## 16 · snapshot สิ้นเดือนรายสัญญา (EOM)
+
+ทีม ITOS สร้างตารางนี้ให้ (แจ้ง 2026-10-22) · **ใช้ดูรายการจ่ายรายเดือน รายคน** ไม่ต้องคำนวณเอง
+
+| | |
+|---|---|
+| ตาราง | `ILOAN_DATASOURCE.ILOAN_DATASOURCE.dbo.ITOS_COLLECTION_DETAIL_EOM` · 62 คอลัมน์ |
+| 1 แถว | 1 สัญญา ต่อ 1 เดือน · `AsOfDate` = วันสิ้นเดือน (ไม่มีสัญญาซ้ำในเดือนเดียวกัน) |
+| ช่วงเวลา | 2025-09-30 → 2026-09-30 (13 เดือน) · 166,043 แถว · 46,582 สัญญา |
+| สัญญาที่อยู่ในตาราง | สัญญาในงานติดตามหนี้ ณ สิ้นเดือน ~15,000/เดือน (ไม่ใช่ทั้งพอร์ต 324,470) · ทุกเดือนรวมกัน: Overdue 1–13 · ลูกหนี้ปกติ 50,587 · Write Off 3,686 · ปิดสัญญา 613 · `NUMBER_OF_OD_INSTALLMENT > 0` 114,823 แถว · `DPD` 0–375 |
+| คอลัมน์ที่ใช้บ่อย | `CONTRACT_NUMBER` · `CONTRACT_STATUS_DESC` · `DPD` · `NUMBER_OF_OD_INSTALLMENT` · `OD_AMOUNT` · `PAID_NUMBER_OF_PERIOD` · `PENALTY_AMT` · **`PENALTY_RECEIVED`** · `COLLECT_AMT` · **`COLLECT_RECEIVED`** · `LAST_REPAY_DATE` · `ASSIGN_TO_TEAM` · `EMP_CODE` · `WRITEOFF_DATE` · `WRITEOFF_AMOUNT` |
+
+> 🔴 **ห้ามใช้ `PENALTY_RECEIVED_SUM` และ `COLLECT_RECEIVED_SUM`** — ทีม ITOS แจ้งว่าคำนวณผิดหลัก
+> ใช้ `PENALTY_RECEIVED` / `COLLECT_RECEIVED` ของแต่ละเดือนแทน
+> ที่เห็นในข้อมูล: สัญญาที่จ่ายเบี้ยปรับ 100 บาทครั้งเดียวเดือน 2025-09 · `PENALTY_RECEIVED_SUM` ค้างเป็น 100 ต่อไปอีก 12 เดือน ขณะที่ `PENALTY_RECEIVED` เป็น 0 · ยอดทั้งพอร์ตเดือน 2026-09: `PENALTY_RECEIVED` 0.77 ล้าน vs `_SUM` 4.18 ล้าน
+
+```sql
+-- รายการจ่ายรายเดือนของสัญญาเดียว
+SELECT  AsOfDate, CONTRACT_STATUS_DESC, DPD, NUMBER_OF_OD_INSTALLMENT, OD_AMOUNT,
+        PAID_NUMBER_OF_PERIOD, PENALTY_RECEIVED, COLLECT_RECEIVED, LAST_REPAY_DATE
+FROM    ILOAN_DATASOURCE.ILOAN_DATASOURCE.dbo.ITOS_COLLECTION_DETAIL_EOM
+WHERE   CONTRACT_NUMBER = 'TFF2510-005889'
+ORDER BY AsOfDate;
+
+-- ทั้งพอร์ตรายเดือน
+SELECT  AsOfDate, COUNT(*) AS contracts,
+        SUM(PENALTY_RECEIVED) AS penalty_received,
+        SUM(COLLECT_RECEIVED) AS collect_fee_received,
+        SUM(OD_AMOUNT)        AS od_amount
+FROM    ILOAN_DATASOURCE.ILOAN_DATASOURCE.dbo.ITOS_COLLECTION_DETAIL_EOM
+GROUP BY AsOfDate
+ORDER BY AsOfDate;
+```
+รันจริง 2026-10-22 · ทั้งพอร์ต ~1.3 วินาที
+
+| เดือน | สัญญา | `PENALTY_RECEIVED` | `COLLECT_RECEIVED` |
+|---|---:|---:|---:|
+| 2025-09 | 520 | 28,700 | 400 |
+| 2025-12 | 9,251 | 634,301 | 131,793 |
+| 2026-03 | 14,041 | 1,076,202 | 322,557 |
+| 2026-06 | 19,757 | 1,341,972 | 326,761 |
+| 2026-09 | 15,048 | 771,097 | 197,917 |
+
+🔴 มี `CUSTOMER_NAME` · `CUSTOMER_PHONE_NUM` · `CUSTOMER_BIRTH_DATE` · `GUARANTOR_NAME` · `GUARANTOR_PHONE_NUM` — อย่า `SELECT *`
+⚠️ ค่าภาษาไทยใน `CONTRACT_STATUS_DESC` (ปิดสัญญา · ลูกหนี้ปกติ) อ่านผ่าน pyodbc ออกมาเป็นตัวอักษรเพี้ยน `[อนุมาน: encoding ฝั่งต้นทาง]` → กรองด้วย `CONTRACT_STATUS_ID` (`ACT` / `CLS` / `TEM`) หรือ `DPD` แทน
+
 ---
 
 ## S_CUSTOMER — ตัวอย่าง query
@@ -529,6 +578,7 @@ ORDER BY contracts_per_person;
 - `REMAINING_OUTSTANDING` vs `OUTS_AMTTOTAL` ต่างกัน 369 สัญญา — เพราะอะไร
 - `FEE_CREATEDATE` ที่เป็นวันในอนาคต (2026-12-14)
 - ข้อมูล NCB อยู่ตารางไหน (ดู [[ITOS Overview#ข้อมูล NCB (เครดิตบูโร)]])
+- `ITOS_COLLECTION_DETAIL_EOM` จะเพิ่มเดือนใหม่อัตโนมัติทุกสิ้นเดือนไหม (เดือน 2026-10 ควรมาหลัง 2026-10-31) · ทีม ITOS จะแก้ `PENALTY_RECEIVED_SUM` / `COLLECT_RECEIVED_SUM` หรือเลิกใช้
 
 ## เชื่อมกับโน้ตอื่น
 

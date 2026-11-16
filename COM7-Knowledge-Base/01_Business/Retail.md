@@ -51,7 +51,7 @@
 | CRM | ITEC | `members.itec_cuscode` |
 | CRM (สมาชิก) | CRM (ลูกค้าทั้งหมด) | `members.customer_master_id → customer_master.id` |
 | CRM | 7Club+ | `member_auth.member_id → members.id` |
-| ค้าปลีก | UFUND | เลขบัตรประชาชน (`customer_master.citizen_no` ↔ `PERSON.TAX_ID`) |
+| ค้าปลีก | UFUND | เลขบัตรประชาชน (`customer_master.citizen_no` 🔒 / `member_auth.identity_no` ↔ `PERSON.TAX_ID`) |
 
 **นี่คือเส้นทางหลักของ Customer 360** — ลูกค้าที่ซื้อ iPhone ที่ Studio7 กับลูกค้าที่ผ่อน iPhone กับ UFUND
 อาจเป็นคนเดียวกัน และปัจจุบันยังมองไม่เห็นว่าเป็นคนเดียวกัน
@@ -94,9 +94,9 @@ BaNANA 1,033 · Franchise 715 · Studio7 236 · BeBe Phone 148 · Consign 133 ·
 | **Personal Loan** | 76,657 | **1,491** | 19,452 |
 
 > **Samsung Finance+ ปล่อยสินเชื่อ 1,491 ล้านบาทที่หน้าร้าน COM7** — เป็นยอดที่ [[UFUND]] ไม่ได้
-> → [[ITEC - Query Cookbook]] สูตร R6
+> → [[ITEC-MIS - Query Cookbook]] สูตร R6
 
-รายละเอียดทั้งหมด → [[ITEC Overview]] · [[ITEC - Data Dictionary]]
+รายละเอียดทั้งหมด → [[ITEC Overview]] · [[ITEC-MIS - Data Dictionary]]
 
 ## ความพร้อมข้อมูลสำหรับ Data Lake
 

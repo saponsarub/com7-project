@@ -161,6 +161,8 @@ Gap Review ตอบว่า:
 
 ### Status
 
+> **2026-11-10:** AWS ยกเลิกแล้ว ([[Decisions|D-21]]) — งานโมเดลต้องรันบนเครื่อง PC / Kaggle / Colab
+
 **Timeline ไม่มี phase ไหนครอบคลุมการสร้าง model** — จบที่ AWS Production (Design → Implement → Test → Deploy → Maintain)
 
 **AWS Proposal ไม่มี SageMaker หรือ ML platform ใดๆ ในสถาปัตยกรรม**

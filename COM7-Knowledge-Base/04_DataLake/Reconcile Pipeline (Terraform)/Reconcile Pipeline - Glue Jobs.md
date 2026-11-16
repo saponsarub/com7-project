@@ -1,5 +1,7 @@
 # Reconcile Pipeline - Glue Jobs
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · เก็บเป็นประวัติ → ตรรกะที่ยังใช้ได้อยู่ใน [[Reconcile Pipeline - Overview]]
+
 > อ่าน code ของ 2 Glue job: `assets/glue_reconcile_generic.py` (2,192 บรรทัด) และ `assets/glue_iceberg_maintenance.py` (325 บรรทัด)
 > arg / CFG แต่ละตัวมาจากไหน → [[Reconcile Pipeline - Arguments & Variables]]
 

@@ -1,5 +1,7 @@
 # Glue Jobs (ap-southeast-7)
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · ทุก job ลบแล้ว · สคริปต์ทั้งหมดสำรองไว้ → [[AWS Data Lake - Pipeline & Data Layers]] (อธิบายแต่ละ job และกติกาทำความสะอาดที่นำกลับมาใช้ได้)
+
 สำรวจ Glue job ทั้งหมดในบัญชี `603238661233` region **ap-southeast-7** เมื่อ 2026-10-08 (อ่านอย่างเดียว ผ่าน AWS CLI)
 มี 20 job · **ตัด notebook 3 ตัวและ job ที่ชื่อมี `test` 2 ตัว → เหลือ 15 job** · สคริปต์ดาวน์โหลดจาก S3 ตาม `ScriptLocation` ของแต่ละ job
 ข้อสันนิษฐานติด `[อนุมาน]`

@@ -1,5 +1,7 @@
 # ADLS Gen2 to S3 — Glue Pilot (staging)
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · pilot จบแล้ว · bucket `com7-raw-adls`, role, secret ใน AWS ลบแล้ว · ⬜ ฝั่ง Azure ยังต้องลบ app `aws-glue-adls-reader` + role assignment (ส่วน G)
+
 ทดสอบ **วิธี 2 (Glue)** จาก [[ADLS Gen2 to S3 - Console Runbook]] กับ container `staging` ด้วยค่าจริงของ COM7
 เป้าหมาย: พิสูจน์ว่า Glue ใน ap-southeast-7 **อ่าน ADLS ของ COM7 ได้** (สิทธิ์ · network · driver) และวัดความเร็ว/ค่าใช้จ่ายจริง — **ยังไม่ใช่การย้ายข้อมูลจริง**
 

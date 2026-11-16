@@ -1,5 +1,7 @@
 # Reconcile Pipeline - Arguments & Variables
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · เก็บเป็นประวัติ (ค่าตั้ง Terraform/Glue) → ภาพรวมตรรกะที่ยังใช้ได้อยู่ใน [[Reconcile Pipeline - Overview]]
+
 > ทุกค่าที่ pipeline ใช้ **มาจากไหน · ผ่านอะไร · ไปจบที่ไหน · ถูกเก็บไว้ที่ไหน**
 > อ่านคู่กับ [[Reconcile Pipeline - Overview]] · code อ้างอิงจาก bundle v1.0.0
 

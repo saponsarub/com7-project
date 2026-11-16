@@ -1,5 +1,7 @@
 # Glue Crawler
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · เก็บเป็นประวัติ · บน MySQL ไม่ต้องมี crawler — schema กำหนดตอน CREATE TABLE
+
 > **หมายเหตุที่มา:** บันทึกจากการทำจริงบน bucket `google-sheet-extract` เมื่อ **2026-09-03** — ทุกอาการและ error ที่เขียนไว้เจอเองกับ Crawler และ Redshift Spectrum ของบัญชี `603238661233`
 
 Crawler สแกนไฟล์ใน S3 แล้วสร้างตารางใน **Glue Data Catalog** ซึ่ง [[Athena Benchmark|Athena]] · [[Redshift|Redshift Spectrum]] · Glue Job ใช้ร่วมกันทั้งหมด

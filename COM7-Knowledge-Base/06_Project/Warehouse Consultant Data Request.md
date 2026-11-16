@@ -246,5 +246,5 @@ python scripts/fo/wh_report.py
 ## เชื่อมโยง
 
 [[D365 F&O Overview]] · [[D365 F&O - Query Cookbook]] · [[D365 F&O - Transaction_FO Dictionary]]
-[[ITEC Overview]] · [[ITEC - Data Dictionary]] · [[ITEC Product Dimension]]
+[[ITEC Overview]] · [[ITEC-MIS - Data Dictionary]] · [[ITEC Product Dimension]]
 [[Environment Setup]] · [[Open Questions & Risks]]

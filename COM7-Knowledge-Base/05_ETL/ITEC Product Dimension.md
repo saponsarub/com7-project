@@ -5,7 +5,7 @@
 > โปรเจกต์ `scripts/itec/dimension/` · อัปเดต 2026-09-21
 >
 > แทนที่ → [[ITEC Category Model (ML)]] (รุ่นเก่า เก็บไว้ดูประวัติเท่านั้น)
-> ต้นทาง rule-based → [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC - Data Dictionary]]
+> ต้นทาง rule-based → [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC-MIS - Data Dictionary]]
 
 ---
 
@@ -280,6 +280,6 @@ ML ออกแบบไว้แล้วในโน้ตบุ๊ก ส่�
 - [[ITEC Category Model (ML)]] — รุ่นเก่า มีกล่องเตือนว่าอย่าใช้เป็นคู่มือ
 - [[ITEC Item Category Mapping (SQL to Python)]] — SQL ต้นทางที่กำลังจะถูกแทน
 - [[ITEC Category Toolkit]] — กับดัก pandas 3 แบบเต็ม
-- [[ITEC - Data Dictionary]] — `dim_item_itec` และ view อื่นของ ITEC
+- [[ITEC-MIS - Data Dictionary]] — `dim_item_itec` และ view อื่นของ ITEC
 - [[Environment Setup]] — ตั้งเครื่องใหม่ · pip · ODBC · GPU
 - [[ITEC Model - Run on EC2 Guide]] — ถ้าจะไปรันบน EC2

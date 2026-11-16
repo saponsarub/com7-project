@@ -1,5 +1,7 @@
 # Reconcile Pipeline - Terraform Modules
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · เก็บเป็นประวัติ · ไม่มี Terraform ฝั่ง AWS แล้ว
+
 > แต่ละไฟล์ใน `reconcile-pipeline-terraform-portable-v1.0.0/` สร้างอะไร · code สำคัญ · เหตุผลที่ออกแบบแบบนี้
 > ค่าแต่ละตัวมาจากไหน → [[Reconcile Pipeline - Arguments & Variables]]
 

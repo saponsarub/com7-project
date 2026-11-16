@@ -1,5 +1,7 @@
 # Reconcile Pipeline - Orchestration & Alerts
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · Step Functions / EventBridge / SNS ลบแล้ว · บนเครื่อง PC ใช้ cron / Task Scheduler + อีเมลแจ้งเตือนแทน `[อนุมาน]`
+
 > Step Functions `<project>-pipeline` (`templates/state_machine.json.tftpl`, 357 บรรทัด) + Scheduler + SNS + CloudWatch alarm
 > ค่าที่ไหลเข้า/ออก state machine → [[Reconcile Pipeline - Arguments & Variables]] ข้อ 5
 

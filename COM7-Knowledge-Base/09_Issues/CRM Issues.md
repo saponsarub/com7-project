@@ -25,7 +25,8 @@
 
 - [ ] ขอ connection แบบ read-only เข้าฐาน CRM เพื่อ verify row count · null rate · รูปแบบข้อมูลจริง
 - [ ] ขอตัวอย่าง `pdpa_consent` มา 5–10 แถวเพื่อดูโครงสร้าง JSON
-- [ ] ทดสอบ join `customer_master.citizen_no` กับ `PERSON.TAX_ID` ของ K2 ว่าตรงกันกี่ราย
+- [ ] ทดสอบ join `member_auth.identity_no` (และ `customer_master.citizen_no` เมื่อได้สิทธิ์) กับ `PERSON.TAX_ID` ของ K2 ว่าตรงกันกี่ราย
+- [ ] ขอสิทธิ์คอลัมน์ที่ถูกซ่อนจากทีม Inno — `customer_master` 8 คอลัมน์ (รวม `citizen_no`) · `members` 33 คอลัมน์ (รวม `address` `postcode` `tax_id`)
 - [ ] ตัดสินใจกับ legal ว่า **CRM เป็น system of record ของ consent** หรือไม่ → [[Consent & PDPA]]
 
 ---
@@ -36,7 +37,7 @@
 |---|---|---|
 | CRM data dictionary อยู่ที่ไหน | ได้จากทีม CRM แล้ว → [[CRM - Data Dictionary]] | 2026-08-28 |
 | CRM ผูกกับ ITEC ด้วยคีย์อะไร | `members.itec_cuscode` | 2026-08-28 |
-| 7Club+ มีสมาชิกเท่าไหร่ | ~800,000 (จาก `member_auth`) | 2026-08-28 |
+| 7Club+ มีสมาชิกเท่าไหร่ | **1,992,680** (นับ `member_auth`) | 2026-11-10 |
 
 ---
 

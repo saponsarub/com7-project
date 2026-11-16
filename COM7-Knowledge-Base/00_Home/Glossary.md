@@ -81,7 +81,9 @@
 | **DynamicFrame** | DataFrame แบบยืดหยุ่นของ Glue |
 | **CRR** | Cross-Region Replication ของ S3 |
 | **RPO / RTO** | Recovery Point / Time Objective |
-| **SSOT** | Single Source of Truth |
+| **SSOT** | Single Source of Truth — ตั้งแต่ 2026-11 ทำบนเครื่อง PC + MySQL (เดิม AWS) |
+| **Outline (VPN)** | VPN ที่ทีม Inno ใช้ให้เข้าฐาน CRM · key ขึ้นต้น `ss://` — ห้ามจดในโน้ต |
+| **Aurora MySQL** | ฐานข้อมูล MySQL แบบจัดการของ AWS — ฐาน CRM อยู่บนนี้ (account ของทีม Inno ไม่ใช่ของเรา) |
 | **CDP** | Customer Data Platform |
 | **RFM** | Recency, Frequency, Monetary |
 | **CLV** | Customer Lifetime Value |

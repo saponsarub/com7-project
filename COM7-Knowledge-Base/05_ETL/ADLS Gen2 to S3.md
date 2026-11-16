@@ -1,5 +1,7 @@
 # ADLS Gen2 to S3
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · แผนย้าย ADLS → S3 ยกเลิก · **ข้อมูลฝั่ง Azure (ส่วน 1) ยังใช้ได้** ถ้าจะดึงเข้า MySQL · ⬜ ยังต้องลบ Entra app `aws-glue-adls-reader` + role บน container `staging`
+
 วิธีย้ายข้อมูลจาก **Azure Data Lake Storage Gen2** (ที่ Azure Synapse ของ COM7 ใช้) ลง **Amazon S3** — ทุกวิธีที่ทำได้ พร้อมขั้นตอน ข้อจำกัด และวิธีที่แนะนำ
 งานนี้คือ Pilot ข้อ 1 ใน Timeline (*"MS Synapse จาก D365 to AWS directly"*) และ PoC issue ข้อ 8 → [[Current Status]]
 

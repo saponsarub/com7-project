@@ -1,5 +1,7 @@
 # Glue Connectivity
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · ปัญหา Glue ↔ on-prem จบไปพร้อม AWS · เครื่อง PC ต่อ SQL Server ภายในได้ตรง
+
 > **สรุปสาระสำคัญ 2026-09-08** — ไล่ debug การตั้ง AWS Glue job (`testjob`) ให้ต่อ MSSQL ทั้งวัน ได้ข้อสรุปเรื่องสถาปัตยกรรมเน็ตเวิร์กที่สำคัญมาก
 > เกี่ยวข้อง → [[Network & VPN]] · [[ETL & Spark]] · [[Glue Crawler]] · [[DMS Full Load Validation (Lambda)]] · [[Pipeline Issues]]
 > Region **ap-southeast-7 (Bangkok)** · VPC `vpc-0724ede854478d5a3` · Subnet `subnet-01fb5215a38d90391` · RouteTable `rtb-08ed1761f17749e9e` · SG `sg-0027ef551e6e063d2` · Account `603238661233`

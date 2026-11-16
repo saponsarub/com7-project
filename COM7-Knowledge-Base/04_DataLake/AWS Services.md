@@ -1,5 +1,7 @@
 # AWS Services
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · โน้ตนี้เก็บเป็นประวัติ — ไม่มีบริการ AWS ใดใช้งานอยู่
+
 Service ที่อยู่ในสถาปัตยกรรม COM7 · Region หลัก **ap-southeast-7**
 
 ---

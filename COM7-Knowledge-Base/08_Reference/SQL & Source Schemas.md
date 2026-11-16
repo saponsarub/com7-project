@@ -8,7 +8,7 @@
 |---|---|---|
 | `ILOAN_COLLECTION` | MSSQL | ITOS |
 | `ILOAN_DATASOURCE` | MSSQL | extract ของ ITOS |
-| `HPCOM7` | MSSQL | K2 — **542 tables · 165 views · สำรวจครบแล้ว** |
+| `HPCOM7` | MSSQL | K2 — **545 tables · 165 views · สำรวจครบแล้ว** |
 | `D365FO_DATALAKE` | ไม่ระบุ | D365 |
 | `syndpdev001` | Azure Synapse | Synapse |
 | `PROJECT_1` | MSSQL | view ของ ITEC |
@@ -113,7 +113,7 @@ FROM [PROJECT_1].[dbo].[view_itec_payment] vip
 
 วิธี 5 ข้อข้างบนยังใช้ได้ แต่กับฐานที่ใหญ่กว่าและไม่มี FK ต้องเพิ่มอีก 4 ข้อ `[อนุมาน]`
 
-6. **นับ foreign key ก่อนเป็นอันดับแรก** — K2 มี **16 FK จาก 542 tables** ถ้าตัวเลขนี้ต่ำ แปลว่าเครื่องมือสร้าง ER อัตโนมัติจะไร้ประโยชน์ และต้องวางแผนพิสูจน์ relation ด้วยการ join จริงตั้งแต่ต้น
+6. **นับ foreign key ก่อนเป็นอันดับแรก** — K2 มี **16 FK ทั้งฐาน** ถ้าตัวเลขนี้ต่ำ แปลว่าเครื่องมือสร้าง ER อัตโนมัติจะไร้ประโยชน์ และต้องวางแผนพิสูจน์ relation ด้วยการ join จริงตั้งแต่ต้น
 ```sql
 SELECT COUNT(*) FROM sys.foreign_keys;
 ```

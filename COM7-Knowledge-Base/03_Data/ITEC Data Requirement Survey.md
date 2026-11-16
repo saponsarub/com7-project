@@ -5,7 +5,7 @@
 **ที่มา:** `Copy of ITEC data requirement_reply1.xlsx` sheet `retail` — คำตอบจากเจ้าของระบบ ITEC
 **รับเข้า vault:** 2026-08-28
 
-ใช้คู่กับ → [[ITEC Overview]] · [[ITEC - Data Dictionary]] · แบบเดียวกันฝั่ง K2 → [[K2 Customer Field Survey]]
+ใช้คู่กับ → [[ITEC Overview]] · [[ITEC-MIS - Data Dictionary]] · แบบเดียวกันฝั่ง K2 → [[K2 Customer Field Survey]]
 
 ---
 
@@ -238,4 +238,4 @@
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC Overview]] · [[ITEC - Data Dictionary]] · [[ITEC Issues]] · [[Retail]] · [[K2 Customer Field Survey]] · [[Customer Identity]] · [[Consent & PDPA]] · [[System Inventory]]
+[[ITEC Overview]] · [[ITEC-MIS - Data Dictionary]] · [[ITEC Issues]] · [[Retail]] · [[K2 Customer Field Survey]] · [[Customer Identity]] · [[Consent & PDPA]] · [[System Inventory]]

@@ -614,4 +614,4 @@ backbone = "../finetune/_out/mini-Item_Type-finetuned"
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Model - Run on EC2 Guide]] · [[ITEC - Data Dictionary]] · [[Data Standardization & Quality]] · [[Analytics & AI]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Category Toolkit]] · [[ITEC Category Model (ML)]]
+[[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Model - Run on EC2 Guide]] · [[ITEC-MIS - Data Dictionary]] · [[Data Standardization & Quality]] · [[Analytics & AI]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Category Toolkit]] · [[ITEC Category Model (ML)]]

@@ -20,6 +20,11 @@
 4. พอรวมระบบเสร็จ lake จะ ingest ระบบรวมระบบเดียว หรือยัง ingest 2 source
 5. `CUST_CODE` เป็น nvarchar(500) — รูปแบบจริงคืออะไร ใช้ join ข้ามระบบได้ไหม
 6. ผู้ค้ำประกัน — เก็บหรือไม่เก็บใน lake (**รอ legal**)
+7. `ITOS_COLLECTION_DETAIL_EOM` จะเพิ่มเดือนใหม่อัตโนมัติทุกสิ้นเดือนไหม
+
+### 🔴 คอลัมน์ที่คำนวณผิด (ทีม ITOS แจ้ง 2026-10-22)
+
+`ITOS_COLLECTION_DETAIL_EOM.PENALTY_RECEIVED_SUM` และ `COLLECT_RECEIVED_SUM` **ห้ามใช้** — ใช้ `PENALTY_RECEIVED` / `COLLECT_RECEIVED` รายเดือนแทน · รายละเอียด → [[ITOS - Query Cookbook#16 · snapshot สิ้นเดือนรายสัญญา (EOM)]]
 
 ---
 

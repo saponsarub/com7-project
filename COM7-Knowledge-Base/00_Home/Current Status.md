@@ -1,10 +1,28 @@
 # Current Status
 
-อัปเดต **2026-08-28** · ที่มา: `Project Timeline _ Data Team.xlsx` + `สรุปประเด็นจากการ POC AWS Data Lake.md` + ชุดข้อมูลที่รับเข้า 2026-08-28
+อัปเดต **2026-11-10** (ส่วนบน) · ตารางระบบด้านล่างยังเป็นของ **2026-08-28** · ที่มา: `Project Timeline _ Data Team.xlsx` + `สรุปประเด็นจากการ POC AWS Data Lake.md` + ชุดข้อมูลที่รับเข้า 2026-08-28
 
 ---
 
-## 🆕 อัปเดต 2026-09-08 — Glue ต่อ MSSQL: เจอต้นตอ Client VPN
+## 🆕 อัปเดต 2026-11-10 — SSOT ย้ายจาก AWS มาเครื่อง PC + MySQL
+
+**ตัดสินใจ:** โปรเจค SSOT **ไม่ทำบน AWS แล้ว** — ไม่ผ่าน POC และไม่ผ่านงบประมาณ
+**แผนใหม่:** ประกอบเครื่อง PC (on-prem) ใช้เก็บข้อมูลแทน · ฐานข้อมูล **MySQL** · **concept เดิม** (รวมข้อมูลทุก BU → มาตรฐานเดียว → SSOT → Customer 360) → [[SSOT Roadmap]]
+
+| เรื่อง | สถานะ |
+|---|---|
+| AWS Data Lake (account 603238661233) | ✅ **ปิดและลบแล้ว** 30 ต.ค. – 2 พ.ย. 2026 · สำรองโค้ด/ค่าตั้ง/ตัวอย่างข้อมูลไว้ในเครื่อง → [[AWS Data Lake - Backup & Shutdown 2026-10]] · ค่าใช้จ่ายเหลือ ≈ 0 (QuickSight unsubscribe แล้ว · KMS key รอลบเอง) |
+| สิ่งที่นำกลับมาใช้ได้ | ตรรกะ ETL bronze→silver→gold (ทำความสะอาดสินค้า/สาขา, fact_sales_enriched) · แนวคิด reconcile แทน CDC · pipeline Google Sheets → [[AWS Data Lake - Pipeline & Data Layers]] — ต้องแปลงจาก Spark/Iceberg เป็น SQL/Python บน MySQL `[อนุมาน]` |
+| ฝั่ง Azure (ADLS pilot) | ⬜ ยังต้องลบ App registration `aws-glue-adls-reader` → [[ADLS Gen2 to S3]] |
+| **CRM** | ✅ **ต่อฐานได้แล้ว** (4–10 พ.ย.) · Aurora **MySQL 8.0.42** แบบ read-only (cluster `crm-pool-th`, ap-southeast-7, ทีม Inno ดูแล) · เข้าผ่าน **Outline VPN** · user แยกรายคน (MIS 3 คน) · รหัส/VPN key ห้ามจดในโน้ต |
+
+**เครื่อง PC สั่งซื้อแล้ว** — Core Ultra 5 245K · RAM 128 GB · SSD 1 TB + 4 TB · Windows Server 2025 · รวม 206,330 บาท → [[SSOT PC Server Spec]] (⚠️ ยังไม่มี UPS / สำเนาข้อมูล / ที่ backup)
+
+ยังไม่รู้: ใครดูแล backup / ไฟดับ · ดึงข้อมูลจากแต่ละระบบเข้า MySQL ด้วยเครื่องมืออะไร (เดิมคือ DMS + Glue)
+
+---
+
+## อัปเดต 2026-09-08 — Glue ต่อ MSSQL: เจอต้นตอ Client VPN
 
 **ข้อค้นพบสำคัญ:** ไล่ debug Glue job ต่อ MSSQL ทั้งวัน สรุปว่า **Client VPN ใช้กับ Glue ต่อ on-prem ไม่ได้** — Client VPN เชื่อม "เครื่องคน" ไม่ได้เชื่อม "subnet" ที่ Glue รัน (ต่างจาก DMS ที่ต่อได้เพราะสั่งจากเครื่องคน) → รายละเอียด [[Glue Connectivity]]
 
@@ -26,10 +44,10 @@
 
 | ระบบ              | มีอะไรแล้ว                                                                 | ขาดอะไร                                                                                |     |
 | ----------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | --- |
-| **ITEC**          | survey เสร็จ                                                               | —                                                                                      |     |
-| **K2**            | สำรวจฐานจริงครบ 542 ตาราง · data dictionary · query cookbook · กติกาธุรกิจ | เอกสารยืนยันจาก MIS-Fintech · null rate จริงรายคอลัมน์                                 |     |
-| **ITOS**          | schema wiki 55 ตาราง                                                       | ยังไม่ได้ต่อฐานเอง · ไม่รู้ว่ายัง update อยู่ไหม                                       |     |
-| **CRM**           | พจนานุกรมข้อมูล 3 ตารางจากทีม CRM                                          | **ยังไม่มี connection** · ไม่รู้ DBMS · `pdpa_consent` เป็น JSON ที่ยังไม่รู้โครงสร้าง |     |
+| **ITEC**          | 2 ฐาน: **ITEC-Rep** (ตัวหลัก · `SSSynced50` 472 ตาราง เกือบ real-time) · **ITEC-MIS** (view `rpt`/`ci` 23 ตัว) → [[ITEC Overview]] | นิยามยอดขาย/สินค้า/สาขาบน ITEC-Rep ต้องสร้างเองจากตารางดิบ |     |
+| **K2**            | สำรวจฐานจริง **545 ตาราง** (2026-11-10) · data dictionary · query cookbook · กติกาธุรกิจ | เอกสารยืนยันจาก MIS-Fintech · null rate จริงรายคอลัมน์ |     |
+| **ITOS**          | schema wiki 55 ตาราง · เข้าผ่าน linked server `ILOAN_DATASOURCE` · external 282 · ตาราง 301 (2026-11-10) | ยังอัปเดตอยู่ (`ext_collection` สด) |     |
+| **CRM**           | ต่อฐานได้ (Aurora MySQL 8.0 · 15 ตาราง · ลูกค้า 21.0M · สมาชิก 8.96M · ออเดอร์ 12.2M) · `pdpa_consents` = JSON `{id, consent}` | คอลัมน์ถูกซ่อนบางส่วน (รวม `citizen_no`) |     |
 | **GI Core / EV7** | `schema.prisma` 166 models · เอกสารเทียบ 88 โมดูล                          | ยังไม่ได้ต่อฐาน · ไม่รู้ว่า Ev7core กับ GI Core สัมพันธ์กันยังไง                       |     |
 | อีก 6 ระบบ        | —                                                                          | ยังไม่เริ่ม                                                                            |     |
 

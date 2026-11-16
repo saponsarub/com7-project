@@ -2,6 +2,8 @@
 
 สำรวจว่า **ฟิลด์ลูกค้า 102 ตัว** ที่โครงการ Centralize ต้องการ มีอยู่ในระบบ CRM หรือไม่
 
+> **2026-11-10: ต่อฐาน CRM ได้แล้ว** — Aurora **MySQL 8.0.42** แบบ read-only (cluster `crm-pool-th`, ap-southeast-7, ทีม Inno ดูแล) · ต้องเปิด **Outline VPN** ก่อน · user แยกรายคน (Kaviphon · Natacha · Sapon) ตามใบคำขอ MIS 2 พ.ย. · รหัสและ VPN key ห้ามจดในโน้ต · ถัดไป: สำรวจตารางจริงเทียบกับฟิลด์ในโน้ตนี้
+
 **ที่มา:** `CRM Data survey template_Done.xlsx` sheet `Customer Profile` — คำตอบจากเจ้าของระบบ CRM
 **รับเข้า vault:** 2026-09-17
 

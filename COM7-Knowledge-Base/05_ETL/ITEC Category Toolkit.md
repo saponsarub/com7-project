@@ -1133,4 +1133,4 @@ Gradient boosting แบ่งทีละ feature ซึ่งไม่เห�
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Category Model (ML)]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Model - Run on EC2 Guide]] · [[ITEC - Data Dictionary]] · [[ITEC Overview]] · [[Python Libraries]] · [[ITEC Category Toolkit]]
+[[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Category Model (ML)]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Model - Run on EC2 Guide]] · [[ITEC-MIS - Data Dictionary]] · [[ITEC-MIS Overview]] · [[Python Libraries]] · [[ITEC Category Toolkit]]

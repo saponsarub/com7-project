@@ -4,7 +4,8 @@
 
 > **อัปเดต 2026-08-28** — จุดเชื่อมข้ามระบบที่ยืนยันแล้ว: `members.itec_cuscode` (CRM → ITEC)
 > และ `citizen_no` ↔ `PERSON.TAX_ID` (CRM → K2, **ยังไม่ทดสอบ join จริง**)
-> [[CRM - Data Dictionary]] · [[K2 Customer Field Survey]]
+> ⚠️ `customer_master.citizen_no` มีตามเอกสาร แต่**บัญชีเรามองไม่เห็น** (ถูกซ่อนสิทธิ์ระดับคอลัมน์ — ต้องขอจากทีม Inno) · ที่เห็นได้คือ `member_auth.identity_no` (154,889 แถว)
+> [[CRM - Data Dictionary]] · [[K2 Customer Field Survey]] · ผลทดสอบคีย์ CRM ↔ ITEC-Rep และ promotion (2026-11-10) → [[Customer Dimension - Feasibility]]
 
 ---
 
@@ -206,7 +207,7 @@ consent (รอ legal) → identity resolution → customer master รวมแ�
 ITEC   rpt.dim_mem_itec.crmid          ── M + 12 ตัว ──►  CRM  members.member_id
 CRM    members.itec_cuscode            ──────────────►  ITEC (ทิศทางกลับ)
 CRM    members.customer_master_id      ──────────────►  CRM  customer_master.id
-CRM    customer_master.citizen_no      ── เลขบัตร ───►  K2   PERSON.TAX_ID
+CRM    customer_master.citizen_no 🔒 / member_auth.identity_no ── เลขบัตร ───►  K2   PERSON.TAX_ID
 K2     PERSON.PERSON_ID                ──────────────►  K2   CONTRACT
 ```
 
@@ -228,7 +229,7 @@ K2     PERSON.PERSON_ID                ─────────────�
 | **มีบัญชีที่ไม่ใช่บุคคล** | `crmid` เดียวมี 10,861 บิลใน 8 เดือน (~45 บิล/วัน) — น่าจะเป็นองค์กร/ตัวแทน/รหัสสำรอง<br>**ต้องกรองออกก่อนทำ analytics รายบุคคล** |
 | **`crmid` มีหลาย prefix** | พบ `M06` `M04` `M01` `M02` — ยังไม่ทราบความหมาย |
 
-ที่มา → [[ITEC Overview]] · [[ITEC - Query Cookbook]]
+ที่มา → [[ITEC Overview]] · [[ITEC-MIS - Query Cookbook]]
 
 ---
 

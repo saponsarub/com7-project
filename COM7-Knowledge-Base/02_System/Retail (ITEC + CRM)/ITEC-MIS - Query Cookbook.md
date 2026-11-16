@@ -1,7 +1,9 @@
-# ITEC - Query Cookbook
+# ITEC-MIS - Query Cookbook
+
+> 🟦 **ITEC-MIS** — ฐาน MIS (เครื่อง 250) · view `rpt` / `ci` ที่ทีมทำไว้ · profile `itec_mis` (env `MIS_USER` / `MIS_PWD`) · ใช้งานได้ แต่**ไม่ใช่ตัวหลัก** — ตัวหลักคือ [[ITEC-Rep Overview|ITEC-Rep]] (ตารางดิบ) · เปรียบเทียบ 2 ฐาน → [[ITEC Overview]] · ในโค้ดใช้ `db.query("itec_mis", …)`
 
 SQL ที่ **รันผ่านจริงกับฐาน MIS แล้ว** พร้อมเวลาที่ใช้และจำนวนแถวที่ได้
-ทดสอบเมื่อ 2026-08-28 · โครงสร้าง → [[ITEC - Data Dictionary]] · ภาพรวม → [[ITEC Overview]]
+ทดสอบเมื่อ 2026-08-28 · โครงสร้าง → [[ITEC-MIS - Data Dictionary]] · ภาพรวม → [[ITEC-MIS Overview]]
 
 ---
 
@@ -442,4 +444,4 @@ K2    PERSON.TAX_ID → PERSON.PERSON_ID → CONTRACT
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC Overview]] · [[ITEC - Data Dictionary]] · [[CRM - Data Dictionary]] · [[K2 - Query Cookbook]] · [[Customer Identity]] · [[Analytics & AI]] · [[SQL & Source Schemas]]
+[[ITEC-MIS Overview]] · [[ITEC-MIS - Data Dictionary]] · [[CRM - Data Dictionary]] · [[K2 - Query Cookbook]] · [[Customer Identity]] · [[Analytics & AI]] · [[SQL & Source Schemas]]

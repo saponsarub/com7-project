@@ -451,5 +451,5 @@ Powerbi/**/.pbi/editorSettings.json
 
 - [[Analytics & AI]] — เครื่องมือวิเคราะห์อื่นในทีม
 - [[Git & GitHub]] — วิธี commit ไฟล์ในโปรเจกต์นี้
-- [[ITEC - Query Cookbook]] — ดึงข้อมูล ITEC ที่เป็นต้นทางของโมเดลนี้
+- [[ITEC-MIS - Query Cookbook]] — ดึงข้อมูล ITEC ที่เป็นต้นทางของโมเดลนี้
 - [[Python Libraries]] — Pillow ที่ใช้ดึงสีจากโลโก้

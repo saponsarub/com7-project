@@ -1,0 +1,16 @@
+﻿schema,table,type,rows_est,gb,created,updated,engine
+crm_pool_prod,customers_order_items_ingestion,BASE TABLE,36086829.0,19.69,2025-03-10 04:59:25,,InnoDB
+crm_pool_prod,customer_master,BASE TABLE,20103172.0,22.04,2025-02-14 09:58:21,,InnoDB
+crm_pool_prod,customers_order_ingestion,BASE TABLE,12167906.0,13.25,2025-03-10 04:58:39,,InnoDB
+crm_pool_prod,order_payment_info,BASE TABLE,10707083.0,3.97,2025-05-27 05:11:16,,InnoDB
+crm_pool_prod,members,BASE TABLE,8591908.0,14.41,2026-03-25 07:41:26,,InnoDB
+crm_pool_prod,customers_voucher,BASE TABLE,7171457.0,4.45,2026-07-13 03:01:39,,InnoDB
+crm_pool_prod,data_migration_crm_data,BASE TABLE,3158088.0,1.37,2026-01-20 11:15:05,,InnoDB
+crm_pool_prod,data_migration_customers,BASE TABLE,3144337.0,1.21,2026-01-20 08:57:38,,InnoDB
+crm_pool_prod,member_auth,BASE TABLE,1782556.0,0.43,2025-09-29 07:52:36,,InnoDB
+crm_pool_prod,member_line_accounts,BASE TABLE,382540.0,0.1,2026-06-29 06:53:58,,InnoDB
+crm_pool_prod,member_backup_register,BASE TABLE,169022.0,0.13,2026-09-08 03:23:36,,InnoDB
+crm_pool_prod,customers_non_sales,BASE TABLE,10146.0,0.01,2025-03-31 05:30:35,,InnoDB
+crm_pool_prod,customers_order_items_mkp,BASE TABLE,635.0,0.0,2026-10-01 08:12:18,,InnoDB
+crm_pool_prod,customers_order_mkp,BASE TABLE,590.0,0.0,2026-10-01 08:12:18,,InnoDB
+crm_pool_prod,view_customers_ingestion,VIEW,,,2025-06-19 04:22:39,,

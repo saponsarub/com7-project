@@ -45,7 +45,7 @@ vault เวอร์ชันแรกอ้างไฟล์นี้เป�
 | # | ไฟล์ | เนื้อหา | ใช้ทำอะไร |
 |---|---|---|---|
 | 17 | **`COM7_Group_AI_Reference.md`** | นิติบุคคล 9 บริษัท · 13 กลุ่มธุรกิจ · แบรนด์ · การแมประบบต้นทาง · ธุรกิจที่ตัดออก | โครงสร้างกลุ่มฉบับทางการ → [[Group Structure]] |
-| 18 | **`crm_fied_description.html`** | พจนานุกรม 3 ตารางของ CRM — `members` 8M · `customer_master` · `member_auth` 800k | ปิดคำถามว่า CRM ผูกกับ ITEC ด้วยอะไร (`itec_cuscode`) → [[CRM - Data Dictionary]] |
+| 18 | **`crm_fied_description.html`** | พจนานุกรม 3 ตารางของ CRM (`members` · `customer_master` · `member_auth`) — จำนวนแถวจริงอยู่ที่ [[CRM - Data Dictionary]] | ปิดคำถามว่า CRM ผูกกับ ITEC ด้วยอะไร (`members.itec_cuscode`) |
 | 19 | **`collection_Union.txt`** | SQL union K2 + ITOS · 58 คอลัมน์ · แท็ก `SOURCE_SYSTEM` | ตรรกะรวม 2 ระบบที่ใช้อยู่จริง + ข้อบกพร่องที่ต้องแก้ → [[Collection Union (K2 + ITOS)]] |
 | 20 | **`OD6_UFUND_Collection.xlsx`** | ไฟล์ที่ส่งทีมติดตามจริง · 608 แถว · extract 2026-08-17 | *ground truth* ของเกณฑ์คัด OD6 ที่ production ใช้ → [[OD6 Collection Delivery]] |
 | 21 | **`Template จดหมายบอกเลิก.xlsx`** | template หนังสือบอกเลิกรุ่นใหม่ · มีทั้งสัญญา K2 และ ITOS | เพิ่มคอลัมน์ "รวมจำนวนงวดที่ค้าง" · แตกที่อยู่ 4 ช่อง → [[K2 - Termination Letter Mapping]] |
@@ -79,9 +79,11 @@ vault เวอร์ชันแรกอ้างไฟล์นี้เป�
 | # | ที่มา | เนื้อหา | ใช้ทำอะไร |
 |---|---|---|---|
 | 29 | **ฐาน MIS (ITEC) โดยตรง** — `192.168.43.250,18963` | สำรวจ metadata + โปรไฟล์ + ทดสอบ join ด้วย `scripts/itec/*.py` (read-only) | 23 view · 297 คอลัมน์ · จำนวนแถว · เส้นทาง join ที่ทดสอบแล้ว → [[ITEC Overview]] |
-| 30 | `ITEC product dimension.txt` | SQL ที่ทีมใช้สร้าง `ci.clean_item_category_itec` — flag 66 ตัวจาก LIKE | เข้าใจที่มาของฟิลด์ `IS_*` → [[ITEC - Data Dictionary]] |
+| 30 | `ITEC product dimension.txt` | SQL ที่ทีมใช้สร้าง `ci.clean_item_category_itec` — flag 66 ตัวจาก LIKE | เข้าใจที่มาของฟิลด์ `IS_*` → [[ITEC-MIS - Data Dictionary]] |
 | 31 | `scripts/legacy/TESTCONNECT.py` | สคริปต์เชื่อมต่อฐาน MIS ของทีม | จุดตั้งต้นของการสำรวจ · 🔴 รหัสผ่านเดิมอยู่ใน git history |
 
+| 34 | `D:\Newdatabase.txt` (ไฟล์ของผู้ใช้ 2026-11) | ค่าเชื่อมต่อ ITEC-Rep `10.100.101.50` / `SSSynced50` + CRM — **มีรหัสผ่านเป็นข้อความธรรมดา** | ย้ายเข้า env `ITEC_*` / `CRM_*` แล้ว · ควรลบไฟล์ · ห้ามคัดลอกรหัสลง vault → [[ITEC-Rep Overview]] |
+| 33 | อีเมล Tanapol.T (ทีม Inno) 4 พ.ย. 2026 *"ขอสิทธิ์การ connect CRM database"* | host ฐาน CRM (Aurora MySQL read-only) · user 3 คน · คู่มือ + key Outline VPN | เข้าฐาน CRM — **รหัสและ key ไม่จดลง vault** → [[CRM Customer Field Survey]] |
 | 32 | `Copy of ITEC data requirement_reply1.xlsx` | แบบสำรวจ 77 ฟิลด์ที่ Data Lake ต้องการจากค้าปลีก + คำตอบจากเจ้าของระบบ | 39 มี / 4 ทดแทน / 21 ไม่มี / 13 ไม่ตอบ → [[ITEC Data Requirement Survey]] |
 
 **ไฟล์ผลลัพธ์:** `02_System/_raw/itec-views.csv` · `02_System/_raw/itec-columns.csv`

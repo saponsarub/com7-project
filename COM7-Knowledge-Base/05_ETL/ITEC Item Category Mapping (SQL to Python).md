@@ -1,7 +1,9 @@
 # ITEC Item Category Mapping (SQL → Python)
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · logic จำแนกสินค้าเป็น pandas ยังใช้ได้ · ส่วนที่ผูกกับ Spark/Glue ไม่ใช้แล้ว
+
 > แผนย้าย logic จำแนกประเภทสินค้าออกจาก SQL ไปทำใน **pandas / Spark**
-> ต้นฉบับ `ci_item_category.sql` (244 บรรทัด · 29.5 KB) → ตารางปลายทาง [[ITEC - Data Dictionary|ci.clean_item_category_itec]] · 216,009 แถว
+> ต้นฉบับ `ci_item_category.sql` (244 บรรทัด · 29.5 KB) → ตารางปลายทาง [[ITEC-MIS - Data Dictionary|ci.clean_item_category_itec]] · 216,009 แถว
 > แนวทาง ML (ทำนายด้วย LLM embedding แทน rule-based) → [[ITEC Category Model (ML)]]
 
 **หลักการ** — SQL ทำหน้าที่**ดึงข้อมูล**อย่างเดียว · **ตรรกะทั้งหมดย้ายไป Python** ที่เทสได้ แก้ได้ และเก็บ keyword เป็นข้อมูลไม่ใช่โค้ด
@@ -353,7 +355,7 @@ WHEN (IS_iMac=1 OR IS_PC=1 OR IS_Desktop=1 OR is_computer=1)
 
 ### `IS_Buletooth` สะกดผิด
 
-บันทึกไว้แล้วใน [[ITEC - Data Dictionary]] · **ตอนย้ายคือจังหวะที่แก้ได้** โดยคง alias เดิมไว้ให้ของเก่าไม่พัง
+บันทึกไว้แล้วใน [[ITEC-MIS - Data Dictionary]] · **ตอนย้ายคือจังหวะที่แก้ได้** โดยคง alias เดิมไว้ให้ของเก่าไม่พัง
 
 ```yaml
 IS_Bluetooth:
@@ -513,7 +515,7 @@ plan             1,414    2.1%
 
 > ⚠️ **คำถามที่ใหญ่กว่าการเพิ่ม flag** — ของพวกนี้ควรอยู่ใน `dim_item` หรือเปล่า
 > มันเป็นเงื่อนไขการขาย ไม่ใช่สิ่งของ · ถ้านับรวมเป็น "สินค้า" ตัวเลข 216,009 จะไม่ใช่จำนวนสินค้าจริง
-> **ควรถามเจ้าของระบบก่อนตัดสินใจ** → [[ITEC Overview]]
+> **ควรถามเจ้าของระบบก่อนตัดสินใจ** → [[ITEC-MIS Overview]]
 
 เกี่ยวกับ **TRUE by COM7** ซึ่งเป็นธุรกิจโทรคมนาคมในเครือ → [[Retail]]
 
@@ -649,4 +651,4 @@ python C:\Projects\my-first-project\scripts\itec\category\explore_flags.py --csv
 
 ## เชื่อมกับโน้ตอื่น
 
-[[ITEC - Data Dictionary]] · [[ITEC Overview]] · [[Data Standardization & Quality]] · [[Python Libraries]] · [[ETL & Spark]] · [[SQL & Source Schemas]] · [[Snapshot Change Detection (ITEC DMS)]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Category Toolkit]]
+[[ITEC-MIS - Data Dictionary]] · [[ITEC-MIS Overview]] · [[Data Standardization & Quality]] · [[Python Libraries]] · [[ETL & Spark]] · [[SQL & Source Schemas]] · [[Snapshot Change Detection (ITEC DMS)]] · [[ITEC Item Category Mapping (SQL to Python)]] · [[ITEC Category Toolkit]]

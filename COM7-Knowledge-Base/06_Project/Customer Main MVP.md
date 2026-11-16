@@ -3,7 +3,7 @@
 ผลงานรูปธรรมแรกของโครงการ SSOT ที่ CBO ขอ: **map ลูกค้าแต่ละ BU** และ **ตาราง customer main** · เป้าส่ง **ธันวาคม 2026**
 ร่างเมื่อ 2026-10-06 · ข้อเสนอของทีมข้อมูล ยังไม่ได้รับการอนุมัติ · ส่วนที่เป็นความเห็นติดป้าย `[อนุมาน]`
 
-ฐานข้อมูลที่ใช้ → [[Customer Identity]] · [[SSOT Roadmap]] · [[Current Status]] · [[Medallion Layer Definition]] · [[Consent & PDPA]]
+ฐานข้อมูลที่ใช้ → [[Customer Identity]] · [[Customer Dimension - Feasibility]] · [[SSOT Roadmap]] · [[Current Status]] · [[Medallion Layer Definition]] · [[Consent & PDPA]]
 
 ---
 
@@ -28,18 +28,19 @@
 | BU / ระบบ | ข้อมูลลูกค้า | คีย์จับคู่ | สถานะ |
 |---|---|---|---|
 | **UFUND: K2** | `PERSON` 404,749 แถว | `TAX_ID` (เลขบัตรไม่ซ้ำ 343,249) | survey ✅ · ต่อฐานได้ |
-| **UFUND: ITOS** | `S_CUSTOMER` 165,722 แถว | `CUST_CARDNO` | มี schema · ยังไม่ได้ต่อฐานเอง |
-| **CRM / 7Club** | สมาชิก ~22M | `citizen_no` · `phone` · `itec_cuscode` | survey ✅ · ❌ **ยังไม่มี connection** |
-| **ITEC (ค้าปลีก)** | ผ่าน `crmid` | `crmid` → CRM (จับคู่บิลได้ 89.2%) | survey ✅ |
+| **UFUND: ITOS** | `S_CUSTOMER` 165,722 แถว | `CUST_CARDNO` | มี schema · เข้าผ่าน linked server `ILOAN_DATASOURCE` ได้ ([[ITOS - Query Cookbook]]) |
+| **CRM / 7Club** | ลูกค้า 21.0M · สมาชิก 8.96M | `citizen_no` 🔒 · `identity_no` (155k) · `phone` · `itec_cuscode` | survey ✅ · ต่อฐานได้ (Aurora MySQL read-only · Outline VPN) |
+| **ITEC (ค้าปลีก)** | ผ่าน `crmid` · ฐานใหม่ `Customer2` 24.8M | `CusCode` = CRM `itec_cuscode` (สุ่มเจอ 100%) · ตัวเลข 89.2% มาจากITEC-MIS | survey ✅ · ✅ ต่อฐานใหม่ได้ 2026-11 → [[ITEC-Rep Overview]] |
 | GI Core / EV7 | `IdentityCard` (nullable) | เลขบัตร (ถ้ามี) · เบอร์ | ยังไม่ได้ต่อฐาน · **เป้าเสริม** |
 | **D365 F&O** | ไม่ใช่แหล่งตัวตนลูกค้า (D-18) · **ใช้เป็นแกน BU** ของ map | `CompanyCode` | สำรวจฐานจริงแล้ว 2026-09-23 → ดูหัวข้อถัดไป |
 | iCare · Tech Trade · SAP B1 | — | — | Wave 2 (2027) |
 
 เส้นทางเชื่อมที่ยืนยันแล้ว
 ```
-ITEC crmid ──► CRM member ──► customer_master.citizen_no ══ เลขบัตร ══► K2 TAX_ID / ITOS CUST_CARDNO
+ITEC-Rep Customer2.CusCode ══ CRM members.itec_cuscode ──► customer_master.citizen_no 🔒 / member_auth.identity_no ══ เลขบัตร ══► K2 TAX_ID / ITOS CUST_CARDNO
+(citizen_no บัญชีเรามองไม่เห็น — ขอสิทธิ์จากทีม Inno · identity_no มีแค่ ~155k คน → ระหว่างนี้ใช้เบอร์โทรช่วย)
 ```
-⚠️ **ยังไม่เคยทดสอบ join จริงระหว่าง CRM กับ K2** ต้องทดสอบเป็นอย่างแรกเมื่อได้ connection CRM
+⚠️ **ยังไม่เคยทดสอบ join จริงระหว่าง CRM กับ K2** — ได้ connection CRM แล้ว (2026-11) → **ทำเป็นงานถัดไป**
 
 ---
 
@@ -85,6 +86,8 @@ ITEC ไม่แบ่งบริษัท (`dim_item_itec` ไม่มี BU
 ---
 
 ## Pipeline
+
+> **2026-11-10:** ผังนี้ออกแบบบน AWS ซึ่งยกเลิกแล้ว ([[Decisions|D-21]]) · ลำดับชั้นและตาราง `customer_*` ยังเหมือนเดิม แต่ปลายทางเป็น **MySQL บนเครื่อง PC** และดึงข้อมูลด้วย Python/SQL แทน DMS `[อนุมาน — ยังไม่ได้ตกลงเครื่องมือ]`
 
 ```
  ต้นทาง (on-prem)            AWS (ap-southeast-7)

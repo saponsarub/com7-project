@@ -10,7 +10,7 @@
 | โน้ต | ครอบคลุม |
 |---|---|
 | [[K2 Issues]] | ระบบ K2 (`HPCOM7`) — 12 หัวข้อ |
-| [[ITEC Issues]] | ระบบค้าปลีก ITEC (ฐาน MIS) — 16 คำถาม |
+| [[ITEC Issues]] | ระบบค้าปลีก ITEC (ITEC-MIS) — 16 คำถาม |
 | [[CRM Issues]] | ระบบสมาชิก/CRM |
 | [[Source System Issues]] | ITOS · D365 · SAP B1 · iCare · Tech Trade · Synapse · EV · ค้าปลีก |
 | [[Open Questions & Risks]] | identity ลูกค้า · Customer 360 |
@@ -38,10 +38,10 @@
 
 | ระบบ | มีอะไรแล้ว | ขาดอะไร | ผู้รับผิดชอบ |
 |---|---|---|---|
-| ITEC | **สำรวจฐานจริงครบ 23 view** · data dictionary · query cookbook | ยืนยันความหมายกับเจ้าของระบบ 16 ข้อ | Data Team |
-| K2 | สำรวจฐานจริงครบ 542 ตาราง | เอกสารยืนยันจากเจ้าของระบบ · null rate รายคอลัมน์ | MIS-Fintech |
-| ITOS | schema wiki 55 ตาราง | ยังไม่ได้ต่อฐานเอง | K.Ton |
-| CRM / 7Club+ | พจนานุกรม 3 ตาราง | ยังไม่มี connection · ไม่รู้ DBMS | P.Por |
+| ITEC | **สำรวจฐานจริงครบ 23 view** (ITEC-MIS) · **2026-11: ตัวหลักใหม่ ITEC-Rep 472 ตาราง** → [[ITEC-Rep Overview]] | ยืนยันความหมายกับเจ้าของระบบ 16 ข้อ | Data Team |
+| K2 | สำรวจฐานจริงครบ 545 ตาราง | เอกสารยืนยันจากเจ้าของระบบ · null rate รายคอลัมน์ | MIS-Fintech |
+| ITOS | schema wiki 55 ตาราง · เข้าผ่าน linked server `ILOAN_DATASOURCE` | — | K.Ton |
+| CRM / 7Club+ | ต่อฐานจริงได้ (Aurora MySQL · 15 ตาราง) · พจนานุกรมจากทีม CRM | คอลัมน์ถูกซ่อนบางส่วน (รวม `citizen_no`) | P.Por |
 | GI Core | `schema.prisma` 166 models | ยังไม่ได้ต่อฐาน | Punt, Nut |
 | EV7 | เอกสารเทียบ 88 โมดูล | ไม่มีชื่อผู้รับผิดชอบในตาราง | — |
 | D365 | เห็นชื่อฐานใน SQL | ไม่รู้ขอบเขต | MIS-ERP |

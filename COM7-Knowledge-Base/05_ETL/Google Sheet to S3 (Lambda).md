@@ -1,5 +1,7 @@
 # Google Sheet to S3 (Lambda)
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · Lambda ลบแล้ว · **โค้ดดึงชีตยังใช้ได้** (Python ล้วน) — เปลี่ยนปลายทางจาก S3 เป็น MySQL / ไฟล์บนเครื่อง · โค้ด: backup `ap-southeast-7/lambda/test-ses-googlesheet/src/`
+
 > **หมายเหตุที่มา:** บันทึกจากการ deploy และรันจริงบน AWS account `603238661233` ระหว่าง **2026-09-02 ถึง 2026-09-07** — ทุกอาการ ตัวเลข และ error มาจาก CloudWatch log ของฟังก์ชันจริง ไม่ใช่เอกสาร
 
 ดึงข้อมูลจาก Google Sheet ที่ทีมงานคีย์มือ ลงจอดเป็น CSV บน S3 ให้ Glue/Athena อ่านต่อ พร้อมเขียน log และส่งรายงานทางอีเมล

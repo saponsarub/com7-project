@@ -1,5 +1,7 @@
 # ADLS Gen2 to S3 — Console Runbook (วิธี 1 DataSync · วิธี 2 Glue)
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · ยกเลิก — เก็บเป็นประวัติ → [[ADLS Gen2 to S3]]
+
 ขั้นตอนละเอียดแบบ **คลิกผ่าน console** ของ 2 วิธีหลักจาก [[ADLS Gen2 to S3]]
 - **วิธี 1** = วิธี A · AWS DataSync (Enhanced mode) — คัดลอกไฟล์ตามต้นฉบับ
 - **วิธี 2** = วิธี B · AWS Glue อ่าน `abfss://` แล้วเขียน Iceberg

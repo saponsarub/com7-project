@@ -2,6 +2,8 @@
 
 บันทึกงานข้อมูลของ **บริษัท คอมเซเว่น จำกัด (มหาชน)** — โครงการ Centralized Data Lake / SSOT
 
+> **2026-11-10:** SSOT ย้ายจาก AWS มาเป็น **เครื่อง PC on-prem + MySQL** (AWS ไม่ผ่าน POC/งบ — ปิดและลบแล้ว) · concept เดิม → [[Current Status]] · โน้ตกลุ่ม AWS (04_DataLake, 05_ETL) เก็บไว้เป็นประวัติ
+
 **โน้ตระบบต้นทางแยกโฟลเดอร์ตามธุรกิจ** · ชื่อไฟล์ขึ้นต้นด้วยชื่อระบบ เช่น `K2 - Data Dictionary`
 
 ---
@@ -22,8 +24,8 @@
 | งานติดตามหนี้ / OD | [[K2 - Collection & OD]] |
 | รหัสสถานะ · จังหวัด · แบรนด์ | [[K2 - Master & Setup]] |
 | **ฟิลด์ใน CRM / ระบบสมาชิก** | [[CRM - Data Dictionary]] · [[CRM Overview]] |
-| **ฟิลด์ใน ITEC (ค้าปลีก)** | [[ITEC - Data Dictionary]] |
-| **ดึงยอดขาย / หาสินค้า / หาสาขา ITEC** | [[ITEC - Query Cookbook]] |
+| **ฟิลด์ใน ITEC (ค้าปลีก)** | [[ITEC-MIS - Data Dictionary]] |
+| **ดึงยอดขาย / หาสินค้า / หาสาขา ITEC** | [[ITEC-MIS - Query Cookbook]] |
 | ระบบค้าปลีก ITEC | [[ITEC Overview]] |
 | ระบบสินเชื่อ ITOS | [[ITOS Overview]] |
 | **หาจังหวัด/อำเภอ/ตำบล ของลูกหนี้ ITOS** | [[ITOS - Address & Geography]] |
@@ -52,7 +54,7 @@
 | ค่าเบี้ยปรับ / ค่าติดตามคิดยังไง | [[K2 - Fee Policy]] |
 | **คัดสัญญาเพื่อบอกเลิก** ยังไง | [[K2 - OD6 Selection Logic]] |
 | ไฟล์ OD6 ที่ส่งทีมติดตามจริง | [[OD6 Collection Delivery]] |
-| **ทำงานออกหนังสือบอกเลิกให้อัตโนมัติบน AWS** | [[K2 Termination Automation]] |
+| ทำงานออกหนังสือบอกเลิกให้อัตโนมัติ (ร่างบน AWS — ต้องออกแบบใหม่) | [[K2 Termination Automation]] |
 | กรอกหนังสือบอกเลิกสัญญา เอาข้อมูลจากไหน | [[K2 - Termination Letter Mapping]] |
 
 ### ข้อมูลและ Data Lake — `03_Data` · `04_DataLake` · `05_ETL`
@@ -66,12 +68,18 @@
 | **ฟิลด์ลูกค้าที่ต้องการ มีใน CRM ไหม** | [[CRM Customer Field Survey]] |
 | ฟิลด์ค้าปลีกที่ต้องการ มีใน ITEC ไหม | [[ITEC Data Requirement Survey]] |
 | UFUND เข้า Customer 360 ยังไง | [[UFUND in Customer 360]] |
-| สถาปัตยกรรม AWS | [[Architecture]] · [[AWS Services]] |
-| **เริ่มใช้ Redshift ยังไง · โหลดจาก S3 · ให้สิทธิ์ยังไง** | [[Redshift]] |
-| **ตั้ง Glue Crawler ยังไงไม่ให้ตารางแตก · วางโครงสร้าง S3** | [[Glue Crawler]] |
-| เชื่อมเครือข่าย on-prem ↔ AWS | [[Network & VPN]] |
-| เขียน Glue job ยังไง | [[ETL & Spark]] |
-| **Glue ต่อ MSSQL / on-prem · Client VPN vs Site-to-Site** | [[Glue Connectivity]] |
+| **SSOT ตอนนี้ไปทางไหน (PC + MySQL) · ทำไมเลิก AWS** | [[Current Status]] · [[Decisions\|D-21]] |
+| **AWS Data Lake ที่ปิดไปแล้ว: สำรองอะไรไว้ · ลบอะไร** | [[AWS Data Lake - Backup & Shutdown 2026-10]] |
+| **แต่ละชั้น bronze/silver/gold ทำอะไร · หน้าตาข้อมูล · ชีต · ADLS** | [[AWS Data Lake - Pipeline & Data Layers]] |
+| **ต่อฐาน CRM (MySQL ผ่าน Outline VPN)** | [[CRM Customer Field Survey]] |
+| **สเปกเครื่อง PC ที่สั่งซื้อ + ความเสี่ยง** | [[SSOT PC Server Spec]] |
+| **ITEC ตัวหลักใหม่ (Rep · SSSynced50) — ตาราง · ลูกค้า · เชื่อม CRM** | [[ITEC-Rep Overview]] |
+| _ประวัติ (AWS ยกเลิกแล้ว)_ — สถาปัตยกรรม AWS | [[Architecture]] · [[AWS Services]] |
+| _ประวัติ_ — Redshift | [[Redshift]] |
+| _ประวัติ_ — Glue Crawler / โครงสร้าง S3 | [[Glue Crawler]] |
+| _ประวัติ_ — เชื่อมเครือข่าย on-prem ↔ AWS | [[Network & VPN]] |
+| _ประวัติ_ — เขียน Glue job | [[ETL & Spark]] |
+| _ประวัติ_ — Glue ต่อ MSSQL · Client VPN vs Site-to-Site | [[Glue Connectivity]] |
 | **ย้ายข้อมูลจาก ADLS Gen2 / Azure Synapse ลง S3 · ทุกวิธี** | [[ADLS Gen2 to S3]] |
 | **ADLS → S3 แบบคลิกผ่าน console + ค่าใช้จ่าย** | [[ADLS Gen2 to S3 - Console Runbook]] |
 | **ทดสอบ Glue อ่าน ADLS (container staging)** | [[ADLS Gen2 to S3 - Glue Pilot (staging)]] |
@@ -79,8 +87,8 @@
 | **สร้าง/เทรน/ใช้งาน AI — แชตบอต · tool · RAG · fine-tune (รวมทุกเรื่อง)** | [[AI-ML Index]] |
 | **ถามตอบภาษาไทยเรื่องรถแท็กซี่ (notebook Kaggle)** | [[EV7 Taxi - Q&A Notebook (Kaggle)]] |
 | **ประชุม Manager 12 ต.ค. — แนวทางทีม** | [[2026-10-12 Manager แนวทางทีม]] |
-| **ทบทวนราคา AWS Data Lake (สไลด์ sale) + คำถามที่ต้องถาม** | [[AWS Data Lake Proposal Review 2026-10]] |
-| **Glue job ที่รันอยู่จริงใน ap-southeast-7 · อะไรสั่งรัน · ปัญหาที่เจอ** | [[Glue Jobs (ap-southeast-7)]] |
+| _ประวัติ_ — ทบทวนราคา AWS Data Lake (ไม่ได้ไปต่อ) | [[AWS Data Lake Proposal Review 2026-10]] |
+| _ประวัติ_ — Glue job ใน ap-southeast-7 (ลบแล้ว) | [[Glue Jobs (ap-southeast-7)]] |
 | รวมข้อมูล collection K2 + ITOS | [[Collection Union (K2 + ITOS)]] |
 | **แพ็ก Lambda ยังไง ทำไมต้อง build บน Linux** | [[Google Sheet to S3 (Lambda)]] |
 | อ่านโค้ด Lambda ทีละฟังก์ชัน | `docs/googlesheet-to-s3.md` → [[Google Sheet to S3 (Lambda)]] |
@@ -192,13 +200,14 @@
 | ข้อมูลเข้า / ออก | ~50 GB/วัน · ~1 TB/วัน | AWS Proposal |
 | Pipeline | ~30 เส้น | AWS Proposal |
 | Survey เสร็จ | 2 จาก 11 ระบบ (ITEC · K2) | Project Timeline |
-| view ใน ITEC (ฐาน MIS) | 23 view · 297 คอลัมน์ · ไม่มี table | probe ฐานจริง 2026-08-28 |
-| บรรทัดขายใน ITEC | 79,828,304 (2025-01 → 2026-08) | probe |
-| สาขาใน ITEC | 3,205 · สินค้า 216,009 | probe |
-| ตาราง K2 | 542 ตาราง · 165 view · FK 16 ตัว | probe ฐานจริง 2026-08-26 |
+| view ใน ITEC (ITEC-MIS) | 23 view · 297 คอลัมน์ · ไม่มี table | probe ฐานจริง 2026-08-28 |
+| **ITEC-Rep ตัวหลักใหม่** | `SSSynced50` 472 ตาราง · `Sell` 53M · `SellItem` 143M · `Customer2` 24.8M · ประวัติตั้งแต่ 2007 | probe 2026-11-10 |
+| บรรทัดขายใน ITEC-MIS (`rpt.fact_sales_itec`) | 79,828,304 (2025-01 → 2026-08) | probe |
+| สาขา · สินค้า | ITEC-MIS (view ทำความสะอาด) 3,205 · 216,009 — ITEC-Rep (ตารางดิบ `Branch` · `Product`) 3,390 · 220,725 | probe |
+| ตาราง K2 | 545 ตาราง · 165 view · FK 16 ตัว | probe ฐานจริง (ตารางนับ 2026-11-10) |
 | สัญญาใน K2 | 288,205 | probe |
 | เลขบัตรไม่ซ้ำใน K2 | 343,249 (จาก 404,627 แถว) | probe |
-| สมาชิก CRM | ~8,000,000 · 7Club+ ~800,000 | เอกสารทีม CRM |
+| สมาชิก CRM | สมาชิก 8,964,616 · 7Club+ 1,992,680 · ลูกค้าทั้งหมด 21,013,427 | นับฐานจริง 2026-11-10 |
 | ลูกค้าใน ITOS | 165,722 | schema wiki |
 | ความพร้อมฟิลด์ลูกค้าใน K2 | 69 มี / 4 ทดแทนได้ / 25 ขาด (จาก 98) | [[K2 Customer Field Survey]] |
 | **ความพร้อมฟิลด์ลูกค้าใน CRM** | **17 มี / 7 ทดแทนได้ / 78 ขาด (จาก 102)** | [[CRM Customer Field Survey]] |

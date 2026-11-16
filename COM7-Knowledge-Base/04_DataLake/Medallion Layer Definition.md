@@ -1,5 +1,7 @@
 # Medallion Layer Definition
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · **นิยามชั้น Raw/Bronze/Silver/Gold ยังใช้ได้** — บน MySQL ให้แต่ละชั้นเป็น database แยก (เช่น `bronze_*` · `silver_*` · `gold_*`) · ส่วน "แบ่ง Glue Job" ไม่ใช้แล้ว
+
 นิยามขอบเขต **Raw → Bronze → Silver → Gold** และการแบ่ง Glue Job
 ปรับจากร่างเดิมของทีม + ผลสำรวจฐานจริง 2026-08 ถึง 2026-09
 
@@ -294,7 +296,7 @@ FROM Transaction_FO        -- 93,468 คู่ · ผูก 1:1 ภายใน�
 | `Transaction_FO.[Ref.DocNum]` | มีชื่อคนไทย **4 แถว** จาก 104.8M | ตัดทิ้ง — เป็นข้อมูลเพี้ยน ไม่ใช่รูปแบบระบบ |
 | CRM / 7Club | สมาชิก 22M | ปิดบังก่อนขึ้น Silver |
 | K2 / ITOS | เลขบัตร 343,249 ใบ | 🚫 ห้ามขึ้นโดยไม่ผ่าน legal |
-| `ci.creditcard_trn_*` | มีเลขบัตรเครดิต | 🚫 **ห้าม ingest** ตามที่ระบุใน [[ITEC - Data Dictionary]] |
+| `ci.creditcard_trn_*` | มีเลขบัตรเครดิต | 🚫 **ห้าม ingest** ตามที่ระบุใน [[ITEC-MIS - Data Dictionary]] |
 
 ---
 
@@ -445,5 +447,5 @@ drl                        ตายไป 2 ปี
 ## เชื่อมโยง
 
 [[System Inventory]] · [[D365 F&O Overview]] · [[D365 F&O - Transaction_FO Dictionary]]
-[[D365 F&O - Query Cookbook]] · [[ITEC Overview]] · [[ITEC - Data Dictionary]]
+[[D365 F&O - Query Cookbook]] · [[ITEC Overview]] · [[ITEC-MIS - Data Dictionary]]
 [[ITEC Product Dimension]] · [[Data Standardization & Quality]] · [[Open Questions & Risks]]

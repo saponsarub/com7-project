@@ -54,8 +54,8 @@ CONTRACT (CONTRACT_NUMBER)
 | N | วันเริ่มชำระงวดแรก | `PRODUCT.FRIST_PAY_DATE` | (typo) · เท่ากับ `MIN(CUSTOMER_CARD.DUEDATE)` |
 | O | วันที่ชำระงวดต่อไป | `PRODUCT.DUEDATE_NUM` | มีแค่ 1 กับ 16 ทั้งฐาน |
 | P | ค้างชำระงวดแรก | **คำนวณ** | `MIN(CUSTOMER_CARD.INSTALL_NUM)` ที่ `RECEIPT_NUMBER IS NULL` |
-| Q | งวดที่ครบ OD 6 | **v4:** `MIN(FIRST_UNPAID_NUM + 5, LAST_INSTALL_NUM)` จากการ์ด · ~~`MIN(EXTRACT_DATE)` snapshot~~ (v2) | ⚠️ v4 นับจาก `CUSTOMER_CARD` ไม่ใช้ snapshot → [[K2 - Termination Letter How-To]] § SQL v4 |
-| R | ค่าเช่าซื้อ 6 งวด | **`OD_AMT_CARD`** (v4) · ~~`COLLECTION_OD.OD_AMOUNT`~~ (v2) | ⚠️ **v4:** รวม `INSTALL_AMT` ของงวดที่ `RECEIPT_NUMBER IS NULL AND DUEDATE <= @asof` จาก `CUSTOMER_CARD` — ไม่ใช้ snapshot · ไม่ใช่ `(Q−P+1) × K` → [[K2 - Termination Letter How-To]] § SQL v4 |
+| Q | งวดที่ครบ OD 6 | `MIN(FIRST_UNPAID_NUM + 5, LAST_INSTALL_NUM)` จากการ์ด | นับจาก `CUSTOMER_CARD` ไม่ใช้ snapshot → [[K2 - Termination Letter How-To]] § SQL v4 |
+| R | ค่าเช่าซื้อ 6 งวด | **`OD_AMT_CARD`** | รวม `INSTALL_AMT` ของงวดที่ `RECEIPT_NUMBER IS NULL AND DUEDATE <= @asof` จาก `CUSTOMER_CARD` — ไม่ใช้ snapshot · ไม่ใช่ `(Q−P+1) × K` → [[K2 - Termination Letter How-To]] § SQL v4 |
 | S | ↳ txt | `=BAHTTEXT(R…)` | |
 | T | ค่าเบี้ยปรับชำระล่าช้า | `COLLECTION_OD.PENALTY_AMT` | ขั้น OD × 100 บาท → [[K2 - Fee Policy]] |
 | U | ↳ txt | `=BAHTTEXT(T…)` | |

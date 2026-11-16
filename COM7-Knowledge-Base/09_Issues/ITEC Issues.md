@@ -1,7 +1,7 @@
 # ITEC Issues
 
-คำถามและงานค้างของระบบ ITEC (ฐาน MIS)
-เนื้อหา → [[ITEC Overview]] · [[ITEC - Data Dictionary]] · [[ITEC - Query Cookbook]]
+คำถามและงานค้างของระบบ ITEC (ITEC-MIS)
+เนื้อหา → [[ITEC-MIS Overview]] · [[ITEC-MIS - Data Dictionary]] · [[ITEC-MIS - Query Cookbook]]
 
 ---
 
@@ -85,4 +85,4 @@
 
 ## เชื่อมกับโน้ตอื่น
 
-[[Issue Index]] · [[ITEC Overview]] · [[ITEC - Data Dictionary]] · [[ITEC - Query Cookbook]] · [[CRM Issues]] · [[Customer Identity]] · [[Consent & PDPA]]
+[[Issue Index]] · [[ITEC-MIS Overview]] · [[ITEC-MIS - Data Dictionary]] · [[ITEC-MIS - Query Cookbook]] · [[CRM Issues]] · [[Customer Identity]] · [[Consent & PDPA]]

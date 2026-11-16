@@ -139,6 +139,8 @@ AWS Proposal มีแค่ IAM ระดับ bucket ซึ่งเขีย
 
 ## PII Protection
 
+> **2026-11-10 — ข้อมูลส่วนบุคคลในฐานใหม่:** ITEC-Rep `Customer2` ถูกตัดเหลือ `CusCode` · `Name` · `CRMID` (นามสกุล เบอร์ อีเมล เลขบัตร วันเกิด ว่างหมด) แต่ **`Cus2Address` ยังมีที่อยู่จริง 5.6M แถว** · CRM `customer_master` มีเบอร์ 20.5M · อีเมล 11.1M · `member_auth.identity_no` 155k · `members.pdpa_consents` = JSON array `{id, consent}` → [[ITEC-Rep Overview]] · [[CRM - Data Dictionary]]
+
 `ARC-09` Tokenization / Encryption ของ Citizen ID — **ขาด**, P1
 
 > "เป็นข้อมูลที่มีความเสี่ยงสูงสุดในรายการทั้งหมด ต้องระบุมาตรการ encryption at rest, tokenization และ role-based access ให้ชัด"
@@ -183,7 +185,10 @@ AWS Proposal มีแค่ IAM ระดับ bucket ซึ่งเขีย
 |---|---|---|---|
 | **รายละเอียด NCB** (เครดิตบูโร) | ข้อมูล sensitive | เก็บเฉพาะ Indicator สูง/กลาง/ต่ำ หรือ flag | ประชุม 2026-08-27 |
 | **`STATEMENT_FILE_PASSWORD`** | รหัสผ่านไฟล์ statement ธนาคารลูกค้า 79,067 แถว | ไม่ ingest เลย | probe K2 |
-| **Pre-Shared Key ของ VPN** | ความลับของระบบเครือข่าย | AWS Secrets Manager | [[Network & VPN]] |
+| **Pre-Shared Key ของ VPN** | ความลับของระบบเครือข่าย | env var / password manager บนเครื่อง | [[Network & VPN]] |
+| **รหัส CRM DB · Outline VPN key** | สิทธิ์เข้าฐานลูกค้า CRM | ห้ามจดในโน้ต / repo · ใช้ env var (`CRM_USER` / `CRM_PWD`) | [[CRM Customer Field Survey]] |
+
+> **2026-11-10:** AWS ยกเลิกแล้ว ([[Decisions|D-21]]) — ประเด็น region / Macie / QuickSight ข้ามพรมแดนด้านล่าง **ไม่เกี่ยวแล้ว** · ประเด็นใหม่บนเครื่อง PC: ใครเข้าเครื่องได้ · เข้ารหัสดิสก์และ backup · สิทธิ์ระดับ column ใน MySQL (GRANT / view) · log การเข้าถึง `[อนุมาน]`
 
 ### Region ของ AWS Service (ยืนยัน 2026-08-27)
 

@@ -1,5 +1,7 @@
 # DMS Full Load Validation (Lambda)
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · Lambda และ DMS ลบแล้ว · หลักตรวจ (load จบจริง · นับแถวต้นทาง = ปลายทาง) ยังใช้กับการโหลดเข้า MySQL ได้ · โค้ด: backup `ap-southeast-7/lambda/com7-dms-validate/`
+
 > ตรวจว่างาน **DMS full-load** จบจริงและข้อมูลปลายทางครบ ก่อนจะปล่อยให้ ETL ตัวถัดไปทำงาน
 
 | | |

@@ -1,5 +1,7 @@
 # Network & VPN
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · การเชื่อม on-prem ↔ AWS (Client VPN / Site-to-Site / WireGuard EC2) ไม่ต้องใช้แล้ว เครื่อง PC อยู่ในเครือข่ายบริษัท · ฐาน CRM (Aurora) เข้าผ่าน Outline VPN ของทีม Inno → [[CRM Customer Field Survey]]
+
 การเชื่อมต่อเครือข่ายระหว่าง **on-premise ของ COM7** กับ **AWS VPC** สำหรับดึงข้อมูลเข้า Data Lake
 
 **ที่มา:** `Template AWS VPN Site-to-Site.xlsx` (แบบฟอร์มจาก True IDC ให้ COM7 กรอก) · รับเข้า vault 2026-08-28

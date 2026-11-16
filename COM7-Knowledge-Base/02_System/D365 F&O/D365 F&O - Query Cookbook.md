@@ -4,7 +4,7 @@ SQL ที่รันได้จริง พร้อมเหตุผลว
 ภาพรวม → [[D365 F&O Overview]] · พจนานุกรมคอลัมน์ → [[D365 F&O - Transaction_FO Dictionary]]
 
 ทุกคิวรีในหน้านี้ **รันจริงแล้ว** เมื่อ 2026-09-23 พร้อมเวลาที่วัดได้
-แบบเดียวกับ [[ITEC - Query Cookbook]] ฝั่ง ITEC
+แบบเดียวกับ [[ITEC-MIS - Query Cookbook]] ฝั่ง ITEC
 
 > ใส่ `WITH (NOLOCK)` เสมอ — เป็นฐาน production ของทีมอื่น
 
@@ -657,5 +657,5 @@ WHERE CompanyCode IN ('com7','dou7','bnn') GROUP BY CompanyCode;
 ## เชื่อมโยง
 
 [[D365 F&O Overview]] · [[D365 F&O - Transaction_FO Dictionary]] · [[D365 F&O - Sales Invoice & Product Mapping]]
-[[ITEC - Query Cookbook]] · [[ITEC - Data Dictionary]] · [[ITEC Product Dimension]]
+[[ITEC-MIS - Query Cookbook]] · [[ITEC-MIS - Data Dictionary]] · [[ITEC Product Dimension]]
 [[System Inventory]] · [[Environment Setup]] · [[Open Questions & Risks]]

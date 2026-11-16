@@ -3,7 +3,7 @@
 **COM7 Group Standard Data Framework** — มาตรฐานที่ MIS ออกให้ทั้งเครือ
 ที่มา: `D:\Consent_PDPA\COM7 Group Data Framework.pptx` (16 สไลด์)
 
-> นี่คือ**มาตรฐาน** ไม่ใช่โปรเจกต์ · โปรเจกต์ที่นำมาตรฐานนี้ไปทำจริงอยู่ที่ [[Current Status|AWS Data Lake]]
+> นี่คือ**มาตรฐาน** ไม่ใช่โปรเจกต์ · โปรเจกต์ที่นำมาตรฐานนี้ไปทำจริงอยู่ที่ [[Current Status|SSOT (PC + MySQL — เดิม AWS Data Lake)]]
 
 ---
 
@@ -144,4 +144,4 @@ Interest (Website/Physical/Event) → Decision
 
 ## เชื่อมกับโน้ตอื่น
 
-[[SSOT Roadmap]] · [[Current Status|AWS Data Lake]] · [[Consent & PDPA]]
+[[SSOT Roadmap]] · [[Current Status|SSOT platform]] · [[Consent & PDPA]]

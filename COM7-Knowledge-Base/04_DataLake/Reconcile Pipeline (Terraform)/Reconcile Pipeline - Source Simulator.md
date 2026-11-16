@@ -1,5 +1,7 @@
 # Reconcile Pipeline - Source Simulator
 
+> 🗄️ **2026-11-10 — เลิกใช้ AWS แล้ว** (ไม่ผ่าน POC และงบประมาณ) · แพลตฟอร์มใหม่ = เครื่อง PC on-prem + **MySQL** (concept SSOT เดิม) · ระบบใน AWS ปิดและลบแล้ว → [[AWS Data Lake - Backup & Shutdown 2026-10]] · เก็บเป็นประวัติ · ตัวจำลองต้นทางยังใช้ทดสอบ reconcile เวอร์ชัน MySQL ได้ `[อนุมาน]`
+
 > CloudFormation `source-simulator.yaml` (512 บรรทัด) — สร้าง **SQL Server ต้นทางจำลอง** ทิ้งได้ สำหรับฝึก/ทดสอบ pipeline
 > ไม่สร้างอะไรของ pipeline · ไม่เปิด SSH · ทุกอย่างสั่งผ่าน SSM
 

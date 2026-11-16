@@ -1,5 +1,10 @@
 # ITOS Overview
 
+> **นับ 2026-11-10** (ผ่าน linked server `ILOAN_DATASOURCE` บนเครื่อง K2): external table **282** · ตารางในฐาน **301** · view 14
+> สร้างหลังวัดขนาด 2026-10-15: external `dbo.CASH_RECEIVE_T_BillPay_Invoice` (1 พ.ย.) · ตาราง `ITOS_STAGE_INVOICE` (1.33M · 1 พ.ย.) · `ITOS_STAGE_REPAY_DATE` (2.04M · 1 พ.ย.) · `ITOS_COLLECTION_DETAIL_SNAPSHOT` (122k · 1 พ.ย.) · `ITOS_EOM_RECEIPT_WORK` (283k · 20 ต.ค.)
+> (`ext_collection.R_SNAP` · `ITOS_EOM_INSTALLMENT_WORK` 7.77M · `ITOS_COLLECTION_DETAIL_EOM` สร้าง 10 ต.ค. ก่อนวัดขนาด) · รายการเต็ม `_raw/itos-objects-2026-11.csv`
+> หมายเหตุ: `ILOAN_DATASOURCE` ไม่อยู่ในรายชื่อฐานของเครื่อง K2 โดยตรง — ต้องอ้างแบบ `ILOAN_DATASOURCE.ILOAN_DATASOURCE.<schema>.<ตาราง>` เท่านั้น (`database=` ใน connection string ใช้ไม่ได้)
+
 ระบบสินเชื่อ/ติดตามหนี้ของ **UFUND (Thunder FinFin)** — ระบบที่ K2 กำลังย้ายไปหา
 
 |              |                                                                                                    |     |
@@ -7,7 +12,7 @@
 | Survey       | **Done** · schema wiki สร้าง 2026-05-04                                                            |     |
 | เจ้าของงาน   | K.Ton                                                                                              |     |
 | Physical     | MSSQL ฐาน **`ILOAN_COLLECTION`**                                                                   |     |
-| ชั้น extract | `ILOAN_DATASOURCE.dbo.ITOS_COLLECTION_DETAIL` · `ITOS_COLLECTION_PORTFOLIO`                        |     |
+| ชั้น extract | `ILOAN_DATASOURCE.dbo.ITOS_COLLECTION_DETAIL` · `ITOS_COLLECTION_PORTFOLIO` · `ITOS_COLLECTION_DETAIL_EOM` (snapshot สิ้นเดือน · เพิ่ม 2026-10-22 → [[ITOS - Query Cookbook#16 · snapshot สิ้นเดือนรายสัญญา (EOM)]]) |     |
 | ขนาด         | **55 ตารางที่ใช้จริง** (ตัดออก 167 ตารางที่ว่างเปล่าหรือชื่อเป็น `BK_*`, `*_BK`, ลงท้ายด้วยตัวเลข) |     |
 |              |                                                                                                    |     |
 
