@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-"""ที่เดียวสำหรับต่อฐานข้อมูลทุกตัวของโปรเจกต์ — read-only
+"""ที่เดียวสำหรับต่อฐานข้อมูลทุกตัวของโปรเจกต์ — read-only (SQL Server ผ่าน pyodbc · CRM MySQL ผ่าน pymysql)
 
     python scripts/db.py                 ดูว่าฐานไหนต่อได้บ้าง
     python scripts/db.py itec            ทดสอบต่อ itec
-    python scripts/db.py itec "SELECT TOP 5 * FROM rpt.booking_list"
+    python scripts/db.py itec_mis "SELECT TOP 5 * FROM rpt.booking_list"
 
 ใช้ในโค้ด
 
     import db
-    df = db.query("itec", "SELECT TOP 10 * FROM rpt.booking_list")
+    df = db.query("itec_mis", "SELECT TOP 10 * FROM rpt.booking_list")   # view ของ ITEC-MIS
+    df = db.query("itec", "SELECT TOP 10 * FROM dbo.Sell")              # ตารางดิบของ ITEC-Rep
     with db.connect("k2") as cn:
         ...
 
@@ -34,12 +35,32 @@ DRIVER = "ODBC Driver 18 for SQL Server"
 # ── ฐานข้อมูลทั้งหมดที่โปรเจกต์นี้ใช้ ───────────────────────────────────
 # แก้ค่า default ที่นี่ที่เดียว · override ด้วย env ได้ทุกตัว
 PROFILES = {
+    # ITEC มี 2 ฐาน — อย่าสับสน
+    #   itec      = ITEC-Rep  replica ตารางดิบของระบบ ITEC (dbo.Sell, dbo.SellItem, dbo.Customer2 …) · ตัวหลักตั้งแต่ 2026-11
+    #   itec_mis  = ITEC-MIS  ฐาน MIS เครื่อง 250 · view ที่ทีมทำไว้ (rpt.fact_sales_itec, ci.clean_item_category_itec …)
     "itec": {
-        "ชื่อ": "ITEC / MIS — ยอดขาย สินค้า สมาชิก",
+        "ชื่อ": "ITEC-Rep — ตัวหลัก · ตารางดิบ (SSSynced50)",
+        "server": os.environ.get("ITEC_SERVER", "10.100.101.50"),
+        "database": os.environ.get("ITEC_DB", "SSSynced50"),
+        "user_env": "ITEC_USER",
+        "pwd_env": "ITEC_PWD",
+    },
+    "itec_mis": {
+        "ชื่อ": "ITEC-MIS — view rpt / ci (เครื่อง 250)",
         "server": os.environ.get("MIS_SERVER", "192.168.43.250,18963"),
         "database": os.environ.get("MIS_DB", "_db1_3f9c2a7e-8b41-4d6f-9c25-1a7e5c0d2b8f"),
         "user_env": "MIS_USER",
         "pwd_env": "MIS_PWD",
+    },
+    # 🆕 2026-11 CRM — Aurora MySQL read-only (ทีม Inno) · ต้องเปิด Outline VPN ก่อน
+    "crm": {
+        "ชื่อ": "CRM / 7Club — สมาชิก (MySQL)",
+        "engine": "mysql",
+        "server": os.environ.get("CRM_SERVER", "crm-pool-th.cluster-ro-cx0g8ua8mgxl.ap-southeast-7.rds.amazonaws.com"),
+        "port": 3306,
+        "database": os.environ.get("CRM_DB", ""),
+        "user_env": "CRM_USER",
+        "pwd_env": "CRM_PWD",
     },
     "k2": {
         "ชื่อ": "K2 / ITOS — สัญญา ผ่อนชำระ บอกเลิก",
@@ -47,6 +68,15 @@ PROFILES = {
         "database": os.environ.get("K2_DB", "HPCOM7"),
         "user_env": "K2_USER",
         "pwd_env": "K2_PWD",
+    },
+    # 🆕 2026-11 EV7 Taxi — GPS / tracking ของโปรเจกต์ EV taxi (ไม่ใช่ GI Core) · ข้อมูลใหญ่มาก
+    #   ห้าม COUNT(*) / SELECT ทั้งตาราง → ใช้ sys.partitions นับแถว · ใส่ WITH (NOLOCK) + TOP / ช่วงเวลาเสมอ
+    "ev7": {
+        "ชื่อ": "EV7 Taxi — GPS tracking (LOB_DB_PROD)",
+        "server": os.environ.get("EV7_SERVER", r"43.254.133.143\LOB_DB_PROD,1433"),
+        "database": os.environ.get("EV7_DB", "ev7"),
+        "user_env": "EV7DB_USER",       # ห้ามใช้ EV7_USER — ชื่อนั้นเป็น basic auth ของเว็บ scripts/taxi/server
+        "pwd_env": "EV7DB_PWD",
     },
     # 🆕 D365 F&O — transaction ของทุก BU รวมที่เดียว · กรองมาแล้ว
     "fo": {
@@ -80,7 +110,7 @@ def ready(profile):
 
 
 def connect(profile, database=None, timeout=300):
-    """เปิด connection · profile = 'itec' หรือ 'k2'
+    """เปิด connection · profile = ชื่อใน PROFILES (itec · itec_mis · k2 · ev7 · fo · fo_raw · crm)
 
     database  ระบุเพื่อข้ามฐาน default (เช่น itec มีหลายฐานในเครื่องเดียวกัน)
     """
@@ -96,8 +126,12 @@ def connect(profile, database=None, timeout=300):
             f"             [Environment]::SetEnvironmentVariable('{p['pwd_env']}','...','User')\n"
             f"  แล้วเปิด VS Code ใหม่")
 
-    import pyodbc
     db = database or p["database"]
+    if p.get("engine") == "mysql":
+        import pymysql
+        return pymysql.connect(host=p["server"], port=p["port"], user=u, password=w, database=db or None,
+                               connect_timeout=min(timeout, 30), read_timeout=timeout, ssl={"ssl": {}}, charset="utf8mb4")
+    import pyodbc
     cs = (f"DRIVER={{{DRIVER}}};SERVER={p['server']};"
           + (f"DATABASE={db};" if db else "")
           + f"UID={u};PWD={w};TrustServerCertificate=yes;")
@@ -141,7 +175,7 @@ def _ping(profile):
     t0 = time.time()
     try:
         with connect(profile, timeout=15) as cn:
-            v = cn.cursor().execute("SELECT @@VERSION").fetchval()
+            cur = cn.cursor(); cur.execute("SELECT @@VERSION"); v = str(cur.fetchone()[0])
         print(f"  ✅ {profile:<6} ต่อได้ใน {time.time()-t0:.1f}s · {v.splitlines()[0][:60]}")
         return True
     except Exception as e:
