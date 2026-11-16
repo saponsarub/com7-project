@@ -13,7 +13,7 @@ OUT = Path(__file__).parent / "_out"
 pd.set_option("display.width", 200)
 pd.set_option("display.max_rows", 200)
 
-d = db.query("itec", """
+d = db.query("itec_mis", """
 WITH L AS (SELECT * FROM (VALUES
     ('iPhone-15','2023-09-15'),('iPhone-16','2024-09-13'),
     ('iPhone-17','2025-09-12'),('iPhone-18','2026-09-12')) v(m, d_open))

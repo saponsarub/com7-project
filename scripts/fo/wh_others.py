@@ -45,7 +45,7 @@ def stock():
     mv = W.cached("stock_fo_moves", lambda: db.query("fo", SQL_STOCK_FO.format(
         d1=W.FROM, d2=W.TO, wh=W.wh_filter("a"))))
     print("  ดึงสต็อกสิ้นเดือน (ITEC 2025) ...", flush=True)
-    it = W.cached("stock_itec", lambda: db.query("itec", SQL_STOCK_ITEC))
+    it = W.cached("stock_itec", lambda: db.query("itec_mis", SQL_STOCK_ITEC))
 
     # ไล่สะสมต่อ (BU, คลัง, สินค้า) ตามลำดับเดือน
     mv = mv.sort_values(["BU", "Warehouse", "ItemId_FO", "YearMonth"])

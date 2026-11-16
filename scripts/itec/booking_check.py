@@ -19,7 +19,7 @@ import db                                                     # noqa: E402
 pd.set_option("display.width", 220)
 pd.set_option("display.max_rows", 120)
 pd.set_option("display.max_colwidth", 46)
-Q = lambda s: db.query("itec", s)                             # noqa: E731
+Q = lambda s: db.query("itec_mis", s)                             # noqa: E731
 
 
 def head(t):

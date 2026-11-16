@@ -46,7 +46,7 @@ def load(source, sample=0):
     if source == "db":
         import db
         print("ดึงจาก rpt.dim_item_itec ...", flush=True)
-        df = db.query("itec", SQL)
+        df = db.query("itec_mis", SQL)
     else:
         if not DATA.exists():
             sys.exit(f"ไม่พบ {DATA}\n"

@@ -12,7 +12,7 @@ import db                                                     # noqa: E402
 pd.set_option("display.width", 200)
 pd.set_option("display.max_rows", 200)
 
-print(db.query("itec", """
+print(db.query("itec_mis", """
 SELECT clean_iPhone_model                    AS รุ่น,
        clean_finishdate                      AS วันรับเครื่อง,
        DATENAME(weekday, clean_finishdate)   AS วัน,

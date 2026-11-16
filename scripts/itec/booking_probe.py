@@ -26,12 +26,12 @@ for sch, tb in TABLES:
     print(f"  {sch}.{tb}")
     print("=" * 80)
     try:
-        cols = db.columns("itec", sch, tb)
-        n = db.query("itec", f"SELECT COUNT_BIG(*) AS n FROM [{sch}].[{tb}]")["n"][0]
+        cols = db.columns("itec_mis", sch, tb)
+        n = db.query("itec_mis", f"SELECT COUNT_BIG(*) AS n FROM [{sch}].[{tb}]")["n"][0]
         print(f"{len(cols)} คอลัมน์ · {n:,} แถว\n")
         print(cols.to_string(index=False))
         print("\n── 3 แถวแรก ──")
-        print(db.query("itec", f"SELECT TOP 3 * FROM [{sch}].[{tb}]").to_string(index=False))
+        print(db.query("itec_mis", f"SELECT TOP 3 * FROM [{sch}].[{tb}]").to_string(index=False))
     except Exception as e:
         print("❌", str(e).splitlines()[0][:160])
     print()

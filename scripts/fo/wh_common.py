@@ -79,7 +79,7 @@ WHERE [ITEC-ITEMNO] IS NOT NULL AND DATEPHYSICAL >= '2024-01-01'
 def cat_itec():
     """หมวดฝั่ง ITEC"""
     def go():
-        return db.query("itec", """
+        return db.query("itec_mis", """
 SELECT ItemId, ItemName, CategoryName, SubCategoryName, Brand
 FROM rpt.dim_item_itec
 """)

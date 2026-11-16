@@ -18,7 +18,7 @@ OUT = Path(__file__).parent / "_out"
 OUT.mkdir(exist_ok=True)
 pd.set_option("display.width", 210)
 pd.set_option("display.max_rows", 200)
-Q = lambda s: db.query("itec", s)                             # noqa: E731
+Q = lambda s: db.query("itec_mis", s)                             # noqa: E731
 
 # วันเปิดตัวที่ยืนยันแล้วจากข้อมูล + ที่ผู้ใช้ให้มา
 LAUNCH = """(VALUES
