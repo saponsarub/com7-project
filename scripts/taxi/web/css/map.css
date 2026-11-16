@@ -1,38 +1,100 @@
-/* css/map.css — สิ่งที่ลอยบนแผนที่ — กล่องควบคุม · ตำนาน · tooltip · การ์ดสถานที่ · กล่อง error */
-/* ── map overlays ────────────────────────────────────────────────────── */
-.mapctl{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:8px;z-index:3}
-.mbox{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:8px 10px;display:flex;flex-direction:column;gap:6px}
-.mbox .lbl{font-size:10.5px;color:var(--ink-3);font-weight:600;letter-spacing:.05em}
-.legend{position:absolute;left:12px;bottom:28px;z-index:3;min-width:200px}
-.legend .row{display:flex;align-items:center;gap:8px;font-size:12px}
-.ramp{display:flex;height:8px;border-radius:3px;overflow:hidden;margin-top:4px}
-.ramp i{flex:1}
-.rampl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);font-family:var(--mono)}
-.zoomto{position:absolute;right:12px;top:12px;z-index:3;display:flex;gap:6px}
-.loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(238,242,240,.9);z-index:30;flex-direction:column;gap:10px;font-size:13px;color:var(--ink-2)}
-.loading.hide{display:none}
-.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--green);border-radius:50%;animation:sp 1s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.spin{animation:none}}
-.deck-tooltip{font-family:var(--sans)!important;font-size:12px!important;background:#10231a!important;color:#fff!important;border-radius:8px!important;padding:8px 10px!important;box-shadow:var(--shadow)!important;max-width:280px}
-.deck-tooltip b{font-family:var(--mono)}
-.deck-tooltip .tt-k{color:#9fb3a8}
-/* ── v2: สถานที่ · จุดจอด · ตั้งค่า ──────────────────────────────────── */
-.place{position:absolute;right:12px;bottom:96px;width:340px;max-width:calc(100% - 24px);z-index:4;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);display:none;overflow:hidden}
-.place.on{display:block}
-.place .ph{display:flex;justify-content:space-between;gap:8px;padding:10px 12px 6px}
-.place .ph b{font-size:13.5px}
-.place .ph small{display:block;color:var(--ink-3);font-size:11px;font-family:var(--mono)}
-.place .addr{padding:0 12px 8px;font-size:12px;line-height:1.5;color:var(--ink-2);min-height:20px}
-.place .addr b{color:var(--ink);font-weight:600}
-.place .img{position:relative;background:var(--panel-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.place .img img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
-.place .img .cap{position:absolute;left:8px;bottom:6px;font-size:10.5px;background:rgba(16,35,26,.75);color:#fff;border-radius:4px;padding:1px 6px}
-.place .img .none{padding:10px 12px;font-size:11.5px;color:var(--ink-3)}
-.place .links{display:flex;gap:6px;padding:8px 12px 10px;flex-wrap:wrap}
-.place .links a{font-size:12px;text-decoration:none;color:var(--ink);border:1px solid var(--line-2);border-radius:8px;padding:4px 9px;background:var(--panel)}
-.place .links a:hover{background:var(--panel-2)}
-.place .links a.sv{background:var(--blue);border-color:var(--blue);color:#fff}
+/* css/map.css — things floating over the map: tools · settings popover · legend · tooltip · place card · errors · loading · timeline controls */
 
-/* กล่องแจ้ง error บนจอ (core/errors.js) */
-#errbox{display:none;position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:50;max-width:560px;background:var(--red-l);border:1px solid #f3c9cb;color:#7a1d21;border-radius:10px;padding:8px 12px;font-size:12px;box-shadow:var(--shadow);white-space:pre-wrap}
+.maptools{position:absolute;top:10px;right:52px;display:flex;gap:6px;z-index:3}
+.tool{display:grid;place-items:center;height:34px;min-width:34px;border-radius:var(--r-sm);background:#fff;box-shadow:var(--shadow);color:var(--ink-2)}
+.tool.wide{display:flex;gap:6px;padding:0 12px;font-weight:600}
+.tool:hover{color:var(--ink)}
+.tool[aria-expanded="true"]{background:var(--ink);color:#fff}
+.pop{position:absolute;top:42px;right:0;width:300px;max-height:calc(100vh - 220px);overflow:auto;background:#fff;border-radius:var(--r);box-shadow:var(--shadow-lg);padding:14px;display:flex;flex-direction:column;gap:13px}
+.pop .seg{align-self:flex-start}
+
+.legend{position:absolute;left:10px;bottom:10px;z-index:2;background:rgba(255,255,255,.94);border-radius:var(--r);box-shadow:var(--shadow);padding:8px 11px;font-size:11.5px;display:flex;flex-direction:column;gap:3px;max-width:220px}
+.legend .row{display:flex;align-items:center;gap:7px}
+.legend .row > .dot:not(.ring):not(.off):not(.hl):not(.tA):not(.tB):not(.tQ){box-shadow:0 0 0 1px #10231a}
+.legend .line{width:14px;border-top:2px solid var(--blue)}
+.lg-ramp{margin-top:5px;display:flex;flex-direction:column;gap:3px}
+.ramp{display:flex;height:8px;border-radius:4px;overflow:hidden}
+.ramp i{flex:1}
+.rampl{display:flex;justify-content:space-between;color:var(--ink-3);font-size:10.5px}
+
+/* deck.gl tooltip */
+.deck-tooltip{font-family:var(--sans) !important;font-size:12px !important;line-height:1.45 !important;background:rgba(16,35,26,.94) !important;color:#fff !important;border-radius:8px !important;padding:8px 10px !important;max-width:280px;box-shadow:var(--shadow-lg)}
+.tt-k{color:#a9bdb2}
+.tt-out{color:#ff9ea2}
+
+/* place card */
+.place{position:absolute;top:54px;right:10px;width:300px;max-width:calc(100% - 20px);background:#fff;border-radius:var(--r);box-shadow:var(--shadow-lg);padding:12px;z-index:3;display:flex;flex-direction:column;gap:9px}
+.place .ph{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.place .ph small{display:block;color:var(--ink-3)}
+.place .addr{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.place .links{display:flex;flex-wrap:wrap;gap:6px}
+.place .links a{padding:4px 10px;border-radius:14px;border:1px solid var(--line-2);font-size:12px;color:var(--ink);text-decoration:none}
+.place .links a.pri{background:var(--ink);border-color:var(--ink);color:#fff}
+.place .links a:hover{border-color:var(--ink)}
+
+/* errors */
+.errbox{position:absolute;left:50%;transform:translateX(-50%);top:10px;z-index:9;max-width:min(560px,calc(100% - 140px));background:var(--red-l);border:1px solid var(--red);color:var(--red);border-radius:var(--r);padding:8px 34px 8px 12px;font-size:12px}
+.errbox pre{white-space:pre-wrap;font:11px var(--mono);margin-top:4px;color:#8c1d22}
+.errbox button{position:absolute;right:8px;top:4px;font-size:18px;color:var(--red)}
+
+/* loading screen (covers the map only — the map starts drawing underneath) */
+.loading{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(238,242,240,.88);backdrop-filter:blur(2px);transition:opacity .35s}
+.loading img{border-radius:12px}
+.loading b{font-size:16px}
+.loading.done{opacity:0;pointer-events:none}
+.progress{width:220px;height:4px;border-radius:2px;background:var(--line-2);overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--green);transition:width .2s}
+.loading.failed .progress{display:none}
+#loadMsg{font-size:12.5px;color:var(--ink-2);text-align:center;max-width:360px}
+
+/* timeline controls */
+.play{display:grid;place-items:center;width:36px;height:36px;border-radius:18px;background:var(--green);color:#fff;flex:none}
+.play:hover{background:var(--green-d)}
+.clock{display:flex;flex-direction:column;line-height:1.1;min-width:84px}
+.clock b{font-size:17px;font-weight:600}
+.clock small{color:var(--ink-3)}
+.tl-ctl select{height:28px;font-size:12px;flex:none}
+.presets{flex-wrap:nowrap;flex:none}
+.presets button{padding:3px 9px;font-size:12px}
+.tl-hint{margin-left:auto;font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+body.chat-open .tl-hint,body.chat-open #rngTxt{display:none}
+
+/* MapLibre */
+.maplibregl-ctrl-group{box-shadow:var(--shadow) !important;border-radius:var(--r-sm) !important}
+.maplibregl-ctrl-top-right{top:0}
+.live-btn{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:14px;border:1px solid var(--line-2);font:600 11.5px var(--mono);letter-spacing:.04em;color:var(--ink-2);flex:none}
+.live-btn i{width:8px;height:8px;border-radius:4px;background:var(--ink-3)}
+.live-btn.on{background:var(--red-l);border-color:#f3c9cb;color:var(--red)}
+.live-btn.on i{background:var(--red);animation:pulse 1.6s infinite}
+.live-btn:not(.on):hover{border-color:var(--red);color:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.kat.live #kMode{background:var(--red);color:#fff;padding:0 5px;border-radius:4px;font:600 10px/15px var(--mono)}
+
+/* LIVE / HISTORY badge on the map */
+.mapmode{position:absolute;top:10px;left:10px;z-index:3;display:flex;align-items:center;gap:8px;padding:5px 6px 5px 10px;border-radius:18px;background:#fff;box-shadow:var(--shadow);font-size:12px}
+.mapmode b{font:700 11.5px var(--mono);letter-spacing:.06em}
+.mapmode span{font:500 12px var(--mono);color:var(--ink-2);padding-right:4px}
+.mapmode.live{background:var(--red);color:#fff}
+.mapmode.live span{color:#ffe1e2}
+.mapmode.live i{width:9px;height:9px;border-radius:5px;background:#fff;animation:pulse 1.6s infinite}
+.mapmode.hist b{color:var(--ink-2)}
+.mapmode button{white-space:nowrap;padding:2px 10px;border-radius:12px;background:var(--red-l);color:var(--red);font-weight:600;font-size:11.5px}
+.mapmode button:hover{background:var(--red);color:#fff}
+.legend .arrow{width:10px;height:11px;flex:none;background:#10231a;clip-path:polygon(50% 0,100% 100%,50% 78%,0 100%);position:relative}
+.legend .arrow::after{content:"";position:absolute;inset:2px 2px 1px;background:var(--green);clip-path:polygon(50% 0,100% 100%,50% 78%,0 100%)}
+
+.mapmode #mmHist,.mapmode #mmReplay{background:rgba(255,255,255,.22);color:#fff}
+.mapmode #mmHist:hover,.mapmode #mmReplay:hover{background:#fff;color:var(--red)}
+.mapmode .mm-wait{font:500 11px var(--sans,inherit);opacity:.9}
+.toast{position:absolute;top:52px;left:10px;z-index:4;padding:7px 12px;border-radius:var(--r-sm);background:var(--ink);color:#fff;font-size:12.5px;box-shadow:var(--shadow-lg)}
+#tlClose{flex:none}
+.legend .dash{width:16px;border-top:2.5px dashed var(--violet)}
+.legend .trk{width:16px;border-top:3px solid #e6007e}
+.legend .trk.dashed{border-top:4px dotted #e6007e}
+.legend .trk.ahead{opacity:.55}
+.mapmode #mmFollow{background:var(--panel-2);color:var(--ink-2);border:1px solid var(--line-2)}
+.mapmode #mmFollow.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.mapmode.live #mmFollow{background:rgba(255,255,255,.22);color:#fff;border-color:transparent}
+.mapmode.live #mmFollow.on{background:#fff;color:var(--red)}
+.mapmode .mm-sim{font-size:11px;opacity:.9}
+.mapmode #mmStop{background:rgba(255,255,255,.22);color:#fff}

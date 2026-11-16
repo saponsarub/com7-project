@@ -66,7 +66,7 @@ def _opt(flag):
         return Path(ARGS[i + 1]) if i + 1 < len(ARGS) else None
     return None
 WEB_DIR, BUNDLE = _opt("--web"), _opt("--bundle")
-_pos = [a for k, a in enumerate(ARGS) if not a.startswith("--") and (k == 0 or ARGS[k - 1] not in ("--web", "--bundle"))]
+_pos = [a for k, a in enumerate(ARGS) if not a.startswith("--") and (k == 0 or ARGS[k - 1] not in ("--web", "--bundle", "--db-days"))]
 OUT_HTML = Path(_pos[0] if _pos else r"D:\Taxi\Taxi_dashboard.html")
 if len(_pos) > 1:
     TEMPLATE = HERE / _pos[1]
@@ -90,8 +90,23 @@ def load_points():
         SELECT SMARTTAXI_BODYCAR_NUMBER AS vin, SMARTTAXI_REFISTER_ID AS plate, ...
         FROM   <ตาราง smarttaxi>
         WHERE  CREATED_AT >= @from AND CREATED_AT < @to
-    (ยังไม่ได้ทำ — ยังไม่ทราบชื่อฐาน/ตาราง)
+    ต่อฐานแล้ว (2026-11-16): ใส่ --db-days N → อ่าน N วันล่าสุดจากที่เก็บของ ev7_sync.py
+    (ev_points · ดึงจากฐาน EV7 โดยตรง · ตัดจุดซ้ำแล้ว) แทนไฟล์ parquet
     """
+    db_days = _opt("--db-days")
+    if db_days:
+        import sqlalchemy as sa
+        import ev7_sync
+        eng = ev7_sync.store()
+        with eng.connect() as c:
+            mx = c.execute(sa.text("SELECT MAX(last_seen_at) FROM ev_points")).scalar()
+            since = pd.Timestamp(mx) - pd.Timedelta(days=float(str(db_days)))
+            d = pd.read_sql(sa.text("SELECT id, vin, plate, center, car_id, gps_time, first_seen_at AS created_at, lat, lon, speed, direction, "
+                                    "meter, engine, battery, signal FROM ev_points WHERE last_seen_at >= :s"), c, params={"s": since.to_pydatetime()})
+        for col in ["gps_time", "created_at"]:
+            d[col] = pd.to_datetime(d[col])
+        print(f"load_points: ที่เก็บ ev7_sync {len(d):,} จุด · {db_days} วันล่าสุด (ถึง {mx})")
+        return d
     d = pd.read_parquet(PARQUET)
     return d.rename(columns={"header_center": "center", "cm_meter": "meter",
                              "cm_engine": "engine", "signal_gps": "signal"})
@@ -465,9 +480,10 @@ def make_payload(cols, meta, vehicles, areas, places=None, ev=None):
 
     payload = {
         "meta": meta, "vehicles": vehicles, "areas": areas, "places": places or [], "ev": ev or [],
-        "car": car_atlas() if V2 else None,
+        "car": None,                                  # car pictures removed from the map (direction arrows only)
         "cols": {k: b64gz(v) for k, v in cols.items()},
-        "dtype": {"v": "u16", "t": "f32", "pos": "f32", "spd": "u8", "flg": "u8", "dist": "u16", "head": "u8"},
+        "dtype": {"v": "u16", "t": "f32", "pos": "f32", "spd": "u8", "flg": "u8", "dist": "u16", "head": "u8",
+                  "road": "u8", "rname": "u16"},
         "geo": {"prov": b64gz(json.dumps(prov_geo, ensure_ascii=False,
                                           separators=(",", ":")).encode("utf-8")),
                 "dist": b64gz(json.dumps(dist_geo, ensure_ascii=False,
@@ -496,6 +512,18 @@ LINK_CSS = _re.compile(r'<link rel="stylesheet" href="((?:css)/[^"]+)">')
 LOCAL_JS = _re.compile(r'<script src="((?:js|data)/[^"]+)"></script>')
 
 
+ROADS = {"data": None}       # set by main() when GraphHopper is running — written as data/taxi-roads.js
+
+
+def roads_js():
+    r = ROADS["data"]
+    if not r:
+        return None
+    body = {"a": b64gz(r["a"]), "n": b64gz(r["n"]), "off": b64gz(r["off"]), "verts": b64gz(r["verts"]), "stats": r["stats"]}
+    return ("// สร้างโดย scripts/taxi/build_dashboard.py (roadsnap.py) — เส้นทางตามถนนของทุกคัน · มีตำแหน่งรถ ห้าม commit\n"
+            "window.TAXI_ROADS = " + json.dumps(body, separators=(",", ":")) + ";\n")
+
+
 def data_js(payload):
     return ("// สร้างโดย scripts/taxi/build_dashboard.py — ห้ามแก้มือ · มีข้อมูลรถ (ทะเบียน · VIN · ตำแหน่ง)\n"
             "window.TAXI_DATA = " + payload + ";\n")
@@ -515,6 +543,20 @@ def write_web(out_dir, payload):
     shutil.copytree(WEB, out_dir, dirs_exist_ok=True)
     (out_dir / "data").mkdir(parents=True, exist_ok=True)
     (out_dir / "data" / "taxi-data.js").write_text(data_js(payload), encoding="utf-8")
+    rj = roads_js()
+    rf = out_dir / "data" / "taxi-roads.js"
+    if rj:
+        rf.write_text(rj, encoding="utf-8")
+    elif rf.exists():
+        rf.unlink()                                      # stale roads for older data would draw wrong paths
+    # cache-busting: ?v=<content hash> on every local css/js → a browser / CDN never mixes old and new files
+    import hashlib
+
+    def ver(m):
+        h = hashlib.sha1((out_dir / m.group(2)).read_bytes()).hexdigest()[:8]
+        return f'{m.group(1)}{m.group(2)}?v={h}"'
+    (out_dir / "index.html").write_text(
+        _re.sub(r'((?:href|src)=")((?:css|js|data)/[^"?]+)"', ver, index), encoding="utf-8")
     size = sum(f.stat().st_size for f in out_dir.rglob("*") if f.is_file())
     print(f"เขียนโฟลเดอร์ {out_dir} · {size / 1e6:.1f} MB · เปิด {out_dir / 'index.html'}")
 
@@ -531,8 +573,12 @@ def write_bundle(out_file, payload):
     def js(m):
         src = m.group(1)
         body = data_js(payload) if src == "data/taxi-data.js" else (WEB / src).read_text(encoding="utf-8")
-        return "<script>\n" + body + "</script>"
+        # "</script" inside inlined JS (a comment or string) would end the tag early → escape it
+        return "<script>\n" + _re.sub(r"</(script)", r"<\\/\1", body, flags=_re.I) + "</script>"
     html = LOCAL_JS.sub(js, html)
+    rj = roads_js()
+    if rj:                                               # single file: road paths inline at the very end (after the app starts)
+        html = html.replace("</body>", "<script>\n" + _re.sub(r"</(script)", r"<\\/\1", rj, flags=_re.I) + "</script>\n</body>")
     html = html.replace("assets/images/ev7logo.png", logo_uri())
     left = LINK_CSS.findall(html) + LOCAL_JS.findall(html)
     if left:
@@ -566,6 +612,15 @@ def main():
         print("สถานีชาร์จ EV (OpenStreetMap) ...", flush=True)
         ev = ev_chargers()
         print(f"  {len(ev):,} จุด")
+    if V2:
+        # ระยะจากจุดที่รถนิ่งถึงขอบถนน — ใช้แยก "จอดบนถนน" / "จอดนอกถนน" ก่อนพิจารณาตัดไฟ (ดู roads.py)
+        print("ระยะถึงถนน (OpenFreeMap / OpenStreetMap) ...", flush=True)
+        import roads
+        pos = cols["pos"]
+        cols["road"], cols["rname"], meta["road_names"] = roads.road_columns(pos[0::2], pos[1::2], cols["spd"], cols["flg"])
+        # every car's trace snapped to roads (our own GraphHopper on localhost) → data/taxi-roads.js
+        import roadsnap
+        ROADS["data"] = roadsnap.snap_cached(pos, cols["spd"], cols["flg"], vehicles["start"], vehicles["count"], OUT_DIR)
     payload = make_payload(cols, meta, vehicles, areas, places, ev)
     if WEB_DIR:
         write_web(WEB_DIR, payload)

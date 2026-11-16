@@ -1,39 +1,42 @@
-/* js/analysis/filters.js — ตัวกรองที่ไม่ขึ้นกับเวลา (ศูนย์ · สถานะ · พื้นที่) → MASK ต่อจุด
-   ใช้: state.js · model.js
-   ให้: areaMatchDist() · vehPass() · rebuildMask() · zoneSets()
-   ⚠️ ไฟล์ทั้งหมดใช้ scope ร่วมกัน (classic script ไม่ใช่ ES module) เพื่อให้เปิดจาก file:// ได้
-      ลำดับการโหลดอยู่ใน index.html — ไฟล์ที่ประกาศก่อนต้องโหลดก่อน */
+/* js/analysis/filters.js — filters that do not depend on time (center · status · area) → MASK per point
+   uses: state.js · model.js
+   provides: areaMatchDist() · vehPass() · rebuildMask() · zoneSets() · inZone() */
 
-/* ตัวกรองที่ไม่เกี่ยวกับเวลา → MASK ต่อจุด */
 function areaMatchDist(dIdx) {
   if (!S.areas.size) return true;
   if (dIdx === 65535) return false;
   return S.areas.has('d:' + dIdx) || S.areas.has('p:' + distProv[dIdx]);
 }
 function vehPass(v) {
-  if (S.centers.size && !S.centers.has(D.vehicles.center[v])) return false;
-  return true;
+  return !S.centers.size || S.centers.has(D.vehicles.center[v]);
 }
 function rebuildMask() {
   MASK = new Uint8Array(N);
-  const st = S.status;
+  const st = S.status, allSt = st.size === 3, noArea = !S.areas.size;
   for (let v = 0; v < NV; v++) {
     if (!vehPass(v)) continue;
     const s = D.vehicles.start[v], e = s + D.vehicles.count[v];
     for (let i = s; i < e; i++) {
-      const sx = status(i);
-      if (sx !== 'nosig' && !st.has(sx)) continue;
-      if (!areaMatchDist(DI[i])) continue;
+      if (!allSt) { const sx = status(i); if (sx !== 'nosig' && !st.has(sx)) continue; }
+      if (!noArea && !areaMatchDist(DI[i])) continue;
       MASK[i] = 1;
     }
   }
   maskVer++;
 }
 
-/* เขตที่อนุญาต (ตาม preset ที่เลือก) → ชุดดัชนีจังหวัด/อำเภอ — ใช้ทั้งนับนอกเขตและสถานะ ณ เวลา */
+/* allowed zone (selected preset) → sets of province / district indexes — cached per zone */
+let _zoneCache = { zone: null };
 function zoneSets() {
+  if (_zoneCache.zone === S.zone) return _zoneCache;
   const z = CFG.ZONES[S.zone];
   const pIdx = new Set(z.prov.map(pc => PROV.findIndex(p => p.pc === pc)));
   const dIdx = new Set(z.dist.map(pc => DIST.findIndex(d => d.pc === pc)));
-  return { pIdx, dIdx };
+  _zoneCache = { zone: S.zone, pIdx, dIdx };
+  return _zoneCache;
+}
+function inZone(dI) {
+  if (dI === 65535) return true;
+  const { pIdx, dIdx } = zoneSets();
+  return pIdx.has(distProv[dI]) || dIdx.has(dI);
 }

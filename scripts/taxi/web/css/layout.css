@@ -1,43 +1,93 @@
-/* css/layout.css — โครงหน้า (header · sidebar · แผนที่ · ไทม์ไลน์) + responsive */
-/* ── shell ───────────────────────────────────────────────────────────── */
-.app{display:grid;grid-template-rows:56px 1fr auto;grid-template-columns:372px 1fr;height:100vh}
-header{grid-column:1/3;display:flex;align-items:center;gap:16px;padding:0 16px;background:var(--panel);border-bottom:1px solid var(--line);z-index:5}
-header .brand{display:flex;align-items:center;gap:12px;min-width:0}
-header .brand img{height:30px;width:auto;display:block}
-header .brand .t{display:flex;flex-direction:column;line-height:1.15;min-width:0}
-header .brand b{font-size:15px;font-weight:700;letter-spacing:.01em;white-space:nowrap}
-header .brand small{font-size:11px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kpis{display:flex;gap:6px;margin-left:auto;flex-wrap:nowrap;overflow-x:auto}
-.kpi{display:flex;flex-direction:column;align-items:flex-start;padding:4px 12px;border-left:1px solid var(--line);min-width:84px}
-.kpi:first-child{border-left:0}
-.kpi .k{font-size:10.5px;color:var(--ink-3);letter-spacing:.02em;white-space:nowrap;display:flex;align-items:center;gap:5px}
-.kpi .v{font-family:var(--mono);font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+/* css/layout.css — page grid: header · nav rail · side panel · map · timeline · chat drawer · small screens */
+.app{
+  height:100vh;height:100dvh;display:grid;
+  grid-template-columns:var(--rail-w) var(--side-w) minmax(0,1fr) 0;
+  grid-template-rows:var(--top-h) minmax(0,1fr) 0;
+  grid-template-areas:"top top top top" "rail side map chat" "rail side tl chat";
+}
+body.side-collapsed .app{grid-template-columns:var(--rail-w) 0 minmax(0,1fr) 0}
+body.chat-open .app{grid-template-columns:var(--rail-w) var(--side-w) minmax(0,1fr) var(--chat-w)}
+body.side-collapsed.chat-open .app{grid-template-columns:var(--rail-w) 0 minmax(0,1fr) var(--chat-w)}
+body.side-collapsed .side{visibility:hidden}
+/* the timeline only shows in History / Replay — Live has the whole height for the map */
+body.tl-open .app{grid-template-rows:var(--top-h) minmax(0,1fr) var(--tl-h)}
+body:not(.tl-open) .timeline{display:none}
 
-aside{grid-row:2/3;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;z-index:4}
-main{position:relative;min-width:0;min-height:0}
-#map{position:absolute;inset:0}
-footer{grid-column:1/3;background:var(--panel);border-top:1px solid var(--line);z-index:5}
-/* ── timeline ────────────────────────────────────────────────────────── */
-.tl{display:grid;grid-template-columns:auto auto 1fr auto;gap:14px;align-items:center;padding:8px 16px 10px}
-.play{width:38px;height:38px;border-radius:50%;border:0;background:var(--green);color:#fff;display:grid;place-items:center;font-size:15px}
-.play:hover{background:var(--green-d)}
-.clock{display:flex;flex-direction:column;line-height:1.15;min-width:150px}
-.clock .d{font-size:11px;color:var(--ink-3)}
-.clock .h{font-family:var(--mono);font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
-.chartwrap{position:relative;height:64px;min-width:0}
-#tlc{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;touch-action:none}
-.tlright{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
-.tlright .ctl{justify-content:flex-end}
-.rng{font-size:11px;color:var(--ink-2);font-family:var(--mono);white-space:nowrap}
-@media (max-width:900px){
-  .app{grid-template-columns:1fr;grid-template-rows:56px 46vh 1fr auto}
-  aside{grid-row:3/4;border-right:0;border-top:1px solid var(--line)}
-  main{grid-row:2/3}
-  header,footer{grid-column:1/2}
-  .kpis .kpi:nth-child(n+4){display:none}
-  .tl{grid-template-columns:auto 1fr;gap:10px}
-  .tl .clock{min-width:0}
-  .tl .chartwrap{grid-column:1/3}
-  .tlright{grid-column:1/3;align-items:stretch}
+/* header */
+.top{grid-area:top;display:flex;align-items:center;gap:16px;padding:0 14px 0 12px;background:var(--panel);border-bottom:1px solid var(--line);z-index:6;min-width:0}
+.brand{display:flex;align-items:center;gap:10px;flex:none}
+.brand img{border-radius:8px;display:block}
+.brand .t{display:flex;flex-direction:column;line-height:1.2}
+.brand b{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.brand small{color:var(--ink-3);white-space:nowrap}
+.kpis{display:flex;align-items:center;gap:18px;margin-left:auto;min-width:0}
+.kat{font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.kat b{color:var(--ink-2);font-weight:500}
+.kpi{display:flex;flex-direction:column;align-items:flex-start;line-height:1.1}
+.kpi .v{font-size:17px;font-weight:600}
+.kpi .k{font-size:11px;color:var(--ink-3);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.kpi.out .v{color:var(--red)}
+
+/* nav rail */
+.rail{grid-area:rail;display:flex;flex-direction:column;align-items:stretch;gap:2px;padding:8px 4px;background:var(--panel);border-right:1px solid var(--line);z-index:5}
+.rail [data-panel]{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 1px 7px;border-radius:var(--r);color:var(--ink-2);font-size:10px;font-weight:500;line-height:1.15;text-align:center}
+.rail [data-panel] svg{width:21px;height:21px}
+.rail [data-panel]:hover{background:var(--panel-2);color:var(--ink)}
+.rail [data-panel][aria-current="page"]{background:var(--green-l);color:var(--green-d)}
+.rail-badge{position:absolute;top:3px;left:calc(50% + 6px);min-width:16px;padding:0 4px;border-radius:8px;background:var(--red);color:#fff;font:600 9.5px/15px var(--mono);box-shadow:0 0 0 2px var(--panel)}
+.rail-badge:empty{display:none}
+.rail-gap{flex:1}
+.rail-mini{display:grid;place-items:center;height:36px;border-radius:var(--r);color:var(--ink-3)}
+.rail-mini:hover{background:var(--panel-2);color:var(--ink)}
+
+/* side panel */
+.side{grid-area:side;display:flex;flex-direction:column;min-height:0;background:var(--panel);border-right:1px solid var(--line);z-index:4;overflow:hidden}
+.side-head{padding:12px 12px 9px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:9px}
+.side-head h2{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.filters select{min-width:0;padding:0 22px 0 8px;font-size:12.5px;background-position:right 8px center;text-overflow:ellipsis}
+.side-body{flex:1;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.panel{padding:2px 12px 20px}
+
+/* map */
+.mapwrap{grid-area:map;position:relative;min-width:0;min-height:0}
+#map{position:absolute;inset:0;background:#e8ece9}
+
+/* timeline */
+.timeline{grid-area:tl;display:flex;flex-direction:column;background:var(--panel);border-top:1px solid var(--line);padding:6px 12px 4px;min-width:0;z-index:3}
+.tl-ctl{display:flex;align-items:center;gap:10px;min-width:0;height:40px;flex:none;overflow:hidden}
+#tlc{flex:1;width:100%;min-height:0;touch-action:none;display:block}
+
+/* chat drawer */
+.chat{grid-area:chat;display:flex;flex-direction:column;min-height:0;background:var(--panel);border-left:1px solid var(--line);z-index:5}
+
+/* ── small screens ─────────────────────────────────────────────────── */
+@media (max-width:1180px){
+  .kpi:nth-of-type(3),.kpi:nth-of-type(4){display:none}
+  .tl-hint{display:none}
+}
+@media (max-width:980px){
+  :root{--side-w:280px}
+  .kpis .kpi:not(.out):not(:nth-of-type(1)){display:none}
+  .kat{display:none}
+}
+@media (max-width:800px){
+  :root{--rail-w:60px;--tl-h:104px;--top-h:52px}
+  .app,body.side-collapsed .app,body.chat-open .app,body.side-collapsed.chat-open .app{grid-template-columns:var(--rail-w) 0 minmax(0,1fr) 0}
+  .side{position:fixed;top:var(--top-h);bottom:0;left:var(--rail-w);width:min(var(--side-w),calc(100vw - var(--rail-w)));box-shadow:var(--shadow-lg)}
+  .chat{position:fixed;inset:var(--top-h) 0 0 0;width:auto}
+  .brand .t,.kpis{display:none}
+  .top{gap:8px;padding:0 8px}
+  .search{min-width:0}
+  .search kbd{display:none}
+  .ask-btn{padding:0 10px}
+  .ask-btn span{display:none}
+  .clear-all span{display:none}                                     /* icon + count on phones */
+  .mapwrap .mapmode{top:52px;left:8px;font-size:11px}             /* under the map buttons, not over them (beats map.css) */
+  .legend{transform:scale(.82);transform-origin:bottom left;left:6px;bottom:6px}
+  .tool.wide span{display:none}
+  .mapmode .mm-wait{display:none}                                  /* the badge stays one short line on phones */
+  .rail [data-panel] span{font-size:10px}
+  .search{max-width:none}
+  .presets{display:none}
 }

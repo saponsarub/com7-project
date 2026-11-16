@@ -1,12 +1,7 @@
-/* js/analysis/fleet.js — สถานะรถ ณ เวลา T + สรุปตามพื้นที่/รายคันในช่วงเวลา
-   ใช้: filters.js
-   ให้: lastIdxAt() · computeNow() · NOW · computeAreas() · AREA · areaVal()
-   ⚠️ ไฟล์ทั้งหมดใช้ scope ร่วมกัน (classic script ไม่ใช่ ES module) เพื่อให้เปิดจาก file:// ได้
-      ลำดับการโหลดอยู่ใน index.html — ไฟล์ที่ประกาศก่อนต้องโหลดก่อน */
+/* js/analysis/fleet.js — vehicle status at time T + totals per area / per vehicle in the selected range
+   uses: filters.js
+   provides: lastIdxAt() · computeNow() · NOW · NOWSTAT · computeAreas() · AREA · areaVal() */
 
-/* ══════════════════════════════════════════════════════════════════════
-   ตำแหน่ง ณ เวลา T
-   ══════════════════════════════════════════════════════════════════════ */
 function lastIdxAt(v, T) {
   const s = D.vehicles.start[v], n = D.vehicles.count[v];
   if (!n || TT[s] > T) return -1;
@@ -14,36 +9,58 @@ function lastIdxAt(v, T) {
   while (lo < hi) { const m = (lo + hi + 1) >> 1; if (TT[m] <= T) lo = m; else hi = m - 1; }
   return lo;
 }
-let NOW = [];
+
+/* vehicles online at S.T (last point ≤ STALE_MIN old) that pass the filters
+   + in live mode, OFFLINE = the others at their last known position */
+let NOW = [], NOWSTAT = { on: 0, hired: 0, mov: 0, park: 0, out: 0 }, OFFLINE = [];
 function computeNow() {
   const { pIdx, dIdx } = zoneSets();
-  const stale = CFG.STALE_MIN * 60;
-  const res = []; let on = 0, hired = 0, mov = 0, park = 0, outz = 0;
+  const stale = CFG.STALE_MIN * 60, useDep = S.exDepot && NEARDEP, live = isLive();
+  const res = [], off = []; const st = { on: 0, hired: 0, mov: 0, park: 0, out: 0 };
   for (let v = 0; v < NV; v++) {
     if (!vehPass(v)) continue;
     const i = lastIdxAt(v, S.T);
-    if (i < 0 || S.T - TT[i] > stale) continue;
+    if (i < 0) continue;
+    if (S.T - TT[i] > stale) { if (live && !(FLG[i] & 2) && areaMatchDist(DI[i])) off.push({ v, i }); continue; }
     if (!areaMatchDist(DI[i])) continue;
-    const st = status(i);
-    if (st !== 'nosig' && !S.status.has(st)) continue;
+    const sx = status(i);
+    if (sx !== 'nosig' && !S.status.has(sx)) continue;
     const dI = DI[i];
-    const isOut = dI !== 65535 && !(pIdx.has(distProv[dI]) || dIdx.has(dI)) && !(FLG[i] & 2) && !(S.exDepot && NEARDEP && NEARDEP[i]);
-    on++; if (st === 'hired') hired++; else if (st === 'vacant') mov++; else if (st === 'park') park++;
-    if (isOut) outz++;
-    res.push({ v, i, st, out: isOut });
+    const isOut = dI !== 65535 && !(pIdx.has(distProv[dI]) || dIdx.has(dI)) && !(FLG[i] & 2) && !(useDep && NEARDEP[i]);
+    st.on++; if (sx === 'hired') st.hired++; else if (sx === 'vacant') st.mov++; else if (sx === 'park') st.park++;
+    if (isOut) st.out++;
+    const [x, y, h] = interpAt(v, i, S.T);
+    res.push({ v, i, st: sx, out: isOut, x, y, h });
   }
-  NOW = res;
-  $('#kOnline').textContent = fmt(on);
-  $('#kHired').textContent = fmt(hired);
-  $('#kMove').textContent = fmt(mov);
-  $('#kPark').textContent = fmt(park);
-  $('#kUtil').textContent = on ? pct(hired / on) : '–';
-  $('#kOut').textContent = fmt(outz);
+  NOW = res; NOWSTAT = st; OFFLINE = off;
+}
+/* where the car is at time T
+   GPS arrives every ~4–5 min, often 1–3 km apart — a straight line between two fixes cuts across blocks
+   ("flying cars"), so the car only glides when the next fix is close (≤ CFG.GLIDE_KM, almost surely the same
+   road); otherwise it stays on its last fix (which is on a road) until the next one arrives.
+   With data/taxi-roads.js loaded every car drives along its road leg instead (roads.js roadPosAt). */
+function interpAt(v, i, T) {
+  const r = roadPosAt(v, i, T);                                   // road-snapped legs (data/taxi-roads.js)
+  if (r) return r;
+  let x = POS[2 * i], y = POS[2 * i + 1], h = D.cols.head ? D.cols.head[i] * 360 / 256 : 0;
+  const j = i + 1, e = D.vehicles.start[v] + D.vehicles.count[v];
+  if (j < e && TT[j] > T && TT[j] <= D.meta.tmax && TT[j] - TT[i] <= CFG.STALE_MIN * 60 && !(FLG[i] & 2) && !(FLG[j] & 2)) {
+    const x2 = POS[2 * j], y2 = POS[2 * j + 1], km = hav(x, y, x2, y2);
+    if (km > 0.03 && km <= CFG.GLIDE_KM) {
+      const f = (T - TT[i]) / (TT[j] - TT[i]);
+      h = bearing(x, y, x2, y2); x += (x2 - x) * f; y += (y2 - y) * f;
+    }
+  }
+  return [x, y, h];
+}
+/* time of the last GPS point at or before index i where the vehicle was moving (-1 = never in the data) */
+function lastMovedAt(v, i) {
+  const s = D.vehicles.start[v];
+  for (let k = i; k >= s; k--) if (!(FLG[k] & 2) && SPD[k] >= CFG.MOVING_KMH) return TT[k];
+  return -1;
 }
 
-/* ══════════════════════════════════════════════════════════════════════
-   สรุปตามพื้นที่ / รายคัน ในช่วง [a,b]
-   ══════════════════════════════════════════════════════════════════════ */
+/* totals per area and per vehicle inside [S.a, S.b] */
 let AREA = null;
 function computeAreas() {
   const nP = PROV.length, nD = DIST.length;
@@ -82,8 +99,8 @@ function computeAreas() {
   AREA = { vehP, vehD, hrsP, hrsD, hirP, hirD, active, util: totOn ? totHire / totOn : NaN };
   VSTAT = vs;
 }
-function areaVal(level, idx) {
+function areaVal(level, idx, metric = S.metric) {
   const A = AREA;
-  if (level === 'prov') return S.metric === 'veh' ? A.vehP[idx] : S.metric === 'hrs' ? A.hrsP[idx] : A.hirP[idx];
-  return S.metric === 'veh' ? A.vehD[idx] : S.metric === 'hrs' ? A.hrsD[idx] : A.hirD[idx];
+  if (level === 'prov') return metric === 'veh' ? A.vehP[idx] : metric === 'hrs' ? A.hrsP[idx] : A.hirP[idx];
+  return metric === 'veh' ? A.vehD[idx] : metric === 'hrs' ? A.hrsD[idx] : A.hirD[idx];
 }

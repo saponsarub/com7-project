@@ -1,22 +1,31 @@
-/* css/tokens.css — สี · ฟอนต์ · ค่าพื้นฐาน (แก้ธีมที่นี่ที่เดียว) */
-/* ── tokens ──────────────────────────────────────────────────────────── */
+/* css/tokens.css — colours · type · base element styles (change the theme here only) */
 :root{
-  --bg:#eef2f0; --panel:#ffffff; --panel-2:#f6f8f7; --line:#dfe5e2; --line-2:#cbd4cf;
-  --ink:#10231a; --ink-2:#4a5a52; --ink-3:#7d8b84;
+  --bg:#eef2f0; --panel:#ffffff; --panel-2:#f5f8f6; --line:#e0e6e3; --line-2:#cad3ce;
+  --ink:#10231a; --ink-2:#44554c; --ink-3:#77867e;
   --green:#00a332; --green-d:#00601c; --green-l:#e3f4e8;
   --blue:#0d93d6;  --blue-d:#0a5f8c;  --blue-l:#e1f2fb;
   --red:#d93a40;   --red-l:#fbe7e8;
-  --amber:#c98a00; --amber-l:#fbf1d9;
+  --amber:#c27a00; --amber-l:#fbf1d9;
+  --violet:#7c3aed; --violet-l:#efe8fd;
   --slate:#8a97a6;
-  --shadow:0 1px 2px rgba(16,35,26,.06),0 4px 16px rgba(16,35,26,.06);
-  --r:10px;
+  --hired:#f08c00;                 /* on trip (map dots, charts, legend) */
+  --shadow:0 1px 2px rgba(16,35,26,.06),0 6px 20px rgba(16,35,26,.08);
+  --shadow-lg:0 8px 32px rgba(16,35,26,.16);
+  --r:10px; --r-sm:7px;
   --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
-  --sans:'IBM Plex Sans Thai','Sarabun',system-ui,sans-serif;
+  --sans:'IBM Plex Sans Thai','Segoe UI',system-ui,sans-serif;
+  --top-h:56px; --rail-w:60px; --side-w:300px; --tl-h:96px; --chat-w:320px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:13px;overflow:hidden}
-button,select,input{font-family:inherit;font-size:inherit;color:inherit}
-button{cursor:pointer}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:13.5px;line-height:1.45;overflow:hidden;-webkit-font-smoothing:antialiased}
+button,select,input,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+button:disabled{cursor:default;opacity:.5}
+[hidden]{display:none !important}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-3)}
+.small{font-size:12px}
+small{font-size:11.5px}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;scroll-behavior:auto !important}}

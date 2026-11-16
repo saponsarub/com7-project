@@ -89,3 +89,6 @@ Untitled.ipynb
 
 # ข้อมูลรถที่ build สร้าง (ทะเบียน · VIN · ตำแหน่ง) — ห้าม commit
 scripts/taxi/web/data/
+
+# web/js/data/ คือโค้ด (source.js · model.js) ไม่ใช่ข้อมูล — กฎ data/ ด้านบนจับผิด
+!scripts/taxi/web/js/data/
